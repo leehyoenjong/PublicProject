@@ -1,25 +1,24 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 using UnityEngine;
 using BackEnd;
 using LitJson;
-// NOTE: 뒤끝 데이터베이스 SDK(BACKND.Database) 는 별도 제품으로 기본 import 되어 있지 않을 수 있다.
-//       컴파일 안전을 위해 'using BACKND.Database;' 사용 금지. 런타임 리플렉션으로 가드한다.
+using BACKND.Database;
 
 namespace PublicFramework
 {
     /// <summary>
     /// 뒤끝 데이터베이스 + 유저 데이터 추상화.
-    /// - 유저데이터(GameData) 저장/로드: 뒤끝 베이스 GameData API (Backend.dll 이미 import).
-    /// - 유연 테이블 쿼리: BACKND.Database Client (리플렉션 기반 감지 + 호출).
-    ///   SDK 미import 시 `QueryFlexibleTable` 은 `BackendError.NotInitialized` 로 즉시 실패 콜백하며,
-    ///   다른 Backend 서비스는 정상 동작한다.
-    ///   SDK 도입: 뒤끝 콘솔에서 다운로드 후 Assets/TheBackend/Plugins/ 에 BACKND.Database.dll 배치.
+    /// - 유저데이터(GameData) 저장/로드: 뒤끝 베이스 GameData API.
+    /// - 유연 테이블 쿼리: BACKND.Database Client (Phase 11 부터 실 연결).
+    ///   Client 는 `BackendConfig.DatabaseUuid` 로 생성하고 `Initialize()` 를 1회만 수행해 캐시한다.
+    /// - 차트: `Backend.CDN.Content.Table.Get()` 까지만 (개별 payload 는 Phase 12+ 이관).
     /// </summary>
-    public class BackendDatabase : IBackendDatabase
+    public class BackendDatabase : IBackendDatabase, IDisposable
     {
         private const string ACTION_SAVE = "SaveUserData";
         private const string ACTION_LOAD = "LoadUserData";
@@ -29,22 +28,31 @@ namespace PublicFramework
         private const string USER_DATA_TABLE = "USER_DATA";
         private const string USER_DATA_COLUMN = "json";
 
-        private const string DB_CLIENT_TYPE = "BACKND.Database.Client, BACKND.Database";
-        private const string DB_METHOD_DATABASE = "Database";
-        private const string DB_METHOD_TO_LIST_ASYNC = "ToListAsync";
-        private const string DB_PROP_INSTANCE = "Instance";
-
         private readonly BackendConfig _config;
         private readonly IEventBus _eventBus;
 
-        private bool _clientChecked;
-        private bool _clientAvailable;
-        private Type _clientType;
+        private Client _client;
+        private BTask _initTask;
+        private bool _clientReady;
 
         public BackendDatabase(BackendConfig config, IEventBus eventBus)
         {
             _config = config;
             _eventBus = eventBus;
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                _client?.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[BackendDatabase] Client Dispose 예외: {e.Message}");
+            }
+            _client = null;
+            _clientReady = false;
         }
 
         public void SaveUserData<T>(T data, Action<bool, BackendError, string> callback) where T : class
@@ -115,52 +123,31 @@ namespace PublicFramework
             }
         }
 
-        public void QueryFlexibleTable(
-            FlexibleTableKey key,
+        public async void QueryFlexibleTable<T>(
             IFlexibleTableFilter filter,
-            Action<bool, IReadOnlyList<Dictionary<string, object>>, BackendError> onComplete)
+            Action<bool, IReadOnlyList<T>, BackendError> onComplete) where T : BaseModel, new()
         {
-            string tableName = _config != null ? _config.GetFlexibleTableName(key) : string.Empty;
-            if (string.IsNullOrEmpty(tableName))
+            if (!await EnsureClientAsync())
             {
-                Debug.LogWarning($"[BackendDatabase] QueryFlexibleTable 중단: 테이블명 미바인딩 key={key}");
-                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NotInitialized, "no table binding");
-                onComplete?.Invoke(false, null, BackendError.NotInitialized);
-                return;
-            }
-
-            if (!EnsureClient())
-            {
-                Debug.LogWarning("[BackendDatabase] BACKND.Database SDK not imported. Skipping QueryFlexibleTable.");
-                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NotInitialized, "BACKND.Database SDK missing");
-                onComplete?.Invoke(false, null, BackendError.NotInitialized);
+                DispatchQuery(onComplete, false, null, BackendError.NotInitialized);
                 return;
             }
 
             int conditionCount = filter != null ? filter.Conditions.Count : 0;
             try
             {
-                // BACKND.Database 공식 문서(/sdk-docs/database/intro/)의 실 사용 패턴:
-                //   var db = new Client("UUID");
-                //   await db.Initialize();
-                //   var list = await db.From<T>().Where(Expression<Func<T, bool>>).Take(N).ToList();
-                // → Client.Instance 싱글톤이 아닌 생성자 + Initialize 필요. UUID 출처가 BackendConfig 에 없어
-                //   Phase 9 현재는 실 쿼리 호출을 보류하고, 타입 감지만 유지한다(회귀 방지).
-                // 서버 Where (Expression<Func<T,bool>>) 매핑은 리플렉션으로 안전하게 호출하기 어려워
-                // 전체 필터는 메모리 폴백을 유지한다.
-                int serverWhere = 0;
-                int memoryFilter = conditionCount; // 현재 전부 메모리 폴백.
-                Debug.Log($"[BackendDatabase] ServerWhere:{serverWhere}, MemoryFilter:{memoryFilter} (table={tableName})");
+                var builder = _client.From<T>();
+                int applied = ApplyConditions<T>(ref builder, filter);
+                Debug.Log($"[BackendDatabase] QueryFlexibleTable<{typeof(T).Name}>: Conditions applied={applied}/{conditionCount}");
 
-                Debug.LogWarning("[BackendDatabase] QueryFlexibleTable: SDK Client 생성자/Initialize UUID 출처 미정 — 쿼리 호출 보류(메모리 필터 경로 스텁). Phase 10+ 이관.");
-                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NotInitialized, "client uuid not bound");
-                onComplete?.Invoke(false, new List<Dictionary<string, object>>(), BackendError.NotInitialized);
+                List<T> rows = await builder.ToList();
+                DispatchQuery(onComplete, true, rows as IReadOnlyList<T>, BackendError.None);
             }
             catch (Exception e)
             {
-                Debug.LogError($"[BackendDatabase] QueryFlexibleTable 리플렉션 예외: {e.Message}");
-                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.Unknown, e.Message);
-                onComplete?.Invoke(false, new List<Dictionary<string, object>>(), BackendError.Unknown);
+                Debug.LogError($"[BackendDatabase] QueryFlexibleTable 예외: {e.Message}");
+                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NetworkError, e.Message);
+                DispatchQuery(onComplete, false, null, BackendError.NetworkError);
             }
         }
 
@@ -174,10 +161,7 @@ namespace PublicFramework
 
             try
             {
-                // 뒤끝 SDK 차트 다운로드 — 공식 문서 /chart-table/ 기준.
-                // NOTE: 2단계(Content.Get) 구현은 `ContentTableItem` FQN 이 프레임워크 참조 범위에서 해결되지 않아
-                //       (CS0246, 문서에서도 FQN 미명시) Phase 11+ 로 이관한다.
-                //       현재는 Table.Get() 전체 JSON payload 를 반환하며, 호출부가 chartName 으로 파싱한다.
+                // Phase 10 방식: 1단계 Table.Get 만 수행, 2단계는 Phase 12+ 이관.
                 var tableBro = Backend.CDN.Content.Table.Get();
                 if (!tableBro.IsSuccess())
                 {
@@ -190,7 +174,7 @@ namespace PublicFramework
 
                 BackendEventDispatcher.NotifyOnlineIfRecovered(_eventBus);
                 string payload = tableBro.GetReturnValuetoJSON()?.ToJson() ?? string.Empty;
-                Debug.Log($"[BackendDatabase] 차트 Table.Get 성공: requested={chartName} (2단계 Content.Get 은 Phase 11+ 이관)");
+                Debug.Log($"[BackendDatabase] 차트 Table.Get 성공: requested={chartName}");
                 callback?.Invoke(true, payload, BackendError.None);
             }
             catch (Exception e)
@@ -201,144 +185,143 @@ namespace PublicFramework
             }
         }
 
-        // Phase 10 QueryFlexibleTable 재활성 시 사용 — 현재 미호출 (A1 보류).
-        private void DispatchQueryResult(
-            Task completed,
-            string tableName,
-            IFlexibleTableFilter filter,
-            Action<bool, IReadOnlyList<Dictionary<string, object>>, BackendError> onComplete,
-            int conditionCount)
-        {
-            void Apply()
-            {
-                try
-                {
-                    if (completed.IsFaulted)
-                    {
-                        var baseEx = completed.Exception?.GetBaseException();
-                        string msg = baseEx != null ? baseEx.Message : "task faulted";
-                        Debug.LogError($"[BackendDatabase] QueryFlexibleTable 비동기 실패: {msg}");
-                        BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NetworkError, msg);
-                        onComplete?.Invoke(false, new List<Dictionary<string, object>>(), BackendError.NetworkError);
-                        return;
-                    }
-
-                    var resultProp = completed.GetType().GetProperty("Result");
-                    var raw = resultProp?.GetValue(completed) as IEnumerable<Dictionary<string, object>>;
-                    var rows = raw != null
-                        ? new List<Dictionary<string, object>>(raw)
-                        : new List<Dictionary<string, object>>();
-
-                    var filtered = ApplyMemoryFilter(rows, filter);
-                    Debug.Log($"[BackendDatabase] QueryFlexibleTable: table={tableName}, conditions={conditionCount}, rows={filtered.Count}");
-                    BackendEventDispatcher.NotifyOnlineIfRecovered(_eventBus);
-                    onComplete?.Invoke(true, filtered, BackendError.None);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"[BackendDatabase] QueryFlexibleTable 결과 처리 예외: {e.Message}");
-                    BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.Unknown, e.Message);
-                    onComplete?.Invoke(false, new List<Dictionary<string, object>>(), BackendError.Unknown);
-                }
-            }
-
-            if (BackendMainThreadDispatcher.Instance != null)
-                BackendMainThreadDispatcher.Instance.Enqueue(Apply);
-            else
-                Apply();
-        }
-
-        // Phase 10 QueryFlexibleTable 재활성 시 사용 — 현재 미호출 (A1 보류).
-        private static List<Dictionary<string, object>> ApplyMemoryFilter(
-            List<Dictionary<string, object>> rows, IFlexibleTableFilter filter)
-        {
-            if (filter == null || filter.Conditions.Count == 0) return rows;
-
-            var result = new List<Dictionary<string, object>>();
-            for (int i = 0; i < rows.Count; i++)
-            {
-                var row = rows[i];
-                bool pass = true;
-                foreach (var cond in filter.Conditions)
-                {
-                    if (!row.TryGetValue(cond.Column, out var cellValue) || !MatchesCondition(cellValue, cond.Op, cond.Value))
-                    {
-                        pass = false;
-                        break;
-                    }
-                }
-                if (pass) result.Add(row);
-            }
-            return result;
-        }
-
-        // Phase 10 QueryFlexibleTable 재활성 시 사용 — 현재 미호출 (A1 보류).
-        private static bool MatchesCondition(object cellValue, FlexibleFilterOp op, object condValue)
-        {
-            switch (op)
-            {
-                case FlexibleFilterOp.Eq:
-                    return Equals(cellValue, condValue) ||
-                           string.Equals(cellValue?.ToString(), condValue?.ToString(), StringComparison.Ordinal);
-                case FlexibleFilterOp.Gt:
-                    return CompareValues(cellValue, condValue) > 0;
-                case FlexibleFilterOp.Lt:
-                    return CompareValues(cellValue, condValue) < 0;
-                case FlexibleFilterOp.In:
-                    return ContainsInList(cellValue, condValue);
-                default:
-                    return false;
-            }
-        }
-
-        // Phase 10 QueryFlexibleTable 재활성 시 사용 — 현재 미호출 (A1 보류).
-        private static bool ContainsInList(object cellValue, object condValue)
-        {
-            if (!(condValue is IEnumerable<object> list)) return false;
-            foreach (var item in list)
-            {
-                if (Equals(cellValue, item) ||
-                    string.Equals(cellValue?.ToString(), item?.ToString(), StringComparison.Ordinal))
-                    return true;
-            }
-            return false;
-        }
-
-        // Phase 10 QueryFlexibleTable 재활성 시 사용 — 현재 미호출 (A1 보류).
-        private static int CompareValues(object a, object b)
-        {
-            if (a is IComparable comparable && b != null)
-            {
-                try { return comparable.CompareTo(b); }
-                catch { /* fallback 아래 */ }
-            }
-            return string.Compare(a?.ToString() ?? string.Empty, b?.ToString() ?? string.Empty, StringComparison.Ordinal);
-        }
-
         /// <summary>
-        /// BACKND.Database.Client 타입 존재 여부를 런타임 리플렉션으로 1회 감지.
-        /// SDK 미 import 환경에서도 컴파일 통과를 보장한다.
+        /// BACKND.Database Client 를 1회 생성 + Initialize 하고 캐시한다.
+        /// Bootstrapper 가 사전 호출해도 되고, QueryFlexibleTable 최초 호출 시 lazy 초기화된다.
         /// </summary>
-        private bool EnsureClient()
+        public async BTask<bool> EnsureClientAsync()
         {
-            if (_clientChecked) return _clientAvailable;
-            _clientChecked = true;
+            if (_clientReady) return true;
+
+            string uuid = _config != null ? _config.DatabaseUuid : string.Empty;
+            if (string.IsNullOrEmpty(uuid))
+            {
+                Debug.LogWarning("[BackendDatabase] DatabaseUuid 미설정 — Client 초기화 보류");
+                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NotInitialized, "DatabaseUuid empty");
+                return false;
+            }
+
+            if (_initTask != null)
+            {
+                try { await _initTask; }
+                catch (Exception) { /* 실패는 아래에서 확인 */ }
+                return _clientReady;
+            }
 
             try
             {
-                _clientType = Type.GetType(DB_CLIENT_TYPE, throwOnError: false);
-                _clientAvailable = _clientType != null;
-                if (_clientAvailable)
-                    Debug.Log("[BackendDatabase] BACKND.Database Client 타입 감지 완료");
+                _client = new Client(uuid);
+                _initTask = _client.Initialize();
+                await _initTask;
+                _clientReady = true;
+                Debug.Log("[BackendDatabase] BACKND.Database Client 초기화 완료");
             }
             catch (Exception e)
             {
-                _clientAvailable = false;
-                _clientType = null;
-                Debug.LogError($"[BackendDatabase] Client 타입 감지 예외: {e.Message}");
+                _clientReady = false;
+                Debug.LogError($"[BackendDatabase] Client 초기화 실패: {e.Message}");
+                BackendEventDispatcher.PublishFailed(_eventBus, ACTION_QUERY, BackendError.NetworkError, e.Message);
             }
 
-            return _clientAvailable;
+            return _clientReady;
+        }
+
+        private static int ApplyConditions<T>(ref QueryBuilder<T> builder, IFlexibleTableFilter filter)
+            where T : BaseModel, new()
+        {
+            if (filter == null || filter.Conditions.Count == 0) return 0;
+
+            int applied = 0;
+            foreach (var cond in filter.Conditions)
+            {
+                var expr = BuildExpression<T>(cond);
+                if (expr == null) continue;
+                builder = builder.Where(expr);
+                applied++;
+            }
+            return applied;
+        }
+
+        private static Expression<Func<T, bool>> BuildExpression<T>(FilterCondition cond)
+            where T : BaseModel, new()
+        {
+            if (string.IsNullOrEmpty(cond.Column)) return null;
+            try
+            {
+                var param = Expression.Parameter(typeof(T), "x");
+                var prop = Expression.PropertyOrField(param, cond.Column);
+
+                Expression body;
+                switch (cond.Op)
+                {
+                    case FlexibleFilterOp.Eq:
+                        body = Expression.Equal(prop, MakeConstant(cond.Value, prop.Type));
+                        break;
+                    case FlexibleFilterOp.Gt:
+                        body = Expression.GreaterThan(prop, MakeConstant(cond.Value, prop.Type));
+                        break;
+                    case FlexibleFilterOp.Lt:
+                        body = Expression.LessThan(prop, MakeConstant(cond.Value, prop.Type));
+                        break;
+                    case FlexibleFilterOp.In:
+                        body = BuildInBody(prop, cond.Value);
+                        if (body == null) return null;
+                        break;
+                    default:
+                        return null;
+                }
+
+                return Expression.Lambda<Func<T, bool>>(body, param);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[BackendDatabase] Expression 구성 실패: column={cond.Column}, op={cond.Op}, msg={e.Message}");
+                return null;
+            }
+        }
+
+        private static Expression MakeConstant(object value, Type targetType)
+        {
+            object converted = ConvertValue(value, targetType);
+            return Expression.Constant(converted, targetType);
+        }
+
+        private static object ConvertValue(object value, Type targetType)
+        {
+            if (value == null) return null;
+            var nonNullable = Nullable.GetUnderlyingType(targetType) ?? targetType;
+            if (nonNullable.IsInstanceOfType(value)) return value;
+            return Convert.ChangeType(value, nonNullable);
+        }
+
+        private static Expression BuildInBody(Expression prop, object raw)
+        {
+            if (!(raw is IEnumerable source)) return null;
+            Type elementType = prop.Type;
+            var listType = typeof(List<>).MakeGenericType(elementType);
+            var list = (IList)Activator.CreateInstance(listType);
+            foreach (var v in source)
+                list.Add(ConvertValue(v, elementType));
+
+            Type enumerableType = typeof(IEnumerable<>).MakeGenericType(elementType);
+            MethodInfo containsMethod = typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .First(m => m.Name == "Contains" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(elementType);
+
+            var listExpr = Expression.Constant(list, enumerableType);
+            return Expression.Call(containsMethod, listExpr, prop);
+        }
+
+        private void DispatchQuery<T>(
+            Action<bool, IReadOnlyList<T>, BackendError> onComplete,
+            bool ok, IReadOnlyList<T> list, BackendError err)
+        {
+            if (onComplete == null) return;
+            IReadOnlyList<T> safe = list ?? Array.Empty<T>();
+            if (BackendMainThreadDispatcher.Instance != null)
+                BackendMainThreadDispatcher.Instance.Enqueue(() => onComplete.Invoke(ok, safe, err));
+            else
+                onComplete.Invoke(ok, safe, err);
         }
 
         private static T ParseUserData<T>(BackendReturnObject bro) where T : class

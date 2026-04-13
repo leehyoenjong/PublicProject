@@ -100,6 +100,9 @@ namespace PublicFramework
                 ConditionPreview = preview,
                 StackHash = stackHash,
             });
+
+            // SessionTracker 에게 AbnormalQuit 승격 신호 (idempotent). 여러 번 호출되어도 최종 Quit 이벤트는 1회만.
+            _sessionTracker?.MarkAbnormal();
         }
 
         private bool ShouldSend(string stackHash)

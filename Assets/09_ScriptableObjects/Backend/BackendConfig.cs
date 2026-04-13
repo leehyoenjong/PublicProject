@@ -41,6 +41,9 @@ namespace PublicFramework
         [Header("네트워크")]
         [SerializeField, Min(1)] private int _defaultTimeoutSec = 10;
 
+        [Header("뒤끝 데이터베이스")]
+        [SerializeField] private string _databaseUuid = string.Empty;
+
         [Header("분석")]
         [SerializeField] private bool _analyticsEnabled = false;
         [SerializeField] private bool _analyticsSessionAutoTrack = false;
@@ -59,6 +62,7 @@ namespace PublicFramework
         public IReadOnlyList<LeaderboardBinding> LeaderboardUuids => _leaderboardUuids;
         public IReadOnlyList<FlexibleTableBinding> FlexibleTableNames => _flexibleTableNames;
         public int DefaultTimeoutSec => _defaultTimeoutSec;
+        public string DatabaseUuid => _databaseUuid;
         public bool AnalyticsEnabled => _analyticsEnabled;
         public bool AnalyticsSessionAutoTrack => _analyticsSessionAutoTrack;
         public int ConsentVersion => _consentVersion;

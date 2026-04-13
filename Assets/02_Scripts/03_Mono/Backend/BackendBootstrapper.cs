@@ -117,8 +117,9 @@ namespace PublicFramework
             _database = new BackendDatabase(_config, eventBus);
             _mail = new BackendMailProvider(eventBus);
             _cloudSave = new CloudSaveSync(saveSystem, eventBus);
-            // Analytics 는 opt-in. BackendConfig.AnalyticsEnabled 초기값 반영.
-            _analytics = new BackendAnalytics(eventBus) { IsEnabled = _config.AnalyticsEnabled };
+            // Analytics 는 opt-in. BackendConfig.AnalyticsEnabled 기본값 AND 사용자 동의(ConsentStore.Analytics) 두 조건 모두 만족 시 활성.
+            bool analyticsOn = _config.AnalyticsEnabled && ConsentStore.GetConsent(ConsentCategory.Analytics);
+            _analytics = new BackendAnalytics(eventBus) { IsEnabled = analyticsOn };
             _realtime = new BackendRealtime(eventBus);
             _pushProvider = new BackendRemotePushProvider(eventBus);
         }
@@ -212,11 +213,23 @@ namespace PublicFramework
 
         private void OnAuthenticated()
         {
+            // DatabaseUuid 가 설정된 경우 BACKND.Database Client 를 사전에 비동기 초기화(fire-and-forget).
+            if (!string.IsNullOrEmpty(_config.DatabaseUuid) && _database is BackendDatabase db)
+            {
+                _ = db.EnsureClientAsync();
+            }
+
             if (!_config.AutoCloudSaveOnLogin)
                 return;
 
             Debug.Log($"[BackendBootstrapper] 자동 클라우드 세이브 다운로드 시작: slot={DEFAULT_CLOUD_SAVE_SLOT}");
             _cloudSave.DownloadSlot(DEFAULT_CLOUD_SAVE_SLOT, null);
+        }
+
+        private void OnDestroy()
+        {
+            // BACKND.Database Client 리소스 정리.
+            (_database as BackendDatabase)?.Dispose();
         }
     }
 }

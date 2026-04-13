@@ -87,6 +87,15 @@ namespace PublicFramework
     [Serializable]
     public struct BackendConsentChangedEvent
     {
+        public bool Required;
+        public bool Analytics;
+        public bool Marketing;
+        public bool Functional;
+
+        /// <summary>
+        /// [Obsolete] 이전 버전 호환용 — <see cref="Analytics"/> 값을 그대로 반영.
+        /// </summary>
+        [Obsolete("Use Analytics instead")]
         public bool Accepted;
     }
 }

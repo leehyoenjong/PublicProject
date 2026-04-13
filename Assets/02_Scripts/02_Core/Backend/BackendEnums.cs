@@ -77,4 +77,19 @@ namespace PublicFramework
         Error,
         Custom,
     }
+
+    /// <summary>
+    /// GDPR 동의 세부 카테고리.
+    /// - Required:   법적 최소 필수 (기본 true, 고정). 거부 시 앱 사용 불가 — 거부 UX 는 프로젝트 책임.
+    /// - Analytics:  사용 통계(세션/이벤트/크래시) — 기본 false (opt-in)
+    /// - Marketing:  광고 식별자/추적 — 기본 false (opt-in)
+    /// - Functional: 기능성 (기본 true)
+    /// </summary>
+    public enum ConsentCategory
+    {
+        Required,
+        Analytics,
+        Marketing,
+        Functional,
+    }
 }

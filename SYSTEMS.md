@@ -1,6 +1,6 @@
 # PublicProject 시스템 가이드
 
-> 전체 213개 C# 파일, 22개 시스템. 네임스페이스: `PublicFramework`
+> 전체 214개 C# 파일, 22개 시스템. 네임스페이스: `PublicFramework`
 > 수정이 필요할 때 이 문서에서 해당 시스템과 파일을 찾아 참조한다.
 
 ---
@@ -429,31 +429,32 @@ eventBus.Publish(new SomeEvent { ... });
 | `01_Interfaces/Backend/IBackendAuth.cs` | 게스트/커스텀/자동 로그인, 닉네임 |
 | `01_Interfaces/Backend/IBackendLeaderboard.cs` | SubmitScore/GetTop/GetMyRank/GetAround (enum key 기반) |
 | `01_Interfaces/Backend/IBackendMail.cs` | 서버 우편 Fetch/Claim (수령 시 서버 자동 제거) |
-| `01_Interfaces/Backend/IBackendDatabase.cs` | SaveUserData/LoadUserData/QueryFlexibleTable(enum key+IFlexibleTableFilter)/DownloadChart |
+| `01_Interfaces/Backend/IBackendDatabase.cs` | SaveUserData/LoadUserData/QueryFlexibleTable&lt;T : BaseModel&gt;(IFlexibleTableFilter)/DownloadChart |
 | `01_Interfaces/Backend/IFlexibleTableFilter.cs` | 필터 체이닝 추상화(Eq/Gt/Lt/In) — SDK Where 타입 은닉 |
 | `01_Interfaces/Backend/ICloudSaveSync.cs` | 슬롯 Upload/Download/Overwrite/GetRemoteTimestamp/충돌 전략 |
 | `01_Interfaces/Backend/IBackendAnalytics.cs` | 이벤트 로깅 (opt-in, PII 금지, props 화이트리스트) |
 | `01_Interfaces/Backend/IBackendRealtime.cs` | WebSocket 실시간 통신 (Connect/Send/이벤트) |
-| `02_Core/Backend/BackendEnums.cs` | BackendError(10), BackendEnvironment, CloudSaveConflictStrategy, LeaderboardKey, FlexibleTableKey, LeaderboardEntry, FlexibleFilterOp, FilterCondition, AnalyticsCategory |
+| `02_Core/Backend/BackendEnums.cs` | BackendError(10), BackendEnvironment, CloudSaveConflictStrategy, LeaderboardKey, FlexibleTableKey(Phase 12 제거 예정), LeaderboardEntry, FlexibleFilterOp, FilterCondition, AnalyticsCategory, ConsentCategory(Required/Analytics/Marketing/Functional) |
 | `02_Core/Backend/BackendEvents.cs` | 11개 이벤트(Initialized/AuthChanged/CallFailed/ConnectivityChanged/LeaderboardUpdated/MailFetched/CloudSaveSynced/AnalyticsLogged/RealtimeMessage/CrashReported/ConsentChanged) |
 | `02_Core/Backend/BackendErrorMapper.cs` | BRO StatusCode → BackendError 매핑 (BRO 외부 노출 금지) |
 | `02_Core/Backend/BackendEventDispatcher.cs` | EventBus publish 일원화 + Connectivity 상태 변화만 1회 발행 |
 | `02_Core/Backend/BackendService.cs` | Backend.Initialize() / GetServerTime (AppVersion은 로그용) |
 | `02_Core/Backend/BackendAuth.cs` | GuestLogin/CustomLogin/LoginWithTheBackendToken/Logout/UserNickName/IsAccessTokenAlive() 선체크 |
 | `02_Core/Backend/BackendLeaderboard.cs` | Backend.Leaderboard.User API(UpdateMyDataAndRefreshLeaderboard/GetLeaderboard/GetMyLeaderboard) + ParseEntries (LitJson) + GetAround 실 SDK(gap) |
-| `02_Core/Backend/BackendDatabase.cs` | GameData.Insert/GetMyData/UpdateV2(4인자) + Backend.CDN.Content.Table.Get() + QueryFlexibleTable(리플렉션 + 메모리 필터 + 메인 스레드 dispatch) |
+| `02_Core/Backend/BackendDatabase.cs` | GameData.Insert/GetMyData/UpdateV2(4인자) + Backend.CDN.Content.Table.Get() + QueryFlexibleTable&lt;T : BaseModel&gt; 실호출(BACKND.Database.Client From/Where/ToList + Expression 빌더 + 메인 스레드 dispatch + IDisposable) |
 | `02_Core/Backend/BackendAnalytics.cs` | Backend.GameLog.InsertLogV2 래핑. IsEnabled 기본 false(opt-in), props 화이트리스트(string/int/long/bool/double), MAX_PROPS=16/KEY=40, PII 자동 주입 금지 |
 | `02_Core/Backend/FlexibleTableFilter.cs` | IFlexibleTableFilter 체이닝 빌더 |
 | `02_Core/Backend/BackendMainThreadDispatcher.cs` | async 콜백 메인 스레드 디스패처(싱글톤, lock-safe Queue) |
 | `02_Core/Backend/BackendMailProvider.cs` | IMailProvider + IBackendMail 이중 구현 (UPost) |
+| `02_Core/Backend/ConsentStore.cs` | GDPR 동의 PlayerPrefs 영속화 (4카테고리 + acceptedVersion). Required/Functional 기본 true, Analytics/Marketing opt-in |
 | `02_Core/Backend/CloudSaveSync.cs` | Upsert(UpdateV2/Insert) + OverwriteRemoteSlot(Task 래핑 Delete+Insert), 복수 row 마이그레이션 폴백 |
 | `02_Core/Backend/BackendRealtime.cs` | IBackendRealtime 구현. `BackEnd.Match` 리플렉션 감지. 실 호출 Phase 11+ 이관 |
 | `02_Core/Backend/BackendRemotePushProvider.cs` | IRemotePushProvider 구현. 리플렉션 타입 감지(`BackEnd.iOS/AOS.PushNotification`) + `InsertPushToken/DeletePushToken` 리플렉션 Invoke. FQN 확정 시 상수 1줄 교체로 활성. 토큰 외부 주입 |
-| `03_Mono/Backend/BackendBootstrapper.cs` | SendQueue + MainThreadDispatcher + SessionTracker + CrashReporter 보장 + 서비스 8종 조립/등록 + Auto 체인 |
-| `03_Mono/Backend/BackendSessionTracker.cs` | Analytics 세션 자동 추적(Start/Focus/Pause/Quit). opt-in, sessionId만 포함(PII 금지) |
-| `03_Mono/Backend/BackendConsentDialog.cs` | GDPR 동의 런타임 UI. 동의 시 `Analytics.IsEnabled=true` + PlayerPrefs 영속화 + `RequiresConsent` 헬퍼 |
-| `03_Mono/Backend/BackendCrashReporter.cs` | `Application.logMessageReceivedThreaded` → Analytics. SHA1 16자 해시, 5분 쓰로틀, PII 엄격 |
-| `09_ScriptableObjects/Backend/BackendConfig.cs` | **SO** — AppVersion, Environment, AutoGuestLogin, SendQueueEnabled, AutoCloudSaveOnLogin, AnalyticsEnabled, AnalyticsSessionAutoTrack, ConsentVersion, CrashReporterEnabled, CrashIncludeErrors, CrashIncludeFullStackInDebugOnly, LeaderboardBinding[], FlexibleTableBinding[], DefaultTimeoutSec |
+| `03_Mono/Backend/BackendBootstrapper.cs` | SendQueue + MainThreadDispatcher + SessionTracker + CrashReporter 보장 + 서비스 8종 조립/등록 + Auto 체인 + OnDestroy Dispose(Client 정리) |
+| `03_Mono/Backend/BackendSessionTracker.cs` | Analytics 세션 자동 추적(Start/Focus/Pause/Quit/AbnormalQuit). opt-in, sessionId + `durationSec` props(PII 금지). MarkAbnormal idempotent |
+| `03_Mono/Backend/BackendConsentDialog.cs` | GDPR 동의 런타임 UI. Required 고정 + Analytics/Marketing/Functional Toggle. Confirm 조건부 활성. ConsentStore 저장 + Analytics IsEnabled 동기화 |
+| `03_Mono/Backend/BackendCrashReporter.cs` | `Application.logMessageReceivedThreaded` → Analytics + SessionTracker.MarkAbnormal(). SHA1 16자 해시, 5분 쓰로틀, PII 엄격 |
+| `09_ScriptableObjects/Backend/BackendConfig.cs` | **SO** — AppVersion, Environment, AutoGuestLogin, SendQueueEnabled, AutoCloudSaveOnLogin, AnalyticsEnabled, AnalyticsSessionAutoTrack, ConsentVersion, CrashReporterEnabled, CrashIncludeErrors, CrashIncludeFullStackInDebugOnly, DatabaseUuid, LeaderboardBinding[], FlexibleTableBinding[], DefaultTimeoutSec |
 | `02_Scripts/Editor/BackendConfigEditor.cs` | **Editor** — `BackendConfig` CustomEditor. AppVersion/Timeout/Binding Key 중복·empty 경고(HelpBox). 읽기 전용 |
 | `TheBackend/Toolkit/SendQueueMgr.cs` | 뒤끝 SDK 기본 제공(원위치 유지). Bootstrapper가 씬에 보장 |
 
@@ -461,16 +462,20 @@ eventBus.Publish(new SomeEvent { ... });
 
 ### ⚙️ BACKND.Database 및 Analytics 사용 안내
 
-- **뒤끝 데이터베이스는 별개 제품**. SDK(`BACKND.Database.dll`)가 `Assets/TheBackend/Plugins/`에 별도로 import되어야 한다. 프레임워크는 **미import 상태에서도 컴파일/실행 가능** (리플렉션 가드 + `NotInitialized` 반환).
-- Phase 9 이후 `BACKND.Database.Client`가 **싱글톤이 아니라 `new Client(UUID) + await Initialize()` 인스턴스** 패턴으로 확인됨. UUID 출처(SO 필드 vs 뒤끝 Settings) 미결로 실 쿼리 호출은 Phase 11+ 재가동 이관. 현 `QueryFlexibleTable`은 `NotInitialized` 반환.
+- **뒤끝 데이터베이스는 별개 제품**. Phase 11부터 `Packages/com.backnd.database/` **UPM 패키지**로 의존 확정. `BACKND.Database` 네임스페이스가 인터페이스까지 노출되는 정책 전환.
+- `IBackendDatabase.QueryFlexibleTable<T>(IFlexibleTableFilter filter, Action<bool, IReadOnlyList<T>, BackendError> cb) where T : BACKND.Database.BaseModel, new()` — 프로젝트가 `BaseModel` 파생 POCO 정의 필수(`[Table("...")]` 속성 포함, DatabaseWeaver IL Weave 처리됨).
+- Client 라이프사이클: `BackendConfig.DatabaseUuid` 설정 + 인증 성공 시 Bootstrapper가 `EnsureClientAsync()` 1회 호출 → `new Client(uuid) + await Initialize()`. `OnDestroy`에서 `Dispose`로 Queue 정리.
+- Expression 빌더: `FilterCondition` → `Expression<Func<T,bool>>` 동적 구성(Eq/Gt/Lt/In). 개별 조건 실패는 스킵 + LogWarning.
+- SDK 미import/미설정 시 `NotInitialized` 반환, 호출부 안전.
 - **BackendAnalytics** (`Backend.GameLog.InsertLogV2` 래핑):
   - `IsEnabled` 기본 false (opt-in, GDPR 대응). 프로젝트가 동의 획득 후 명시 활성화
   - PII(UserInDate/Nickname) 자동 주입 **금지**
   - props 타입 화이트리스트: string/int/long/bool/double만 허용
   - 제한: 키 최대 16개, 키 길이 40자
   - fire-and-forget + `BackendAnalyticsLoggedEvent` 발행
-- **세션 자동 추적**: `BackendConfig.AnalyticsSessionAutoTrack=true`이면 `BackendSessionTracker` 자동 생성(Start/Focus/Pause/Quit 훅). Quit 이벤트는 best-effort.
-- **GDPR 동의 UI**: `BackendConsentDialog.RequiresConsent(config)` static 헬퍼로 프로젝트가 앱 시작 시 재동의 필요 여부 판단 → `Configure` + `Show` 호출. ConsentVersion 변경 시 강제 재표시.
+- **세션 자동 추적**: `BackendConfig.AnalyticsSessionAutoTrack=true`이면 `BackendSessionTracker` 자동 생성(Start/Focus/Pause/Quit/AbnormalQuit 훅). `durationSec` props 단일 키(action=Background=구간, Quit/AbnormalQuit=세션 전체).
+- **AbnormalQuit**: `BackendCrashReporter`가 예외 캡처 시 `SessionTracker.MarkAbnormal()` 호출 → OnApplicationQuit에서 `AbnormalQuit` 이벤트 발행. idempotent.
+- **GDPR 동의 UI (세부 옵트인)**: `ConsentCategory` 4종(Required/Analytics/Marketing/Functional). Required 고정, Analytics/Marketing opt-in. `ConsentStore`가 PlayerPrefs 5키로 영속화. `BackendConsentDialog.RequiresConsent(config)` 헬퍼로 ConsentVersion 변경 시 강제 재표시.
 - **CrashReporter**: `BackendConfig.CrashReporterEnabled=true`이면 `Application.logMessageReceivedThreaded` 훅 자동 등록. Exception만 기본 캡처, SHA1 16자 해시 + 200자 preview + sessionId만 전송, 5분 쓰로틀. 전체 스택트레이스는 `Debug.isDebugBuild + CrashIncludeFullStackInDebugOnly` 조합에서만.
 - **BackendRealtime**: Phase 10에서 `IBackendRealtime` 인터페이스만 확정. `BackEnd.Match` SDK 실 호출은 Phase 11+ 이관(공식 문서 접근 실패로 시그니처 미확정). 현재 `NotInitialized` fallback.
 
@@ -480,14 +485,26 @@ eventBus.Publish(new SomeEvent { ... });
 - `ICloudSaveSync.OverwriteRemoteSlot` — Phase 9 C안 Task 래핑으로 **엄격 Delete+Insert 구현 완료**. `Backend.GameData.DeleteV2(table, inDate, owner, callback)` → TaskCompletionSource → `Task.WhenAll` → Insert. 부분 실패 시 Insert 억제.
 - `IBackendRealtime` — Phase 10 스텁 상태. `Connect/Send` 호출 시 `NotInitialized` 반환. Phase 11+ Match SDK 실 호출 연결 필요.
 
-### 🔭 Phase 11+ 이관 (선택 사항)
-- **A1-재가동**: `BackendConfig.DatabaseUuid` 필드 + `Client` 라이프사이클 설계 후 `QueryFlexibleTable` 실 호출
-- **A2-재가동**: `ContentTableItem` FQN 확정 후 `DownloadChart` 2단계(chartName 필터링 + `Backend.CDN.Content.Get`) 실 호출
-- **B5-재가동**: Push SDK 공식 문서 확보 후 `BackendRemotePushProvider` 리플렉션 상수(iOS/AOS FQN) 교체
-- **B6 Realtime 실 호출**: `Backend.Match.*` SDK 시그니처 확정 후 `Connect/Send/OnMessage` 실구현 + 자동 리커넥션
-- **B7 세부 옵트인**: 분석/마케팅/기능별 분리된 Consent UI
-- `BackendAnalytics` 세션 지속 시간 자동 계산
-- Crash 이벤트에서 `AbnormalQuit` 세션 플래그 연동
+### 🔭 Phase 12+ 이관 (SDK 외부 변수 해소 시에만 재착수)
+
+모든 재가동은 기획자가 트리거 충족 확인 후 별도 스프린트 편성.
+
+- **A2 재가동 (DownloadChart 2단계)** — 트리거 (하나라도 충족):
+  1. 뒤끝 Chart 공식 문서 재공개 + `ContentTableItem` 공개 프로퍼티 확정
+  2. Backend.dll `ContentTableItem` 멤버가 Unity 에디터 리플렉션 출력으로 확인 가능
+  3. 뒤끝 측 `ContentTableItem` 오픈소스화
+- **B5 재가동 (Push Provider)** — 트리거 (둘 이상 충족):
+  1. 뒤끝 Push 공식 문서 재공개 + `Backend.PushNotification.*` FQN 확정
+  2. 프로젝트의 FCM/APNs 네이티브 통합 결정
+  3. 프레임워크 사용 프로젝트에서 푸시 요구 발생
+- **B6 재가동 (Realtime 실 호출)** — 트리거 (둘 이상 충족):
+  1. 뒤끝 Match 공식 문서(`/sdk-docs/backend/match/`) 재공개
+  2. 프로젝트의 실시간 통신 요구 발생
+  3. Match 서버 래퍼 vs 순수 WebSocket 재합의
+- **FlexibleTableKey / FlexibleTableBinding 완전 제거** — 현재 유지 중(하위 호환). Phase 12 클린업 시 제거.
+- **BackendDatabase Client 재초기화** — 로그아웃→재로그인 시 Client Dispose + 재Init
+- **Analytics 세션 통합 통계** — 세션 간 누적/평균 집계
+- **ConsentDialog 지역별 법규 분기** — GDPR/CCPA 등 영역별 UI 변형
 
 ---
 

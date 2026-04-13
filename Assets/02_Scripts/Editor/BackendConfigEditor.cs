@@ -27,6 +27,9 @@ namespace PublicFramework
             if (config.DefaultTimeoutSec <= 0)
                 EditorGUILayout.HelpBox("DefaultTimeoutSec 은 1 이상이어야 합니다.", MessageType.Warning);
 
+            if (string.IsNullOrEmpty(config.DatabaseUuid))
+                EditorGUILayout.HelpBox("DatabaseUuid 가 비어있습니다. QueryFlexibleTable 호출 시 NotInitialized 반환.", MessageType.Warning);
+
             ValidateLeaderboardBindings(config.LeaderboardUuids);
             ValidateFlexibleTableBindings(config.FlexibleTableNames);
         }
