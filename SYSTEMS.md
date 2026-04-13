@@ -1,6 +1,6 @@
 # PublicProject 시스템 가이드
 
-> 전체 214개 C# 파일, 22개 시스템. 네임스페이스: `PublicFramework`
+> 전체 시스템 27개, 네임스페이스: `PublicFramework`
 > 수정이 필요할 때 이 문서에서 해당 시스템과 파일을 찾아 참조한다.
 
 ---
@@ -529,6 +529,86 @@ eventBus.Publish(new SomeEvent { ... });
 
 ---
 
+## Phase 12 — 디자이너/기획자 유틸 컴포넌트
+
+> 기존 시스템을 Inspector만으로 조립/표시하도록 감싼 얇은 MonoBehaviour/Attribute 모음. 코드 추가 시스템 없음(기존 시스템 의존).
+
+### 22. 다국어 TMP 컴포넌트
+
+| 파일 | 역할 |
+|------|------|
+| `03_Mono/Localization/LocalizedTMPText.cs` | TMP_Text에 key + formatArgs Inspector로 연결. LanguageChangedEvent 실시간 갱신 |
+| `03_Mono/Localization/LocalizedTMPFont.cs` | 언어별 TMP_FontAsset 자동 교체 |
+| `02_Core/Localization/TMPFontMapping.cs` | **SO** — 언어별 TMP_FontAsset 매핑 (Legacy `FontMapping`과 분리) |
+
+**수정 포인트**: 새 언어 폰트 → `TMPFontMapping` SO에 엔트리 추가.
+
+---
+
+### 23. UI 헬퍼
+
+| 파일 | 역할 |
+|------|------|
+| `03_Mono/UI/Helpers/SoundButton.cs` | Button 클릭 시 지정 SFX 자동 재생(ISoundManager) |
+| `03_Mono/UI/Helpers/SafeAreaFitter.cs` | `Screen.safeArea`에 RectTransform 앵커 자동 맞춤. 변/상/하 무시 옵션 |
+| `03_Mono/UI/Helpers/AutoLayoutRefresher.cs` | LayoutGroup 즉시 재계산. OnEnable 자동 옵션 |
+| `03_Mono/UI/Helpers/CanvasGroupFader.cs` | CanvasGroup 페이드 인/아웃 + interactable/blocksRaycasts 연동 |
+
+---
+
+### 24. 데이터 바인딩 표시기
+
+| 파일 | 역할 |
+|------|------|
+| `03_Mono/Stat/StatDisplay.cs` | 엔티티 ID + StatType → TMP 표시. StatChangedEvent 갱신 |
+| `03_Mono/Buff/BuffIconBinder.cs` | BuffIconBar에 ownerId를 Inspector로 연결 |
+| `03_Mono/Save/CurrencyDisplay.cs` | SaveSystem 슬롯/키에서 재화 읽어 TMP 표시. CurrencyChangedEvent 갱신 |
+| `02_Core/Save/CurrencyEvents.cs` | `CurrencyChangedEvent`(SlotIndex/Key/Old/New) |
+
+**수정 포인트**: 재화 변경 시 프로젝트가 `EventBus.Publish(new CurrencyChangedEvent{...})` 호출. CurrencyDisplay가 구독.
+
+---
+
+### 25. 이벤트 채널 / 릴레이
+
+| 파일 | 역할 |
+|------|------|
+| `02_Core/Events/GameEventSO.cs` | **SO** — Raise/Register/Unregister. 기획자가 Asset으로 관리 |
+| `03_Mono/Events/GameEventListener.cs` | GameEventSO 구독 → UnityEvent 발행(Inspector 조립) |
+| `03_Mono/Events/EventBusRelay.cs` | `EventBusRelay<T>` 추상 베이스 → UnityEvent 중계. 구체 예시 `QuestCompletedRelay` 포함 |
+
+---
+
+### 26. 튜토리얼 트리거 유틸
+
+> `ITutorialSystem.CheckTriggers(TriggerType, string)` 오버로드를 인터페이스에 추가(기존 구현체는 이미 존재).
+> `TriggerType`에 `ButtonClick`, `StageClear`, `AchievementUnlocked` 3종 추가.
+
+| 파일 | 역할 |
+|------|------|
+| `03_Mono/Tutorial/TutorialUITrigger.cs` | OnEnable 시 `UIOpen` 트리거. 같은 GO의 BaseScreen ScreenId 자동 사용 |
+| `03_Mono/Tutorial/TutorialButtonTrigger.cs` | Button 클릭 시 `ButtonClick` 트리거 |
+| `03_Mono/Tutorial/TutorialStageClearTrigger.cs` | 프로젝트가 `Fire(stageId)` 수동 호출 → `StageClear` |
+| `03_Mono/Tutorial/TutorialEventBridge.cs` | EventBus의 `QuestCompletedEvent`/`AchievementCompletedEvent`를 자동 브리지. 씬에 1개 배치 |
+
+**수정 포인트**: 퀘스트/업적 자동 연결은 `TutorialEventBridge` 하나만 배치하면 됨. 커스텀 이벤트 추가 → `TutorialEventBridge`에 Subscribe 추가 또는 프로젝트별 별도 브리지.
+
+---
+
+### 27. Inspector Attribute
+
+| Attribute | Drawer | 용도 |
+|-----------|--------|------|
+| `[ReadOnly]` | `ReadOnlyDrawer` | Inspector 표시만, 편집 불가 |
+| `[LocalizationKey]` | `LocalizationKeyDrawer` | 로컬라이제이션 키 표식(🌐 아이콘) |
+| `[SceneName]` | `SceneNameDrawer` | Build Settings 씬 드롭다운 |
+| `[EnumFlags]` | `EnumFlagsDrawer` | enum 비트 플래그 다중 선택 |
+| `[ShowIf("_cond")]` | `ShowIfDrawer` | 같은 오브젝트 bool 필드가 true일 때만 표시 |
+
+경로: `04_Utils/Attributes/*.cs`(런타임), `Editor/Drawers/*.cs`(에디터).
+
+---
+
 ## 시스템 간 의존 관계
 
 ```
@@ -581,6 +661,7 @@ IRemotePushProvider ← NotificationSystem (리모트 푸시)
 | `cacbb0b` | Phase 3: 가챠/IAP/광고 | 38 |
 | `f669604` | Phase 4: 퀘스트/업적/우편함 | 46 |
 | `95219cb` | Phase 5+6: 다국어/튜토리얼/네트워크/푸시 | 46 |
+| (미커밋) | Phase 12: 디자이너/기획자 유틸 (TMP 다국어, UI 헬퍼, 바인딩, 이벤트/튜토리얼 트리거, Attribute) | 25 |
 
 ---
 

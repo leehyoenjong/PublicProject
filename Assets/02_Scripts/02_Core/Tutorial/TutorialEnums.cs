@@ -18,7 +18,10 @@ namespace PublicFramework
         UIOpen,
         ItemGet,
         Manual,
-        ConditionMet
+        ConditionMet,
+        ButtonClick,
+        StageClear,
+        AchievementUnlocked
     }
 
     public enum StepWaitType

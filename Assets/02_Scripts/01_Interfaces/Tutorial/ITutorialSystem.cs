@@ -16,6 +16,7 @@ namespace PublicFramework
         string CurrentTutorialId { get; }
         int CurrentStepIndex { get; }
         void CheckTriggers();
+        void CheckTriggers(TriggerType triggerType, string triggerValue);
         IReadOnlyList<string> GetCompletedTutorials();
     }
 }
