@@ -10,8 +10,8 @@ namespace PublicFramework
     public class TutorialData : ScriptableObject
     {
         [Header("기본 정보")]
-        [SerializeField] private string _tutorialId;
-        [SerializeField] private string _displayName;
+        [SerializeField, SheetAlias("MID")] private string _tutorialId;
+        [SerializeField, LocalizationKey, SheetAlias("name")] private int _displayName;
         [SerializeField] private int _priority;
         [SerializeField] private bool _canSkip;
 
@@ -20,13 +20,13 @@ namespace PublicFramework
         [SerializeField] private string _triggerValue;
 
         [Header("선행 조건")]
-        [SerializeField] private string[] _prerequisiteTutorialIds;
+        [SerializeField, SheetAlias("prereqIds")] private string[] _prerequisiteTutorialIds;
 
         [Header("스텝")]
         [SerializeField] private TutorialStepData[] _steps;
 
         public string TutorialId => _tutorialId;
-        public string DisplayName => _displayName;
+        public int DisplayName => _displayName;
         public int Priority => _priority;
         public bool CanSkip => _canSkip;
         public TriggerType TriggerType => _triggerType;

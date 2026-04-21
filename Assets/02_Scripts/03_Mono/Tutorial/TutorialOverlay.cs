@@ -1,17 +1,27 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace PublicFramework
 {
     /// <summary>
-    /// 튜토리얼 오버레이 — 화면 어둡게 + 하이라이트 영역
+    /// 튜토리얼 오버레이 — 화면 어둡게 + 하이라이트 영역.
+    /// HighlightShape 별 비주얼은 Inspector 에 미리 GameObject 로 매핑하고 활성 전환한다.
+    /// 디자이너는 Shape 마다 다른 Sprite/Material/Prefab 인스턴스를 Scene 에 배치해 두고 참조만 연결하면 된다.
     /// </summary>
     public class TutorialOverlay : MonoBehaviour
     {
+        [Serializable]
+        public class ShapeVisual
+        {
+            public HighlightShape shape;
+            public RectTransform visual;
+        }
+
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private Image _overlayImage;
-        [SerializeField] private RectTransform _highlightMask;
         [SerializeField] private Button _tapArea;
+        [SerializeField] private ShapeVisual[] _shapeVisuals;
 
         private ITutorialSystem _tutorialSystem;
 
@@ -24,6 +34,7 @@ namespace PublicFramework
                 _tapArea.onClick.AddListener(OnTap);
             }
 
+            DeactivateAllShapes();
             SetVisible(false);
         }
 
@@ -39,23 +50,37 @@ namespace PublicFramework
 
         public void SetHighlight(RectTransform target, HighlightShape shape)
         {
-            if (_highlightMask == null || target == null) return;
+            if (_shapeVisuals == null) return;
 
-            _highlightMask.position = target.position;
-            _highlightMask.sizeDelta = target.sizeDelta;
+            for (int i = 0; i < _shapeVisuals.Length; i++)
+            {
+                var sv = _shapeVisuals[i];
+                if (sv == null || sv.visual == null) continue;
 
-            // TODO: HighlightShape에 따라 마스크 형태 변경
-            // Circle → 원형 마스크, Rectangle → 사각 마스크, None → 마스크 없음
-            // 프로젝트별 구현 시 Image.sprite나 Material로 분기
+                bool active = sv.shape == shape && shape != HighlightShape.None && target != null;
+                sv.visual.gameObject.SetActive(active);
 
-            _highlightMask.gameObject.SetActive(shape != HighlightShape.None);
+                if (active)
+                {
+                    sv.visual.position = target.position;
+                    sv.visual.sizeDelta = target.sizeDelta;
+                }
+            }
         }
 
         public void ClearHighlight()
         {
-            if (_highlightMask != null)
+            DeactivateAllShapes();
+        }
+
+        private void DeactivateAllShapes()
+        {
+            if (_shapeVisuals == null) return;
+            for (int i = 0; i < _shapeVisuals.Length; i++)
             {
-                _highlightMask.gameObject.SetActive(false);
+                var sv = _shapeVisuals[i];
+                if (sv == null || sv.visual == null) continue;
+                sv.visual.gameObject.SetActive(false);
             }
         }
 

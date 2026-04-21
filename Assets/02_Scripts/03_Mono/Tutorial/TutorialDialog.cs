@@ -15,10 +15,12 @@ namespace PublicFramework
         [SerializeField] private Button _skipButton;
 
         private ITutorialSystem _tutorialSystem;
+        private ILocalizationSystem _locSystem;
 
         private void Start()
         {
             _tutorialSystem = ServiceLocator.Get<ITutorialSystem>();
+            _locSystem = ServiceLocator.Get<ILocalizationSystem>();
 
             if (_nextButton != null) _nextButton.onClick.AddListener(OnNext);
             if (_skipButton != null) _skipButton.onClick.AddListener(OnSkip);
@@ -26,9 +28,12 @@ namespace PublicFramework
             SetVisible(false);
         }
 
-        public void Show(string text, DialogPosition position)
+        public void Show(int dialogTextKey, DialogPosition position)
         {
-            if (_dialogText != null) _dialogText.text = text;
+            if (_dialogText != null)
+            {
+                _dialogText.text = _locSystem != null ? _locSystem.GetText(dialogTextKey) : dialogTextKey.ToString();
+            }
 
             SetPosition(position);
             SetVisible(true);

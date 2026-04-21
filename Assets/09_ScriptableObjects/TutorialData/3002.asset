@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 994c5a580bb6e4f98beb956aec97fee7, type: 3}
+  m_Name: 3002
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.TutorialData
+  _tutorialId: 3002
+  _displayName: 3002
+  _priority: 10
+  _canSkip: 1
+  _triggerType: 1
+  _triggerValue: 5
+  _prerequisiteTutorialIds:
+  - 3001
+  _steps:
+  - _stepType: 0
+    _dialogText: 3006
+    _dialogPosition: 1
+    _highlightTargetId: 
+    _highlightShape: 2
+    _arrowDirection: 4
+    _waitType: 0
+    _waitDuration: 0
+    _waitConditionId: 
+    _canSkip: 0
+  - _stepType: 1
+    _dialogText: 3007
+    _dialogPosition: 2
+    _highlightTargetId: AttackButton
+    _highlightShape: 1
+    _arrowDirection: 0
+    _waitType: 1
+    _waitDuration: 0
+    _waitConditionId: AttackButton
+    _canSkip: 0
+  - _stepType: 3
+    _dialogText: 3008
+    _dialogPosition: 1
+    _highlightTargetId: 
+    _highlightShape: 2
+    _arrowDirection: 4
+    _waitType: 2
+    _waitDuration: 3
+    _waitConditionId: 
+    _canSkip: 0

@@ -3,7 +3,7 @@ using UnityEngine;
 namespace PublicFramework
 {
     /// <summary>
-    /// 문자열 필드를 로컬라이제이션 키로 표시. (표식 용도, 향후 Drawer에서 드롭다운 확장 가능)
+    /// int/string 필드를 로컬라이제이션 키로 표시. (신규 코드는 int 사용, 구 SO 잔존 필드는 string)
     /// </summary>
     public class LocalizationKeyAttribute : PropertyAttribute
     {

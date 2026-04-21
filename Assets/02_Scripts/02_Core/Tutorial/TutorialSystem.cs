@@ -205,7 +205,7 @@ namespace PublicFramework
                 _presentation?.ShowHighlight(step);
             }
 
-            if (!string.IsNullOrEmpty(step.DialogText))
+            if (step.DialogText != 0)
             {
                 _presentation?.ShowDialog(step.DialogText, step.DialogPosition);
             }

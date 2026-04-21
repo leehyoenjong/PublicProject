@@ -10,9 +10,12 @@ namespace PublicFramework.EditorTools
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (property.propertyType != SerializedPropertyType.String)
+            bool supported = property.propertyType == SerializedPropertyType.String
+                || property.propertyType == SerializedPropertyType.Integer;
+
+            if (!supported)
             {
-                EditorGUI.LabelField(position, label.text, "[LocalizationKey] string 전용");
+                EditorGUI.LabelField(position, label.text, "[LocalizationKey] int/string 전용");
                 return;
             }
 

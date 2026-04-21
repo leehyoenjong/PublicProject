@@ -9,7 +9,7 @@ namespace PublicFramework
         void HideStep();
         void ShowHighlight(TutorialStepData step);
         void HideHighlight();
-        void ShowDialog(string text, DialogPosition position);
+        void ShowDialog(int dialogTextKey, DialogPosition position);
         void HideDialog();
         void ShowArrow(ArrowDirection direction);
         void HideArrow();

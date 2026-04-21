@@ -1,39 +1,47 @@
+using System;
 using UnityEngine;
 
 namespace PublicFramework
 {
     /// <summary>
-    /// 튜토리얼 화살표 UI
+    /// 튜토리얼 화살표 UI.
+    /// ArrowDirection 별 비주얼은 Inspector 에 미리 GameObject 로 매핑하고 활성 전환한다.
+    /// 디자이너는 방향마다 다른 아트/애니메이션을 가진 Prefab 인스턴스를 Scene 에 배치해 두고 참조만 연결하면 된다.
     /// </summary>
     public class TutorialArrow : MonoBehaviour
     {
-        [SerializeField] private RectTransform _arrowTransform;
-        [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField] private float _bounceAmount = 10f;
-        [SerializeField] private float _bounceSpeed = 3f;
+        [Serializable]
+        public class DirectionVisual
+        {
+            public ArrowDirection direction;
+            public GameObject visual;
+        }
 
-        private Vector3 _basePosition;
-        private ArrowDirection _currentDirection;
-        private bool _isVisible;
+        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private DirectionVisual[] _directionVisuals;
+
+        private void Awake()
+        {
+            DeactivateAll();
+        }
 
         public void Show(ArrowDirection direction)
         {
-            _currentDirection = direction;
-            _isVisible = true;
-
-            if (_arrowTransform != null)
+            if (direction == ArrowDirection.None)
             {
-                float rotation = direction switch
-                {
-                    ArrowDirection.Up => 0f,
-                    ArrowDirection.Down => 180f,
-                    ArrowDirection.Left => 90f,
-                    ArrowDirection.Right => -90f,
-                    _ => 0f
-                };
+                DeactivateAll();
+                SetVisible(false);
+                return;
+            }
 
-                _arrowTransform.localRotation = Quaternion.Euler(0f, 0f, rotation);
-                _basePosition = _arrowTransform.localPosition;
+            if (_directionVisuals != null)
+            {
+                for (int i = 0; i < _directionVisuals.Length; i++)
+                {
+                    var dv = _directionVisuals[i];
+                    if (dv == null || dv.visual == null) continue;
+                    dv.visual.SetActive(dv.direction == direction);
+                }
             }
 
             SetVisible(true);
@@ -41,26 +49,19 @@ namespace PublicFramework
 
         public void Hide()
         {
-            _isVisible = false;
+            DeactivateAll();
             SetVisible(false);
         }
 
-        private void Update()
+        private void DeactivateAll()
         {
-            if (!_isVisible || _arrowTransform == null) return;
-
-            float offset = Mathf.Sin(Time.time * _bounceSpeed) * _bounceAmount;
-
-            Vector3 bounceDir = _currentDirection switch
+            if (_directionVisuals == null) return;
+            for (int i = 0; i < _directionVisuals.Length; i++)
             {
-                ArrowDirection.Up => Vector3.up,
-                ArrowDirection.Down => Vector3.down,
-                ArrowDirection.Left => Vector3.left,
-                ArrowDirection.Right => Vector3.right,
-                _ => Vector3.zero
-            };
-
-            _arrowTransform.localPosition = _basePosition + bounceDir * offset;
+                var dv = _directionVisuals[i];
+                if (dv == null || dv.visual == null) continue;
+                dv.visual.SetActive(false);
+            }
         }
 
         private void SetVisible(bool visible)

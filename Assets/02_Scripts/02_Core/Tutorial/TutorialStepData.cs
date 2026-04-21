@@ -10,7 +10,7 @@ namespace PublicFramework
     public class TutorialStepData
     {
         [SerializeField] private TutorialStepType _stepType;
-        [SerializeField] private string _dialogText;
+        [SerializeField, LocalizationKey] private int _dialogText;
         [SerializeField] private DialogPosition _dialogPosition;
         [SerializeField] private string _highlightTargetId;
         [SerializeField] private HighlightShape _highlightShape;
@@ -21,7 +21,7 @@ namespace PublicFramework
         [SerializeField] private bool _canSkip;
 
         public TutorialStepType StepType => _stepType;
-        public string DialogText => _dialogText;
+        public int DialogText => _dialogText;
         public DialogPosition DialogPosition => _dialogPosition;
         public string HighlightTargetId => _highlightTargetId;
         public HighlightShape HighlightShape => _highlightShape;

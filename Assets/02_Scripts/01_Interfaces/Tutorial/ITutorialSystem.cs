@@ -7,6 +7,7 @@ namespace PublicFramework
     /// </summary>
     public interface ITutorialSystem : IService
     {
+        void SetPresentation(ITutorialPresentation presentation);
         void StartTutorial(string tutorialId);
         void NextStep();
         void SkipTutorial();
