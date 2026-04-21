@@ -23,12 +23,17 @@ namespace PublicFramework
 
             if (_titleText != null) _titleText.text = data.TooltipTitle;
             if (_descText != null) _descText.text = data.TooltipDesc;
-            if (_iconImage != null && data.Icon != null) _iconImage.sprite = data.Icon;
 
             UpdateDynamic();
             SetVisible(true);
 
             Debug.Log($"[BuffTooltip] Show: {data.BuffId}");
+        }
+
+        public void SetIcon(Sprite icon)
+        {
+            if (_iconImage == null) return;
+            _iconImage.sprite = icon;
         }
 
         public void Hide()

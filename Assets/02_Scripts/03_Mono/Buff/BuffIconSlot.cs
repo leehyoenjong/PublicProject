@@ -24,13 +24,14 @@ namespace PublicFramework
         {
             _data = data;
 
-            if (_iconImage != null && data.Icon != null)
-            {
-                _iconImage.sprite = data.Icon;
-            }
-
             UpdateStack(data.StackCount);
             UpdateCategoryBorder(data.Category);
+        }
+
+        public void SetIcon(Sprite icon)
+        {
+            if (_iconImage == null) return;
+            _iconImage.sprite = icon;
         }
 
         public void UpdateStack(int stack)

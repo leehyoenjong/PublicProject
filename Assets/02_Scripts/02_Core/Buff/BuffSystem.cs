@@ -11,14 +11,16 @@ namespace PublicFramework
     {
         private readonly IStatSystem _statSystem;
         private readonly IEventBus _eventBus;
+        private readonly ILocalizationSystem _locSystem;
         private readonly Dictionary<string, List<BuffInstance>> _activeBuffs = new Dictionary<string, List<BuffInstance>>();
         private readonly Dictionary<string, HashSet<string>> _buffIdImmunities = new Dictionary<string, HashSet<string>>();
         private readonly Dictionary<string, HashSet<BuffCategory>> _categoryImmunities = new Dictionary<string, HashSet<BuffCategory>>();
 
-        public BuffSystem(IStatSystem statSystem, IEventBus eventBus)
+        public BuffSystem(IStatSystem statSystem, IEventBus eventBus, ILocalizationSystem locSystem = null)
         {
             _statSystem = statSystem;
             _eventBus = eventBus;
+            _locSystem = locSystem;
             Debug.Log("[BuffSystem] Init started");
         }
 
@@ -220,7 +222,7 @@ namespace PublicFramework
 
         private BuffResult ApplyNewBuff(string targetId, BuffData buffData, string sourceId)
         {
-            var instance = new BuffInstance(buffData, targetId, sourceId);
+            var instance = new BuffInstance(buffData, targetId, sourceId, _locSystem);
 
             if (!_activeBuffs.TryGetValue(targetId, out List<BuffInstance> buffs))
             {

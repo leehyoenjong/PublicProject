@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,10 +7,9 @@ namespace PublicFramework
     public class BuffData : ScriptableObject
     {
         [Header("기본 정보")]
-        [SerializeField] private string _buffId;
-        [SerializeField] private string _displayName;
-        [SerializeField] private string _description;
-        [SerializeField] private Sprite _icon;
+        [SerializeField, SheetAlias("MID")] private string _buffId;
+        [SerializeField, LocalizationKey, SheetAlias("name")] private int _displayName;
+        [SerializeField, LocalizationKey, SheetAlias("desc")] private int _description;
 
         [Header("분류")]
         [SerializeField] private BuffCategory _category;
@@ -37,12 +35,11 @@ namespace PublicFramework
         [SerializeField] private string[] _tags;
 
         [Header("스탯 수정")]
-        [SerializeField] private StatModifierEntry[] _targetStats;
+        [SerializeField] private PassiveStat[] _targetStats;
 
         public string BuffId => _buffId;
-        public string DisplayName => _displayName;
-        public string Description => _description;
-        public Sprite Icon => _icon;
+        public int DisplayName => _displayName;
+        public int Description => _description;
         public BuffCategory Category => _category;
         public ModifierType ModifierType => _modifierType;
         public BuffSource Source => _source;
@@ -56,18 +53,6 @@ namespace PublicFramework
         public int Priority => _priority;
         public bool IsUndispellable => _isUndispellable;
         public IReadOnlyList<string> Tags => _tags;
-        public IReadOnlyList<StatModifierEntry> TargetStats => _targetStats;
-    }
-
-    [Serializable]
-    public class StatModifierEntry
-    {
-        [SerializeField] private StatType _statType;
-        [SerializeField] private StatModType _modType;
-        [SerializeField] private float _value;
-
-        public StatType StatType => _statType;
-        public StatModType ModType => _modType;
-        public float Value => _value;
+        public IReadOnlyList<PassiveStat> TargetStats => _targetStats;
     }
 }

@@ -11,6 +11,7 @@ namespace PublicFramework
         private readonly BuffData _data;
         private readonly string _targetId;
         private readonly string _sourceId;
+        private readonly ILocalizationSystem _locSystem;
         private readonly List<IStatModifier> _modifiers = new List<IStatModifier>();
 
         private int _currentStack;
@@ -31,23 +32,23 @@ namespace PublicFramework
         public IReadOnlyList<IStatModifier> Modifiers => _modifiers.AsReadOnly();
 
         // IBuffUIData
-        public Sprite Icon => _data.Icon;
         public float RemainingRatio => _data.Duration > 0f ? _remainingDuration / _data.Duration : 1f;
         public string RemainingText => FormatRemainingText();
         public int StackCount => _currentStack;
-        public string TooltipTitle => _data.DisplayName;
-        public string TooltipDesc => _data.Description;
+        public string TooltipTitle => _locSystem != null ? _locSystem.GetText(_data.DisplayName) : _data.DisplayName.ToString();
+        public string TooltipDesc => _locSystem != null ? _locSystem.GetText(_data.Description) : _data.Description.ToString();
 
         public BuffData Data => _data;
         public IBuffEffect CustomEffect => _customEffect;
 
         private readonly IBuffEffect _customEffect;
 
-        public BuffInstance(BuffData data, string targetId, string sourceId, IBuffEffect customEffect = null)
+        public BuffInstance(BuffData data, string targetId, string sourceId, ILocalizationSystem locSystem, IBuffEffect customEffect = null)
         {
             _data = data;
             _targetId = targetId;
             _sourceId = sourceId;
+            _locSystem = locSystem;
             _customEffect = customEffect;
             _currentStack = 1;
             _remainingDuration = data.Duration;
@@ -182,7 +183,7 @@ namespace PublicFramework
         {
             if (_data.TargetStats == null) return;
 
-            foreach (StatModifierEntry entry in _data.TargetStats)
+            foreach (PassiveStat entry in _data.TargetStats)
             {
                 var modifier = new StatModifier(
                     entry.StatType,
@@ -201,7 +202,7 @@ namespace PublicFramework
 
             if (_data.TargetStats == null) return;
 
-            foreach (StatModifierEntry entry in _data.TargetStats)
+            foreach (PassiveStat entry in _data.TargetStats)
             {
                 float scaledValue = _data.StackPolicy == StackPolicy.Intensity
                     ? entry.Value * _currentStack
