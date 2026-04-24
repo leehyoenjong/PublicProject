@@ -14,8 +14,8 @@ namespace PublicFramework
         private AchievementState _state;
 
         public string AchievementId => _data.AchievementId;
-        public string DisplayName => _data.DisplayName;
-        public string Description => _data.Description;
+        public int DisplayName => _data.DisplayName;
+        public int Description => _data.Description;
         public AchievementCategory Category => _data.Category;
         public AchievementState State => _state;
         public bool IsHidden => _data.IsHidden;
@@ -39,21 +39,6 @@ namespace PublicFramework
             {
                 int required = RequiredAmount;
                 return required > 0 ? Mathf.Clamp01((float)_currentAmount / required) : 1f;
-            }
-        }
-
-        public int TotalPoints
-        {
-            get
-            {
-                int total = 0;
-                if (_data.Tiers == null) return 0;
-
-                for (int i = 0; i < _currentTier; i++)
-                {
-                    total += _data.Tiers[i].Points;
-                }
-                return total;
             }
         }
 

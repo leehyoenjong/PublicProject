@@ -20,11 +20,13 @@ namespace PublicFramework
         [SerializeField] private CanvasGroup _canvasGroup;
 
         private IQuestSystem _questSystem;
+        private ILocalizationSystem _locSystem;
         private string _currentQuestId;
 
         private void Start()
         {
             _questSystem = ServiceLocator.Get<IQuestSystem>();
+            _locSystem = ServiceLocator.Get<ILocalizationSystem>();
 
             if (_acceptButton != null) _acceptButton.onClick.AddListener(OnAccept);
             if (_claimButton != null) _claimButton.onClick.AddListener(OnClaim);
@@ -37,8 +39,8 @@ namespace PublicFramework
         {
             _currentQuestId = quest.QuestId;
 
-            if (_titleText != null) _titleText.text = quest.DisplayName;
-            if (_descText != null) _descText.text = quest.Description;
+            if (_titleText != null) _titleText.text = _locSystem != null ? _locSystem.GetText(quest.DisplayName) : quest.DisplayName.ToString();
+            if (_descText != null) _descText.text = _locSystem != null ? _locSystem.GetText(quest.Description) : quest.Description.ToString();
             if (_progressText != null) _progressText.text = $"{Mathf.RoundToInt(quest.Progress * 100f)}%";
 
             UpdateConditions(quest);

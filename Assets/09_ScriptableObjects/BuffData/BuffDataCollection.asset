@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a5583740ae1473b932ab31f475d453f, type: 3}
+  m_Name: BuffDataCollection
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.BuffDataCollection
+  _items:
+  - {fileID: 11400000, guid: 96cc5bd341bbe4dcc9eceec81c62569c, type: 2}
+  - {fileID: 11400000, guid: 596e8d2a997d047f9864ebc1023dbabe, type: 2}
+  - {fileID: 11400000, guid: fe71991446dbf4036b23c0ddfcc78d67, type: 2}

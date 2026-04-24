@@ -10,8 +10,8 @@ namespace PublicFramework
         string QuestId { get; }
         QuestType QuestType { get; }
         QuestState State { get; }
-        string DisplayName { get; }
-        string Description { get; }
+        int DisplayName { get; }
+        int Description { get; }
         float Progress { get; }
         bool IsCompleted { get; }
         IReadOnlyList<IConditionProgress> GetConditions();

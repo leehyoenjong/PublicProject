@@ -10,7 +10,7 @@ namespace PublicFramework
     [RequireComponent(typeof(TMP_Text))]
     public class LocalizedTMPText : MonoBehaviour
     {
-        [SerializeField] private string _localizationKey;
+        [SerializeField, LocalizationKey] private int _localizationKey;
         [SerializeField] private string[] _formatArgs;
 
         private TMP_Text _text;
@@ -36,7 +36,7 @@ namespace PublicFramework
             _eventBus?.Unsubscribe<LanguageChangedEvent>(OnLanguageChanged);
         }
 
-        public void SetKey(string key)
+        public void SetKey(int key)
         {
             _localizationKey = key;
             UpdateText();
@@ -56,7 +56,6 @@ namespace PublicFramework
         private void UpdateText()
         {
             if (_text == null || _locSystem == null) return;
-            if (string.IsNullOrEmpty(_localizationKey)) return;
 
             if (_formatArgs != null && _formatArgs.Length > 0)
             {

@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a4dbbed6b79492fb01751182662ce4, type: 3}
+  m_Name: En
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.LocalizationTable
+  _language: 1
+  _entries:
+  - _key: 1001
+    _value: Hero's First Step
+  - _key: 1002
+    _value: Defeat 3 slimes.
+  - _key: 1003
+    _value: Threat of the Forest
+  - _key: 1004
+    _value: Defeat 5 wolves and the area boss.
+  - _key: 1005
+    _value: Daily Login
+  - _key: 1006
+    _value: Log in for 3 consecutive days.
+  - _key: 1007
+    _value: Weekly Hunt
+  - _key: 1008
+    _value: Defeat any 30 enemies or clear stage 10.
+  - _key: 1009
+    _value: Christmas Event
+  - _key: 1010
+    _value: Event-only limited-time quest.
+  - _key: 2001
+    _value: First Strike
+  - _key: 2002
+    _value: Defeat your first enemy.
+  - _key: 2004
+    _value: Monster Slayer
+  - _key: 2005
+    _value: Defeat monsters.
+  - _key: 2009
+    _value: Enhancement Novice
+  - _key: 2010
+    _value: Enhance equipment 10 times.
+  - _key: 3001
+    _value: 'Tutorial: Basic Controls'
+  - _key: 3002
+    _value: 'Tutorial: Combat'
+  - _key: 3003
+    _value: Welcome! Tap the screen to continue.
+  - _key: 3004
+    _value: Press the play button here.
+  - _key: 3005
+    _value: Basic controls tutorial complete.
+  - _key: 3006
+    _value: Now let's learn combat.
+  - _key: 3007
+    _value: Press the attack button to attack.
+  - _key: 3008
+    _value: Please wait...
+  - _key: 4001
+    _value: ATK Up
+  - _key: 4002
+    _value: ATK increases for a duration.
+  - _key: 4003
+    _value: Burn
+  - _key: 4004
+    _value: Takes continuous fire damage.
+  - _key: 4005
+    _value: Shield
+  - _key: 4006
+    _value: Absorbs a fixed amount of damage.
+  - _key: 5001
+    _value: Fireball
+  - _key: 5002
+    _value: Deals fire damage and inflicts burn.
+  - _key: 5003
+    _value: Fireball Hit
+  - _key: 5004
+    _value: Hit effect
+  - _key: 5005
+    _value: Heal
+  - _key: 5006
+    _value: Heals an ally.
+  - _key: 7001
+    _value: Premium Banner
+  - _key: 7002
+    _value: Ongoing premium banner.
+  - _key: 7003
+    _value: Spring 2026 Event
+  - _key: 7004
+    _value: Limited-time spring event banner with exclusive pickup items.
+  - _key: 8001
+    _value: Premium Daily Gacha
+  - _key: 8002
+    _value: 100 per pull, 900 for 10x (10% off). Daily 10 pulls.
+  - _key: 8003
+    _value: Spring Event Pickup Gacha
+  - _key: 8004
+    _value: Increased SSR pickup rate. Pickup pity at 180.

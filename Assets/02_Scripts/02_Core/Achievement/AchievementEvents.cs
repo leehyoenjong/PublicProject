@@ -18,24 +18,5 @@ namespace PublicFramework
     {
         public string AchievementId;
         public int Tier;
-        public int Points;
-    }
-
-    public struct AchievementTitleUnlockedEvent
-    {
-        public string AchievementId;
-        public string Title;
-    }
-
-    public struct AchievementMilestoneClaimedEvent
-    {
-        public int MilestoneIndex;
-        public int RequiredPoints;
-    }
-
-    public struct AchievementPointsChangedEvent
-    {
-        public int TotalPoints;
-        public int AddedPoints;
     }
 }

@@ -10,22 +10,22 @@ namespace PublicFramework
     public class AchievementData : ScriptableObject
     {
         [Header("기본 정보")]
-        [SerializeField] private string _achievementId;
-        [SerializeField] private string _displayName;
-        [SerializeField] private string _description;
+        [SerializeField, SheetAlias("MID")] private string _achievementId;
+        [SerializeField, LocalizationKey, SheetAlias("name")] private int _displayName;
+        [SerializeField, LocalizationKey, SheetAlias("desc")] private int _description;
         [SerializeField] private AchievementCategory _category;
         [SerializeField] private bool _isHidden;
 
         [Header("조건")]
         [SerializeField] private ConditionType _conditionType;
-        [SerializeField] private string _conditionTargetId;
+        [SerializeField, SheetAlias("targetId")] private string _conditionTargetId;
 
         [Header("단계별 데이터")]
         [SerializeField] private AchievementTierData[] _tiers;
 
         public string AchievementId => _achievementId;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public int DisplayName => _displayName;
+        public int Description => _description;
         public AchievementCategory Category => _category;
         public bool IsHidden => _isHidden;
         public ConditionType ConditionType => _conditionType;

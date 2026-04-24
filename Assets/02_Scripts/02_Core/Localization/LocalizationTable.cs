@@ -15,29 +15,43 @@ namespace PublicFramework
 
         public LanguageCode Language => _language;
 
-        public Dictionary<string, string> ToDictionary()
+        public Dictionary<int, string> ToDictionary()
         {
-            var dict = new Dictionary<string, string>();
+            var dict = new Dictionary<int, string>();
             if (_entries == null) return dict;
 
             foreach (LocalizationEntry entry in _entries)
             {
-                if (!string.IsNullOrEmpty(entry.Key))
-                {
-                    dict[entry.Key] = entry.Value;
-                }
+                dict[entry.Key] = entry.Value;
             }
             return dict;
         }
+
+#if UNITY_EDITOR
+        /// <summary>에디터 전용: 시트 임포터에서 테이블 내용을 일괄 교체.</summary>
+        public void SetData(LanguageCode language, LocalizationEntry[] entries)
+        {
+            _language = language;
+            _entries = entries ?? Array.Empty<LocalizationEntry>();
+        }
+#endif
     }
 
     [Serializable]
     public class LocalizationEntry
     {
-        [SerializeField] private string _key;
+        [SerializeField] private int _key;
         [SerializeField] private string _value;
 
-        public string Key => _key;
+        public int Key => _key;
         public string Value => _value;
+
+        public LocalizationEntry() { }
+
+        public LocalizationEntry(int key, string value)
+        {
+            _key = key;
+            _value = value;
+        }
     }
 }

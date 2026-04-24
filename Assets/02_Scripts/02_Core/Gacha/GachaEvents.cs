@@ -1,47 +1,39 @@
+using System.Collections.Generic;
+
 namespace PublicFramework
 {
-    public struct GachaPullStartEvent
+    /// <summary>뽑기 요청 발생 — Pull() 진입 직후.</summary>
+    public struct GachaPullRequestedEvent
     {
-        public string BannerId;
+        public string GachaMID;
         public int Count;
+        public PaymentType PaymentType;
     }
 
-    public struct GachaPullResultEvent
+    /// <summary>뽑기 성공 — 재화 차감 + 추첨 + 보상 지급 완료 후. UI 연출 단일 페이로드.</summary>
+    public struct GachaPullCompletedEvent
     {
-        public string BannerId;
-        public GachaReward[] Rewards;
-        public int TotalPullCount;
+        public string GachaMID;
+        public string BannerMID;
+        public int Count;
+        public IReadOnlyList<GachaRewardItem> Rewards;
+        public GachaPullSummary Summary;
     }
 
-    public struct GachaPityReachedEvent
+    /// <summary>뽑기 실패 — 자격 부족/재화 부족/추첨 오류 등.</summary>
+    public struct GachaPullFailedEvent
     {
-        public string BannerId;
-        public PityType PityType;
-        public int PullCount;
+        public string GachaMID;
+        public int Count;
+        public string Reason;
     }
 
-    public struct GachaPityResetEvent
+    /// <summary>천장 발동 — Hard/Pickup 중 하나 트리거됐을 때.</summary>
+    public struct GachaPityTriggeredEvent
     {
-        public string BannerId;
-        public int PreviousPullCount;
-    }
-
-    public struct GachaBannerOpenEvent
-    {
-        public string BannerId;
-        public GachaType BannerType;
-    }
-
-    public struct GachaBannerCloseEvent
-    {
-        public string BannerId;
-    }
-
-    public struct GachaDuplicateEvent
-    {
-        public string BannerId;
-        public string RewardId;
-        public ItemGrade Grade;
-        public DuplicatePolicy Policy;
+        public string GachaMID;
+        public bool HardPity;
+        public bool PickupPity;
+        public int PullCountAtTrigger;
     }
 }

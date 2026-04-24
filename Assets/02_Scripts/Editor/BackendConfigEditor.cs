@@ -9,7 +9,7 @@ namespace PublicFramework
     /// BackendConfig 인스펙터 확장. 읽기 전용 경고만 표시 — 자동 수정 금지.
     /// </summary>
     [CustomEditor(typeof(BackendConfig))]
-    public class BackendConfigEditor : Editor
+    public class BackendConfigEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

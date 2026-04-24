@@ -9,7 +9,7 @@ namespace PublicFramework
     [RequireComponent(typeof(Text))]
     public class LocalizedText : MonoBehaviour
     {
-        [SerializeField] private string _localizationKey;
+        [SerializeField, LocalizationKey] private int _localizationKey;
 
         private Text _text;
         private ILocalizationSystem _locSystem;
@@ -34,7 +34,7 @@ namespace PublicFramework
             _eventBus?.Unsubscribe<LanguageChangedEvent>(OnLanguageChanged);
         }
 
-        public void SetKey(string key)
+        public void SetKey(int key)
         {
             _localizationKey = key;
             UpdateText();
@@ -48,8 +48,6 @@ namespace PublicFramework
         private void UpdateText()
         {
             if (_text == null || _locSystem == null) return;
-            if (string.IsNullOrEmpty(_localizationKey)) return;
-
             _text.text = _locSystem.GetText(_localizationKey);
         }
     }

@@ -14,7 +14,7 @@ namespace PublicFramework
 
     public struct LocalizationKeyMissingEvent
     {
-        public string Key;
+        public int Key;
         public LanguageCode Language;
     }
 }

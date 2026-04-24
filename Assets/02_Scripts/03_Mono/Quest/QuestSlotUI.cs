@@ -15,9 +15,16 @@ namespace PublicFramework
         [SerializeField] private GameObject _completedIcon;
         [SerializeField] private Button _button;
 
+        private ILocalizationSystem _locSystem;
+
         public void SetData(IQuestInstance quest, Action onClick)
         {
-            if (_nameText != null) _nameText.text = quest.DisplayName;
+            if (_locSystem == null) _locSystem = ServiceLocator.Get<ILocalizationSystem>();
+
+            if (_nameText != null)
+            {
+                _nameText.text = _locSystem != null ? _locSystem.GetText(quest.DisplayName) : quest.DisplayName.ToString();
+            }
 
             if (_progressText != null)
             {

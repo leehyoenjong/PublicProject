@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fbc1596e45c1437e8b582ef0ea89242, type: 3}
+  m_Name: quest_daily_001
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.QuestData
+  _questId: quest_daily_001
+  _displayName: 1005
+  _description: 1006
+  _questType: 2
+  _category: daily
+  _sortOrder: 100
+  _startDate: 2026-04-14
+  _endDate: 2026-12-31
+  _conditionGroupType: 0
+  _conditions:
+  - _conditionId: 
+    _conditionType: 8
+    _targetId: 
+    _requiredAmount: 3
+    _description: 
+  _rewards:
+  - _rewardId: 3
+    _amount: 1
+  _prerequisiteQuestIds: []
+  _requiredLevel: 1
+  _autoComplete: 1

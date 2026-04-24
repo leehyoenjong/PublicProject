@@ -10,9 +10,9 @@ namespace PublicFramework
     public class ConditionData
     {
         [SerializeField] private string _conditionId;
-        [SerializeField] private ConditionType _conditionType;
+        [SerializeField, SheetAlias("type")] private ConditionType _conditionType;
         [SerializeField] private string _targetId;
-        [SerializeField] private int _requiredAmount;
+        [SerializeField, SheetAlias("amount")] private int _requiredAmount;
         [SerializeField] private string _description;
 
         public string ConditionId => _conditionId;

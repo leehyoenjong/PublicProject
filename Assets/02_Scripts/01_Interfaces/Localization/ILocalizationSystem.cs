@@ -9,8 +9,8 @@ namespace PublicFramework
     {
         LanguageCode CurrentLanguage { get; }
         void SetLanguage(LanguageCode language);
-        string GetText(string key, params object[] args);
-        bool HasKey(string key);
+        string GetText(int key, params object[] args);
+        bool HasKey(int key);
         IReadOnlyList<LanguageCode> GetSupportedLanguages();
     }
 }

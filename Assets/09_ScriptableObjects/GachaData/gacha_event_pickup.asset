@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bf9b7d272da4a81adee125a17ab18d, type: 3}
+  m_Name: gacha_event_pickup
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.GachaData
+  _gachaId: gacha_event_pickup
+  _displayName: 8003
+  _description: 8004
+  _icon: {fileID: 0}
+  _paymentType: 2
+  _cost1Item: 9001
+  _cost1Amount: 300
+  _cost10Item: 9001
+  _cost10Amount: 2700
+  _dailyLimit: 0
+  _periodLimit: 0
+  _lifetimeLimit: 0
+  _bonus11th: 1
+  _bonusGuaranteedTier: 3
+  _pitySoftCount: 70
+  _pityHardCount: 90
+  _pityPickupCount: 180
+  _subtypeType: 0
+  _subtypeRef: 
+  _isActive: 1
+  _tiers:
+  - _tier: 3
+    _weight: 5
+  - _tier: 2
+    _weight: 20
+  - _tier: 1
+    _weight: 75
+  _drops:
+  - _tier: 3
+    _itemMID: 10103
+    _weight: 70
+  - _tier: 3
+    _itemMID: 10101
+    _weight: 30
+  - _tier: 2
+    _itemMID: 10201
+    _weight: 100
+  - _tier: 1
+    _itemMID: 10301
+    _weight: 100

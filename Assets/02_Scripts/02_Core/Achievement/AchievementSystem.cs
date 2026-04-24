@@ -1,23 +1,21 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace PublicFramework
 {
     /// <summary>
-    /// IAchievementSystem 구현체. SaveSystem 연동, 포인트 마일스톤.
+    /// IAchievementSystem 구현체. SaveSystem 연동.
+    /// 보상: 아이템(QuestReward) + 영구 보유효과(PassiveStat).
     /// </summary>
     public class AchievementSystem : IAchievementSystem
     {
         private readonly IEventBus _eventBus;
         private readonly ISaveSystem _saveSystem;
         private readonly Dictionary<string, AchievementInstance> _achievements = new Dictionary<string, AchievementInstance>();
-        private readonly List<PointMilestone> _milestones = new List<PointMilestone>();
         private IRewardHandler _rewardHandler;
 
         private const int SAVE_SLOT = 0;
         private const string SAVE_KEY_ACHIEVEMENTS = "achievement_data";
-        private const string SAVE_KEY_MILESTONES = "achievement_milestones";
 
         public AchievementSystem(IEventBus eventBus, ISaveSystem saveSystem)
         {
@@ -46,11 +44,6 @@ namespace PublicFramework
 
             var instance = new AchievementInstance(data);
             _achievements[data.AchievementId] = instance;
-        }
-
-        public void AddMilestone(PointMilestone milestone)
-        {
-            _milestones.Add(milestone);
         }
 
         public void NotifyProgress(ConditionType type, string targetId, int amount)
@@ -93,40 +86,25 @@ namespace PublicFramework
             AchievementTierData tierData = achievement.GetCurrentTierData();
             if (tierData == null) return false;
 
+            int claimedTierIndex = achievement.CurrentTier;
             achievement.ClaimCurrentTier();
 
             if (tierData.Rewards != null)
             {
                 foreach (QuestReward reward in tierData.Rewards)
                 {
-                    _rewardHandler?.HandleReward(reward.RewardId, reward.RewardType, reward.Amount, "Achievement");
+                    _rewardHandler?.HandleReward(reward.RewardId, reward.Amount, "Achievement");
                 }
             }
 
             _eventBus?.Publish(new AchievementRewardClaimedEvent
             {
                 AchievementId = achievementId,
-                Tier = achievement.CurrentTier - 1,
-                Points = tierData.Points
-            });
-
-            if (!string.IsNullOrEmpty(tierData.Title))
-            {
-                _eventBus?.Publish(new AchievementTitleUnlockedEvent
-                {
-                    AchievementId = achievementId,
-                    Title = tierData.Title
-                });
-            }
-
-            _eventBus?.Publish(new AchievementPointsChangedEvent
-            {
-                TotalPoints = GetTotalPoints(),
-                AddedPoints = tierData.Points
+                Tier = claimedTierIndex
             });
 
             SaveData();
-            Debug.Log($"[AchievementSystem] Reward claimed: {achievementId} tier {achievement.CurrentTier - 1}");
+            Debug.Log($"[AchievementSystem] Reward claimed: {achievementId} tier {claimedTierIndex}");
             return true;
         }
 
@@ -153,48 +131,33 @@ namespace PublicFramework
             return result.AsReadOnly();
         }
 
-        public int GetTotalPoints()
+        public IReadOnlyList<PassiveStat> GetActivePassiveStats()
         {
-            int total = 0;
+            var result = new List<PassiveStat>();
+
             foreach (AchievementInstance achievement in _achievements.Values)
             {
-                total += achievement.TotalPoints;
-            }
-            return total;
-        }
+                IReadOnlyList<AchievementTierData> tiers = achievement.Data.Tiers;
+                if (tiers == null) continue;
 
-        public IReadOnlyList<PointMilestone> GetPointMilestones()
-        {
-            return _milestones.AsReadOnly();
-        }
-
-        public bool ClaimMilestone(int milestoneIndex)
-        {
-            if (milestoneIndex < 0 || milestoneIndex >= _milestones.Count) return false;
-
-            PointMilestone milestone = _milestones[milestoneIndex];
-            if (milestone.IsClaimed) return false;
-            if (GetTotalPoints() < milestone.RequiredPoints) return false;
-
-            milestone.Claim();
-
-            if (milestone.Rewards != null)
-            {
-                foreach (QuestReward reward in milestone.Rewards)
+                int claimedCount = achievement.CurrentTier;
+                if (achievement.State == AchievementState.Rewarded && claimedCount < achievement.MaxTier)
                 {
-                    _rewardHandler?.HandleReward(reward.RewardId, reward.RewardType, reward.Amount, "Milestone");
+                    // Rewarded 상태에서 다음 티어로 넘어간 경우 이미 CurrentTier 가 증가된 상태
+                }
+
+                for (int i = 0; i < claimedCount && i < tiers.Count; i++)
+                {
+                    IReadOnlyList<PassiveStat> stats = tiers[i].PassiveStats;
+                    if (stats == null) continue;
+                    foreach (PassiveStat s in stats)
+                    {
+                        if (s != null) result.Add(s);
+                    }
                 }
             }
 
-            _eventBus?.Publish(new AchievementMilestoneClaimedEvent
-            {
-                MilestoneIndex = milestoneIndex,
-                RequiredPoints = milestone.RequiredPoints
-            });
-
-            SaveData();
-            Debug.Log($"[AchievementSystem] Milestone claimed: {milestoneIndex} ({milestone.RequiredPoints} pts)");
-            return true;
+            return result.AsReadOnly();
         }
 
         private void SaveData()
@@ -208,21 +171,12 @@ namespace PublicFramework
             }
 
             _saveSystem.Save(SAVE_SLOT, SAVE_KEY_ACHIEVEMENTS, data);
-
-            // 마일스톤 수령 상태 저장
-            var milestoneStates = new bool[_milestones.Count];
-            for (int i = 0; i < _milestones.Count; i++)
-            {
-                milestoneStates[i] = _milestones[i].IsClaimed;
-            }
-            _saveSystem.Save(SAVE_SLOT, SAVE_KEY_MILESTONES, milestoneStates);
         }
 
         private void LoadData()
         {
             if (_saveSystem == null) return;
 
-            // 업적 진행도 복원
             if (_saveSystem.HasKey(SAVE_SLOT, SAVE_KEY_ACHIEVEMENTS))
             {
                 var data = _saveSystem.Load<Dictionary<string, int[]>>(SAVE_SLOT, SAVE_KEY_ACHIEVEMENTS);
@@ -238,22 +192,6 @@ namespace PublicFramework
                             achievement.SetCurrentAmount(values[0]);
                             achievement.SetCurrentTier(values[1]);
                             achievement.SetState((AchievementState)values[2]);
-                        }
-                    }
-                }
-            }
-
-            // 마일스톤 수령 상태 복원
-            if (_saveSystem.HasKey(SAVE_SLOT, SAVE_KEY_MILESTONES))
-            {
-                var milestoneStates = _saveSystem.Load<bool[]>(SAVE_SLOT, SAVE_KEY_MILESTONES);
-                if (milestoneStates != null)
-                {
-                    for (int i = 0; i < _milestones.Count && i < milestoneStates.Length; i++)
-                    {
-                        if (milestoneStates[i])
-                        {
-                            _milestones[i].Claim();
                         }
                     }
                 }

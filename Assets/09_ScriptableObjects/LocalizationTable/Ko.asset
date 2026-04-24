@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a4dbbed6b79492fb01751182662ce4, type: 3}
+  m_Name: Ko
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.LocalizationTable
+  _language: 0
+  _entries:
+  - _key: 1001
+    _value: "\uC6A9\uC0AC\uC758 \uCCAB\uAC78\uC74C"
+  - _key: 1002
+    _value: "\uC2AC\uB77C\uC784 3\uB9C8\uB9AC\uB97C \uCC98\uCE58\uD55C\uB2E4."
+  - _key: 1003
+    _value: "\uC232\uC758 \uC704\uD611"
+  - _key: 1004
+    _value: "\uB291\uB300 5\uB9C8\uB9AC \uCC98\uCE58 + \uC9C0\uC5ED\uC7A5 \uCC98\uCE58."
+  - _key: 1005
+    _value: "\uB9E4\uC77C \uB85C\uADF8\uC778"
+  - _key: 1006
+    _value: "3\uC77C \uC5F0\uC18D \uB85C\uADF8\uC778."
+  - _key: 1007
+    _value: "\uC8FC\uAC04 \uC0AC\uB0E5"
+  - _key: 1008
+    _value: "\uC5B4\uB5A4 \uC801\uC774\uB4E0 30\uB9C8\uB9AC \uCC98\uCE58 \uB610\uB294
+      \uC2A4\uD14C\uC774\uC9C0 10 \uD074\uB9AC\uC5B4."
+  - _key: 1009
+    _value: "\uD06C\uB9AC\uC2A4\uB9C8\uC2A4 \uC774\uBCA4\uD2B8"
+  - _key: 1010
+    _value: "\uC774\uBCA4\uD2B8 \uC804\uC6A9 \uAE30\uAC04 \uD018\uC2A4\uD2B8."
+  - _key: 2001
+    _value: "\uCCAB \uBC88\uC9F8 \uCC98\uCE58"
+  - _key: 2002
+    _value: "\uCCAB \uBC88\uC9F8 \uC801\uC744 \uCC98\uCE58\uD558\uC138\uC694."
+  - _key: 2004
+    _value: "\uBAAC\uC2A4\uD130 \uCC98\uCE58\uC655"
+  - _key: 2005
+    _value: "\uBAAC\uC2A4\uD130\uB97C \uCC98\uCE58\uD569\uB2C8\uB2E4."
+  - _key: 2009
+    _value: "\uAC15\uD654 \uC785\uBB38"
+  - _key: 2010
+    _value: "\uC7A5\uBE44\uB97C 10\uD68C \uAC15\uD654\uD558\uC138\uC694."
+  - _key: 3001
+    _value: "\uD29C\uD1A0\uB9AC\uC5BC: \uAE30\uBCF8 \uC870\uC791"
+  - _key: 3002
+    _value: "\uD29C\uD1A0\uB9AC\uC5BC: \uC804\uD22C"
+  - _key: 3003
+    _value: "\uD658\uC601\uD569\uB2C8\uB2E4! \uD654\uBA74\uC744 \uD0ED\uD574 \uC9C4\uD589\uD558\uC138\uC694."
+  - _key: 3004
+    _value: "\uC5EC\uAE30 \uD50C\uB808\uC774 \uBC84\uD2BC\uC744 \uB20C\uB7EC\uBCF4\uC138\uC694."
+  - _key: 3005
+    _value: "\uAE30\uBCF8 \uC870\uC791 \uC124\uBA85\uC774 \uB05D\uB0AC\uC2B5\uB2C8\uB2E4."
+  - _key: 3006
+    _value: "\uC774\uC81C \uC804\uD22C\uB97C \uBC30\uC6CC\uBD05\uC2DC\uB2E4."
+  - _key: 3007
+    _value: "\uACF5\uACA9 \uBC84\uD2BC\uC744 \uB20C\uB7EC \uC801\uC744 \uACF5\uACA9\uD558\uC138\uC694."
+  - _key: 3008
+    _value: "\uC7A0\uC2DC \uAE30\uB2E4\uB9AC\uC138\uC694..."
+  - _key: 4001
+    _value: "\uACF5\uACA9\uB825 \uC99D\uAC00"
+  - _key: 4002
+    _value: "\uACF5\uACA9\uB825\uC774 \uC77C\uC815 \uC2DC\uAC04 \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - _key: 4003
+    _value: "\uD654\uC0C1"
+  - _key: 4004
+    _value: "\uC9C0\uC18D\uC801\uC778 \uD654\uC5FC \uD53C\uD574\uB97C \uBC1B\uC2B5\uB2C8\uB2E4."
+  - _key: 4005
+    _value: "\uBCF4\uD638\uB9C9"
+  - _key: 4006
+    _value: "\uC77C\uC815\uB7C9\uC758 \uD53C\uD574\uB97C \uD761\uC218\uD569\uB2C8\uB2E4."
+  - _key: 5001
+    _value: "\uD30C\uC774\uC5B4\uBCFC"
+  - _key: 5002
+    _value: "\uC801\uC5D0\uAC8C \uD654\uC5FC \uD53C\uD574\uC640 \uD654\uC0C1\uC744
+      \uC785\uD799\uB2C8\uB2E4."
+  - _key: 5003
+    _value: "\uD30C\uC774\uC5B4\uBCFC \uC801\uC911"
+  - _key: 5004
+    _value: "\uCDA9\uB3CC \uD6A8\uACFC"
+  - _key: 5005
+    _value: "\uD790"
+  - _key: 5006
+    _value: "\uC544\uAD70\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
+  - _key: 7001
+    _value: "\uD504\uB9AC\uBBF8\uC5C4 \uBC30\uB108"
+  - _key: 7002
+    _value: "\uC0C1\uC2DC \uC6B4\uC601\uB418\uB294 \uD504\uB9AC\uBBF8\uC5C4 \uBF51\uAE30
+      \uBC30\uB108\uC785\uB2C8\uB2E4."
+  - _key: 7003
+    _value: "2026 \uBD04 \uC774\uBCA4\uD2B8"
+  - _key: 7004
+    _value: "\uAE30\uAC04 \uD55C\uC815 \uBD04 \uC774\uBCA4\uD2B8 \uBC30\uB108. \uC804\uC6A9
+      \uD53D\uC5C5 \uC544\uC774\uD15C \uD3EC\uD568."
+  - _key: 8001
+    _value: "\uD504\uB9AC\uBBF8\uC5C4 \uC77C\uC77C \uBF51\uAE30"
+  - _key: 8002
+    _value: "1\uD68C 100, 10\uC5F0 900 (10% \uD560\uC778). \uC77C\uC77C 10\uD68C
+      \uC81C\uD55C."
+  - _key: 8003
+    _value: "\uBD04 \uC774\uBCA4\uD2B8 \uD53D\uC5C5 \uBF51\uAE30"
+  - _key: 8004
+    _value: "SSR \uD53D\uC5C5 \uD655\uB960 \uC0C1\uC2B9. \uD53D\uC5C5 \uCC9C\uC7A5
+      180\uD68C."

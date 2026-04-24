@@ -15,8 +15,8 @@ namespace PublicFramework
         public string QuestId => _data.QuestId;
         public QuestType QuestType => _data.QuestType;
         public QuestState State => _state;
-        public string DisplayName => _data.DisplayName;
-        public string Description => _data.Description;
+        public int DisplayName => _data.DisplayName;
+        public int Description => _data.Description;
         public float Progress => _conditionGroup.Progress;
         public bool IsCompleted => _conditionGroup.IsCompleted;
 

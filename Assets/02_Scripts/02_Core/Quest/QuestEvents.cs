@@ -20,8 +20,7 @@ namespace PublicFramework
     public struct QuestRewardClaimedEvent
     {
         public string QuestId;
-        public string RewardId;
-        public RewardType RewardType;
+        public int RewardId;
         public int Amount;
     }
 

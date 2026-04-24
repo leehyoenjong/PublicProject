@@ -47,11 +47,6 @@ namespace PublicFramework
             _quests[questData.QuestId] = instance;
 
             _eventBus?.Publish(new QuestRegisteredEvent { QuestId = questData.QuestId });
-
-            if (questData.AutoAccept)
-            {
-                instance.SetState(QuestState.InProgress);
-            }
         }
 
         public bool AcceptQuest(string questId)
@@ -78,12 +73,11 @@ namespace PublicFramework
             if (quest.State != QuestState.InProgress) return false;
 
             quest.ResetConditions();
-            quest.SetState(QuestState.Available);
             SaveQuestStates();
 
             _eventBus?.Publish(new QuestAbandonedEvent { QuestId = questId });
 
-            Debug.Log($"[QuestSystem] Quest abandoned: {questId}");
+            Debug.Log($"[QuestSystem] Quest abandoned (progress reset): {questId}");
             return true;
         }
 
@@ -96,13 +90,12 @@ namespace PublicFramework
 
             foreach (QuestReward reward in quest.GetRewards())
             {
-                _rewardHandler?.HandleReward(reward.RewardId, reward.RewardType, reward.Amount, "Quest");
+                _rewardHandler?.HandleReward(reward.RewardId, reward.Amount, "Quest");
 
                 _eventBus?.Publish(new QuestRewardClaimedEvent
                 {
                     QuestId = questId,
                     RewardId = reward.RewardId,
-                    RewardType = reward.RewardType,
                     Amount = reward.Amount
                 });
             }
@@ -138,22 +131,21 @@ namespace PublicFramework
             foreach (QuestInstance quest in _quests.Values)
             {
                 if (quest.State != QuestState.Locked) continue;
+                if (!ArePrerequisitesMet(quest)) continue;
 
-                if (ArePrerequisitesMet(quest))
+                quest.SetState(QuestState.InProgress);
+
+                _eventBus?.Publish(new QuestUnlockedEvent
                 {
-                    quest.SetState(QuestState.Available);
+                    QuestId = quest.QuestId,
+                    QuestType = quest.QuestType
+                });
 
-                    _eventBus?.Publish(new QuestUnlockedEvent
-                    {
-                        QuestId = quest.QuestId,
-                        QuestType = quest.QuestType
-                    });
-
-                    if (quest.Data.AutoAccept)
-                    {
-                        AcceptQuest(quest.QuestId);
-                    }
-                }
+                _eventBus?.Publish(new QuestAcceptedEvent
+                {
+                    QuestId = quest.QuestId,
+                    QuestType = quest.QuestType
+                });
             }
 
             SaveQuestStates();
@@ -239,7 +231,7 @@ namespace PublicFramework
                 if (quest.QuestType != type) continue;
 
                 quest.ResetConditions();
-                quest.SetState(quest.Data.AutoAccept ? QuestState.InProgress : QuestState.Available);
+                quest.SetState(ArePrerequisitesMet(quest) ? QuestState.InProgress : QuestState.Locked);
             }
 
             SaveQuestStates();

@@ -1,0 +1,233 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c01f924753147c6b701e6326bdb59c, type: 3}
+  m_Name: Data
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::PublicFramework.Editor.SheetImporter.SheetImporterConfig
+  _entries:
+  - _entryName: "\uD018\uC2A4\uD2B8"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=82229843#gid=82229843
+    _targetScript: {fileID: 11500000, guid: 1fbc1596e45c1437e8b582ef0ea89242, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _questId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: ad35bf9e383274f4ea4005fa688f89c7, type: 3}
+    _childTables: []
+  - _entryName: "\uB7AD\uADC0\uC9C0"
+    _mode: 1
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=40470093#gid=40470093
+    _targetScript: {fileID: 11500000, guid: 1fbc1596e45c1437e8b582ef0ea89242, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: MID
+    _keyHeader: MID
+    _collectionScript: {fileID: 0}
+    _childTables: []
+  - _entryName: "\uC5C5\uC801"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=345520462
+    _targetScript: {fileID: 11500000, guid: 652b37fdb6df44f968d675ce855de8e8, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _achievementId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 64ee13283fc674ff481cf803dc192877, type: 3}
+    _childTables: []
+  - _entryName: "\uD29C\uD1A0\uB9AC\uC5BC"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=2110322570#gid=2110322570
+    _targetScript: {fileID: 11500000, guid: 994c5a580bb6e4f98beb956aec97fee7, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _tutorialId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 7aa376dfc1d1c41f3917b2f2e7e7b95f, type: 3}
+    _childTables:
+    - _parentFieldName: _steps
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1327448111#gid=1327448111
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+  - _entryName: "\uBC84\uD504"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1049674501
+    _targetScript: {fileID: 11500000, guid: b6872cf33fc5e42ea84d20a3e9528800, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _buffId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 4a5583740ae1473b932ab31f475d453f, type: 3}
+    _childTables: []
+  - _entryName: "\uC2A4\uD0AC"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=925937470#gid=925937470
+    _targetScript: {fileID: 11500000, guid: 4d7d9746def9a48dfac0fd7e44260f08, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _skillId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 5d352001a83e94a9faf8fe8d130a1cfa, type: 3}
+    _childTables:
+    - _parentFieldName: _actions
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1811336116#gid=1811336116
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+    - _parentFieldName: _levelTable
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1076934073#gid=1076934073
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+  - _entryName: "\uC544\uC774\uD15C \uB370\uC774\uD130"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/export?format=csv&gid=955246087
+    _targetScript: {fileID: 11500000, guid: c70fe056e77f147dfb45bd163766ddb2, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _itemId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 4e87d8b068af9454794cf8351f66c2e3, type: 3}
+    _childTables: []
+  - _entryName: "\uC7A5\uBE44"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/export?format=csv&gid=62457652
+    _targetScript: {fileID: 11500000, guid: 02330470d486041169ceb90f6441c7c4, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: 
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 992e2e07529294baf84b34fc94efb2b4, type: 3}
+    _childTables:
+    - _parentFieldName: _baseStats
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/export?format=csv&gid=491701425
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+  - _entryName: "\uC0C1\uC810"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit#gid=941699676
+    _targetScript: {fileID: 11500000, guid: 49acd9d811e5a46629a239e99c359649, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: 
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 9c385a875d9694939bdc4065646521ea, type: 3}
+    _childTables:
+    - _parentFieldName: _rewards
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit#gid=800544369
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+  - _entryName: "\uAC00\uCC60"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1135662539#gid=1135662539
+    _targetScript: {fileID: 11500000, guid: 14bf9b7d272da4a81adee125a17ab18d, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: 
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: d0ac7b9ef81c24d50a38c5652471420c, type: 3}
+    _childTables:
+    - _parentFieldName: _tiers
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=466632295
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+    - _parentFieldName: _drops
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1202262069
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+  - _entryName: "\uBCA0\uB108"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=747031948
+    _targetScript: {fileID: 11500000, guid: 3c0a9c9fd4bbb455ab81fc6a9f9c797c, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: 
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: dd8ebe176a5d54749b8141897a57d3ca, type: 3}
+    _childTables:
+    - _parentFieldName: _gachas
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1794792722
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []

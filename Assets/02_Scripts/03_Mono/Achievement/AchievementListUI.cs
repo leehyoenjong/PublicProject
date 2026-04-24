@@ -12,7 +12,6 @@ namespace PublicFramework
         [SerializeField] private Transform _slotParent;
         [SerializeField] private AchievementSlotUI _slotPrefab;
         [SerializeField] private AchievementDetailUI _detailUI;
-        [SerializeField] private Text _totalPointsText;
 
         private IAchievementSystem _achievementSystem;
         private IEventBus _eventBus;
@@ -49,11 +48,6 @@ namespace PublicFramework
             ClearSlots();
 
             IReadOnlyList<IAchievementInstance> achievements = _achievementSystem.GetAchievements(_currentFilter);
-
-            if (_totalPointsText != null)
-            {
-                _totalPointsText.text = _achievementSystem.GetTotalPoints().ToString();
-            }
 
             if (_slotPrefab == null || _slotParent == null) return;
 

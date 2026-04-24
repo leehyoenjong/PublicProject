@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49acd9d811e5a46629a239e99c359649, type: 3}
+  m_Name: shop_pot_small_daily
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.ShopData
+  _shopId: shop_pot_small_daily
+  _displayName: 6001
+  _description: 6002
+  _icon: {fileID: 0}
+  _paymentType: 2
+  _paymentId: currency_gem
+  _paymentAmount: 10
+  _resetPeriod: 1
+  _weeklyMask: 0
+  _eventStartUtc: 
+  _eventEndUtc: 
+  _productLimit: 0
+  _playerLimit: 1
+  _playerLimitScope: 0
+  _discountPercent: 0
+  _firstPurchaseBonusPercent: 0
+  _conditionType: 0
+  _conditionValue: 
+  _slotIndex: 0
+  _isFeatured: 0
+  _isActive: 1
+  _rewards:
+  - _rewardItemMID: 10001
+    _rewardAmount: 1

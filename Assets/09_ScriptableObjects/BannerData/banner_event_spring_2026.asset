@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c0a9c9fd4bbb455ab81fc6a9f9c797c, type: 3}
+  m_Name: banner_event_spring_2026
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.BannerData
+  _bannerId: banner_event_spring_2026
+  _displayName: 7003
+  _description: 7004
+  _keyVisual: {fileID: 0}
+  _category: 1
+  _periodStartUtc: 2026-05-01T00:00:00Z
+  _periodEndUtc: 2026-05-31T23:59:59Z
+  _displayOrder: 10
+  _unlockType: 1
+  _unlockValue: 20
+  _carryOverCounter: 0
+  _isActive: 1
+  _gachas:
+  - _gachaMID: gacha_event_pickup

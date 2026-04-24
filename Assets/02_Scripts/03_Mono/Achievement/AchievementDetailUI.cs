@@ -14,18 +14,19 @@ namespace PublicFramework
         [SerializeField] private Text _progressText;
         [SerializeField] private Image _progressFill;
         [SerializeField] private Text _tierText;
-        [SerializeField] private Text _pointsText;
         [SerializeField] private Transform _tierListParent;
         [SerializeField] private GameObject _tierEntryPrefab;
         [SerializeField] private Button _claimButton;
         [SerializeField] private CanvasGroup _canvasGroup;
 
         private IAchievementSystem _achievementSystem;
+        private ILocalizationSystem _locSystem;
         private string _currentId;
 
         private void Start()
         {
             _achievementSystem = ServiceLocator.Get<IAchievementSystem>();
+            _locSystem = ServiceLocator.Get<ILocalizationSystem>();
 
             if (_claimButton != null) _claimButton.onClick.AddListener(OnClaim);
             SetVisible(false);
@@ -35,12 +36,11 @@ namespace PublicFramework
         {
             _currentId = achievement.AchievementId;
 
-            if (_titleText != null) _titleText.text = achievement.DisplayName;
-            if (_descText != null) _descText.text = achievement.Description;
+            if (_titleText != null) _titleText.text = _locSystem != null ? _locSystem.GetText(achievement.DisplayName) : achievement.DisplayName.ToString();
+            if (_descText != null) _descText.text = _locSystem != null ? _locSystem.GetText(achievement.Description) : achievement.Description.ToString();
             if (_progressText != null) _progressText.text = $"{achievement.CurrentAmount}/{achievement.RequiredAmount}";
             if (_progressFill != null) _progressFill.fillAmount = achievement.Progress;
             if (_tierText != null) _tierText.text = $"Tier {achievement.CurrentTier + 1}/{achievement.MaxTier}";
-            if (_pointsText != null) _pointsText.text = $"{achievement.TotalPoints} pts";
 
             UpdateTierList(achievement);
             if (_claimButton != null) _claimButton.gameObject.SetActive(achievement.State == AchievementState.Completed);
@@ -67,7 +67,7 @@ namespace PublicFramework
                 if (text != null)
                 {
                     string status = i < achievement.CurrentTier ? "[Done]" : (i == achievement.CurrentTier ? "[Current]" : "");
-                    text.text = $"Tier {i + 1}: {tiers[i].RequiredAmount} — {tiers[i].Points}pts {status}";
+                    text.text = $"Tier {i + 1}: {tiers[i].RequiredAmount} {status}";
                 }
             }
         }

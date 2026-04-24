@@ -28,7 +28,7 @@ namespace PublicFramework
         {
             _eventBus.Subscribe<ConditionProgressEvent>(OnConditionProgress);
             _eventBus.Subscribe<EnhanceSuccessEvent>(OnEnhanceSuccess);
-            _eventBus.Subscribe<GachaPullResultEvent>(OnGachaPull);
+            _eventBus.Subscribe<GachaPullCompletedEvent>(OnGachaPull);
             _eventBus.Subscribe<BuffAppliedEvent>(OnBuffApplied);
             _eventBus.Subscribe<MaterialConsumedEvent>(OnMaterialConsumed);
         }
@@ -37,7 +37,7 @@ namespace PublicFramework
         {
             _eventBus.Unsubscribe<ConditionProgressEvent>(OnConditionProgress);
             _eventBus.Unsubscribe<EnhanceSuccessEvent>(OnEnhanceSuccess);
-            _eventBus.Unsubscribe<GachaPullResultEvent>(OnGachaPull);
+            _eventBus.Unsubscribe<GachaPullCompletedEvent>(OnGachaPull);
             _eventBus.Unsubscribe<BuffAppliedEvent>(OnBuffApplied);
             _eventBus.Unsubscribe<MaterialConsumedEvent>(OnMaterialConsumed);
         }
@@ -52,10 +52,10 @@ namespace PublicFramework
             _questSystem.NotifyConditionProgress(ConditionType.EquipUpgrade, evt.InstanceId, 1);
         }
 
-        private void OnGachaPull(GachaPullResultEvent evt)
+        private void OnGachaPull(GachaPullCompletedEvent evt)
         {
-            int count = evt.Rewards != null ? evt.Rewards.Length : 0;
-            _questSystem.NotifyConditionProgress(ConditionType.GachaPull, evt.BannerId, count);
+            int count = evt.Rewards != null ? evt.Rewards.Count : evt.Count;
+            _questSystem.NotifyConditionProgress(ConditionType.GachaPull, evt.GachaMID, count);
         }
 
         private void OnBuffApplied(BuffAppliedEvent evt)

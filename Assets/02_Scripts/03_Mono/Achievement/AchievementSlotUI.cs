@@ -16,13 +16,18 @@ namespace PublicFramework
         [SerializeField] private GameObject _completedIcon;
         [SerializeField] private Button _button;
 
+        private ILocalizationSystem _locSystem;
+
         public void SetData(IAchievementInstance achievement, Action onClick)
         {
+            if (_locSystem == null) _locSystem = ServiceLocator.Get<ILocalizationSystem>();
+
             if (_nameText != null)
             {
-                _nameText.text = achievement.IsHidden && achievement.State == AchievementState.InProgress
+                bool hidden = achievement.IsHidden && achievement.State == AchievementState.InProgress;
+                _nameText.text = hidden
                     ? "???"
-                    : achievement.DisplayName;
+                    : (_locSystem != null ? _locSystem.GetText(achievement.DisplayName) : achievement.DisplayName.ToString());
             }
 
             if (_progressText != null)

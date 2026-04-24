@@ -11,9 +11,8 @@ namespace PublicFramework
     {
         private readonly IEventBus _eventBus;
         private readonly ISaveSystem _saveSystem;
-        private readonly List<ILocalizationLoader> _loaders = new List<ILocalizationLoader>();
 
-        private readonly Dictionary<LanguageCode, Dictionary<string, string>> _tables = new Dictionary<LanguageCode, Dictionary<string, string>>();
+        private readonly Dictionary<LanguageCode, Dictionary<int, string>> _tables = new Dictionary<LanguageCode, Dictionary<int, string>>();
         private readonly List<LanguageCode> _supportedLanguages = new List<LanguageCode>();
 
         private LanguageCode _currentLanguage;
@@ -31,11 +30,6 @@ namespace PublicFramework
 
             LoadSavedLanguage();
             Debug.Log($"[LocalizationSystem] Init started (language: {_currentLanguage})");
-        }
-
-        public void AddLoader(ILocalizationLoader loader)
-        {
-            _loaders.Add(loader);
         }
 
         public void LoadTable(LocalizationTable table)
@@ -58,33 +52,6 @@ namespace PublicFramework
             Debug.Log($"[LocalizationSystem] Table loaded: {table.Language} ({_tables[table.Language].Count} keys)");
         }
 
-        public void LoadFromLoaders(LanguageCode language)
-        {
-            foreach (ILocalizationLoader loader in _loaders)
-            {
-                if (!loader.SupportsLanguage(language)) continue;
-
-                Dictionary<string, string> data = loader.Load(language);
-                if (data == null) continue;
-
-                if (!_tables.TryGetValue(language, out Dictionary<string, string> existing))
-                {
-                    existing = new Dictionary<string, string>();
-                    _tables[language] = existing;
-                }
-
-                foreach (var kvp in data)
-                {
-                    existing[kvp.Key] = kvp.Value;
-                }
-
-                if (!_supportedLanguages.Contains(language))
-                {
-                    _supportedLanguages.Add(language);
-                }
-            }
-        }
-
         public void SetLanguage(LanguageCode language)
         {
             if (_currentLanguage == language) return;
@@ -94,7 +61,7 @@ namespace PublicFramework
 
             if (!_tables.ContainsKey(language))
             {
-                LoadFromLoaders(language);
+                Debug.LogWarning($"[LocalizationSystem] Table for '{language}' not loaded — Fallback will apply");
             }
 
             SaveLanguage();
@@ -108,7 +75,7 @@ namespace PublicFramework
             Debug.Log($"[LocalizationSystem] Language changed: {oldLanguage} -> {language}");
         }
 
-        public string GetText(string key, params object[] args)
+        public string GetText(int key, params object[] args)
         {
             string value = FindText(key, _currentLanguage);
 
@@ -130,7 +97,7 @@ namespace PublicFramework
                 });
 
                 Debug.LogWarning($"[LocalizationSystem] Key not found: {key} ({_currentLanguage})");
-                return key;
+                return key.ToString();
             }
 
             if (args != null && args.Length > 0)
@@ -149,7 +116,7 @@ namespace PublicFramework
             return value;
         }
 
-        public bool HasKey(string key)
+        public bool HasKey(int key)
         {
             return FindText(key, _currentLanguage) != null
                 || FindText(key, LanguageCode.En) != null
@@ -161,9 +128,9 @@ namespace PublicFramework
             return _supportedLanguages.AsReadOnly();
         }
 
-        private string FindText(string key, LanguageCode language)
+        private string FindText(int key, LanguageCode language)
         {
-            if (_tables.TryGetValue(language, out Dictionary<string, string> table))
+            if (_tables.TryGetValue(language, out Dictionary<int, string> table))
             {
                 if (table.TryGetValue(key, out string value))
                 {

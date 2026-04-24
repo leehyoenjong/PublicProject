@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fbc1596e45c1437e8b582ef0ea89242, type: 3}
+  m_Name: quest_event_xmas
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.QuestData
+  _questId: quest_event_xmas
+  _displayName: 1009
+  _description: 1010
+  _questType: 4
+  _category: event
+  _sortOrder: 500
+  _startDate: 2026-12-20
+  _endDate: 2026-12-27
+  _conditionGroupType: 2
+  _conditions:
+  - _conditionId: 
+    _conditionType: 6
+    _targetId: xmas_banner
+    _requiredAmount: 10
+    _description: 
+  - _conditionId: 
+    _conditionType: 5
+    _targetId: gold
+    _requiredAmount: 5000
+    _description: 
+  _rewards:
+  - _rewardId: 5
+    _amount: 1
+  _prerequisiteQuestIds:
+  - quest_main_002
+  - quest_weekly_001
+  _requiredLevel: 10
+  _autoComplete: 0

@@ -8,8 +8,8 @@ namespace PublicFramework
     public interface IAchievementInstance
     {
         string AchievementId { get; }
-        string DisplayName { get; }
-        string Description { get; }
+        int DisplayName { get; }
+        int Description { get; }
         AchievementCategory Category { get; }
         AchievementState State { get; }
         bool IsHidden { get; }
@@ -18,7 +18,6 @@ namespace PublicFramework
         float Progress { get; }
         int CurrentAmount { get; }
         int RequiredAmount { get; }
-        int TotalPoints { get; }
         IReadOnlyList<AchievementTierData> GetTiers();
     }
 }

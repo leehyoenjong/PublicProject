@@ -5,419 +5,461 @@ using UnityEngine;
 namespace PublicFramework
 {
     /// <summary>
-    /// IGachaSystem 구현체 — 배너 관리, Pull 처리, 천장 계산
-    /// IEventBus, ISaveSystem 생성자 주입 (DIP)
+    /// IGachaSystem 구현. 배너 노출 / 뽑기 자격 / 뽑기 처리의 단일 진입점.
+    /// 재화 차감 및 보상 지급은 IInventorySystem, 추첨은 IDropResolver, 영속화는 IGachaRepository.
     /// </summary>
     public class GachaSystem : IGachaSystem
     {
-        private const string PITY_SAVE_PREFIX = "gacha_pity_";
-        private const int SAVE_SLOT = 0;
-
         private readonly IEventBus _eventBus;
-        private readonly ISaveSystem _saveSystem;
-        private readonly Dictionary<string, GachaBannerData> _banners = new Dictionary<string, GachaBannerData>();
-        private readonly Dictionary<string, IPullStrategy> _strategies = new Dictionary<string, IPullStrategy>();
-        private readonly Dictionary<string, PityCounter> _pityCounters = new Dictionary<string, PityCounter>();
-        private readonly IPullStrategy _defaultStrategy;
-        private IDuplicateHandler _duplicateHandler;
+        private readonly IInventorySystem _inventory;
+        private readonly IGachaRepository _repository;
+        private readonly ITimeProvider _timeProvider;
+        private IDropResolver _dropResolver;
 
-        public GachaSystem(IEventBus eventBus, ISaveSystem saveSystem)
+        private readonly Dictionary<string, IBanner> _banners = new Dictionary<string, IBanner>();
+        private readonly Dictionary<string, IGacha> _gachas = new Dictionary<string, IGacha>();
+        private readonly Dictionary<string, string> _gachaToBanner = new Dictionary<string, string>();
+        private readonly Dictionary<string, PityCounter> _pityCounters = new Dictionary<string, PityCounter>();
+
+        public GachaSystem(IEventBus eventBus, IInventorySystem inventory, IGachaRepository repository, ITimeProvider timeProvider)
         {
             _eventBus = eventBus;
-            _saveSystem = saveSystem;
-            _defaultStrategy = new WeightedPullStrategy();
-
+            _inventory = inventory;
+            _repository = repository;
+            _timeProvider = timeProvider;
+            _dropResolver = new DefaultDropResolver();
             Debug.Log("[GachaSystem] Init started");
         }
 
-        public void SetDuplicateHandler(IDuplicateHandler handler)
+        /// <summary>추첨 전략 교체(OCP). 미호출 시 DefaultDropResolver 사용.</summary>
+        public void SetDropResolver(IDropResolver resolver)
         {
-            _duplicateHandler = handler;
+            if (resolver == null) return;
+            _dropResolver = resolver;
+            Debug.Log($"[GachaSystem] DropResolver replaced: {resolver.GetType().Name}");
         }
 
-        public GachaResult Pull(string bannerId, int count = 1)
+        public void Initialize(BannerDataCollection bannerCollection, GachaDataCollection gachaCollection)
         {
-            if (!_banners.TryGetValue(bannerId, out GachaBannerData banner))
-            {
-                Debug.LogError($"[GachaSystem] Banner not found: {bannerId}");
-                return new GachaResult { Success = false, FailReason = "Banner not found" };
-            }
-
-            if (banner.DropTable == null)
-            {
-                Debug.LogError($"[GachaSystem] DropTable is null for banner: {bannerId}");
-                return new GachaResult { Success = false, FailReason = "DropTable is null" };
-            }
-
-            if (banner.DropTable.Entries == null || banner.DropTable.Entries.Count == 0)
-            {
-                Debug.LogError($"[GachaSystem] DropTable entries empty for banner: {bannerId}");
-                return new GachaResult { Success = false, FailReason = "DropTable entries empty" };
-            }
-
-            if (count <= 0)
-            {
-                Debug.LogWarning($"[GachaSystem] Invalid pull count: {count}");
-                return new GachaResult { Success = false, FailReason = "Invalid pull count" };
-            }
-
-            PityCounter pityCounter = GetOrCreatePityCounter(bannerId);
-            IPullStrategy strategy = GetStrategy(bannerId);
-
-            _eventBus?.Publish(new GachaPullStartEvent
-            {
-                BannerId = bannerId,
-                Count = count
-            });
-
-            int previousPullCount = pityCounter.PullCount;
-
-            // 뽑기 실행
-            GachaReward[] rewards = strategy.Pull(banner.DropTable, pityCounter, count);
-
-            // Multi 보장 처리
-            if (count > 1 && count >= banner.MultiPullCount)
-            {
-                rewards = ApplyMultiGuarantee(rewards, banner);
-            }
-
-            // 중복 처리
-            rewards = ProcessDuplicates(rewards, banner);
-
-            // 천장 리셋 감지
-            if (previousPullCount > 0 && pityCounter.PullCount < previousPullCount)
-            {
-                _eventBus?.Publish(new GachaPityReachedEvent
-                {
-                    BannerId = bannerId,
-                    PityType = banner.PityType,
-                    PullCount = previousPullCount + count
-                });
-
-                _eventBus?.Publish(new GachaPityResetEvent
-                {
-                    BannerId = bannerId,
-                    PreviousPullCount = previousPullCount
-                });
-            }
-
-            pityCounter.LastPullTime = DateTime.Now;
-            SavePityCounter(pityCounter);
-
-            _eventBus?.Publish(new GachaPullResultEvent
-            {
-                BannerId = bannerId,
-                Rewards = rewards,
-                TotalPullCount = pityCounter.PullCount
-            });
-
-            Debug.Log($"[GachaSystem] Pull complete: {bannerId} x{count} (pity: {pityCounter.PullCount})");
-
-            return new GachaResult
-            {
-                Success = true,
-                Rewards = rewards,
-                PityInfo = pityCounter
-            };
+            Initialize(bannerCollection?.Items, gachaCollection?.Items);
         }
 
-        public GachaBannerData GetBannerInfo(string bannerId)
+        /// <summary>테스트·DI 편의 오버로드. 인터페이스 컬렉션을 직접 주입.</summary>
+        public void Initialize(IReadOnlyList<IBanner> banners, IReadOnlyList<IGacha> gachas)
         {
-            _banners.TryGetValue(bannerId, out GachaBannerData banner);
+            _banners.Clear();
+            _gachas.Clear();
+            _gachaToBanner.Clear();
+
+            if (gachas != null)
+            {
+                foreach (IGacha g in gachas)
+                {
+                    if (g == null || string.IsNullOrEmpty(g.MID)) continue;
+                    _gachas[g.MID] = g;
+                }
+            }
+
+            if (banners != null)
+            {
+                foreach (IBanner b in banners)
+                {
+                    if (b == null || string.IsNullOrEmpty(b.MID)) continue;
+                    _banners[b.MID] = b;
+
+                    if (b.Gachas == null) continue;
+                    foreach (BannerGachaEntry entry in b.Gachas)
+                    {
+                        if (entry == null || string.IsNullOrEmpty(entry.GachaMID)) continue;
+                        _gachaToBanner[entry.GachaMID] = b.MID;
+                    }
+                }
+            }
+
+            LoadPityCounters();
+
+            Debug.Log($"[GachaSystem] Initialized — banners: {_banners.Count}, gachas: {_gachas.Count}, counters: {_pityCounters.Count}");
+        }
+
+        public IReadOnlyList<IBanner> GetVisibleBanners(IGachaContext context)
+        {
+            var list = new List<IBanner>();
+            DateTime nowUtc = _timeProvider != null ? _timeProvider.NowUtc : DateTime.UtcNow;
+
+            foreach (IBanner banner in _banners.Values)
+            {
+                if (!banner.IsActive) continue;
+                if (!IsWithinBannerPeriod(banner, nowUtc)) continue;
+                if (!IsBannerUnlocked(banner, context)) continue;
+
+                list.Add(banner);
+            }
+
+            return list.AsReadOnly();
+        }
+
+        public IBanner GetBanner(string bannerMID)
+        {
+            _banners.TryGetValue(bannerMID, out IBanner banner);
             return banner;
         }
 
-        public IReadOnlyList<GachaBannerData> GetActiveBanners()
+        public IGacha GetGacha(string gachaMID)
         {
-            var active = new List<GachaBannerData>();
+            _gachas.TryGetValue(gachaMID, out IGacha gacha);
+            return gacha;
+        }
 
-            foreach (GachaBannerData banner in _banners.Values)
+        public IPityCounter GetPityCounter(string gachaMID)
+        {
+            return EnsureCounter(gachaMID);
+        }
+
+        public PullEligibility CanPull(string gachaMID, int count, IGachaContext context)
+        {
+            if (count != 1 && count != 10)
             {
-                if (IsBannerActive(banner))
-                {
-                    active.Add(banner);
-                }
+                return Fail("invalid_pull_count");
             }
 
-            return active.AsReadOnly();
-        }
-
-        public PityCounter GetPityInfo(string bannerId)
-        {
-            return GetOrCreatePityCounter(bannerId);
-        }
-
-        public IReadOnlyList<DropEntry> GetProbabilities(string bannerId)
-        {
-            if (!_banners.TryGetValue(bannerId, out GachaBannerData banner) || banner.DropTable == null)
+            if (!_gachas.TryGetValue(gachaMID, out IGacha gacha))
             {
-                return new List<DropEntry>().AsReadOnly();
+                return Fail("gacha_not_found");
             }
 
-            return banner.DropTable.Entries;
+            if (!gacha.IsActive)
+            {
+                return Fail("inactive");
+            }
+
+            if (!IsGachaVisible(gachaMID, context, out string bannerBlock))
+            {
+                return Fail(bannerBlock);
+            }
+
+            int costItem = count == 10 ? EffectiveCost10Item(gacha) : gacha.Cost1Item;
+            int costAmount = count == 10 ? EffectiveCost10Amount(gacha) : gacha.Cost1Amount;
+
+            if (costItem == 0 || costAmount <= 0)
+            {
+                return Fail("cost_not_configured");
+            }
+
+            if (_inventory != null && _inventory.GetCount(costItem) < costAmount)
+            {
+                return Fail("insufficient_currency");
+            }
+
+            if (gacha.DailyLimit > 0 && _repository != null &&
+                _repository.GetPurchaseCount(gachaMID, PurchaseScope.Daily) + count > gacha.DailyLimit)
+            {
+                return Fail("daily_limit_exceeded");
+            }
+
+            if (gacha.PeriodLimit > 0 && _repository != null &&
+                _repository.GetPurchaseCount(gachaMID, PurchaseScope.Period) + count > gacha.PeriodLimit)
+            {
+                return Fail("period_limit_exceeded");
+            }
+
+            if (gacha.LifetimeLimit > 0 && _repository != null &&
+                _repository.GetPurchaseCount(gachaMID, PurchaseScope.Lifetime) + count > gacha.LifetimeLimit)
+            {
+                return Fail("lifetime_limit_exceeded");
+            }
+
+            return new PullEligibility { CanPull = true, BlockReason = null };
         }
 
-        public void RegisterBanner(GachaBannerData bannerData)
+        public void Pull(string gachaMID, int count, IGachaContext context, Action<PullResult> callback)
         {
-            if (bannerData == null)
+            PullEligibility eligibility = CanPull(gachaMID, count, context);
+            if (!eligibility.CanPull)
             {
-                Debug.LogError("[GachaSystem] BannerData is null");
+                FailPull(gachaMID, count, eligibility.BlockReason, callback);
                 return;
             }
 
-            _banners[bannerData.BannerId] = bannerData;
+            IGacha gacha = _gachas[gachaMID];
 
-            // PityType에 따라 자동으로 적절한 전략 설정
-            if (!_strategies.ContainsKey(bannerData.BannerId))
+            _eventBus?.Publish(new GachaPullRequestedEvent
             {
-                AssignDefaultStrategy(bannerData);
-            }
-
-            _eventBus?.Publish(new GachaBannerOpenEvent
-            {
-                BannerId = bannerData.BannerId,
-                BannerType = bannerData.BannerType
+                GachaMID = gachaMID,
+                Count = count,
+                PaymentType = gacha.PaymentType
             });
 
-            Debug.Log($"[GachaSystem] Banner registered: {bannerData.BannerId}");
-        }
+            int costItem = count == 10 ? EffectiveCost10Item(gacha) : gacha.Cost1Item;
+            int costAmount = count == 10 ? EffectiveCost10Amount(gacha) : gacha.Cost1Amount;
 
-        public void UnregisterBanner(string bannerId)
-        {
-            if (_banners.Remove(bannerId))
+            if (_inventory != null && !_inventory.ConsumeByMID(costItem, costAmount))
             {
-                _strategies.Remove(bannerId);
+                FailPull(gachaMID, count, "currency_consume_failed", callback);
+                return;
+            }
 
-                _eventBus?.Publish(new GachaBannerCloseEvent
+            PityCounter counter = EnsureCounter(gachaMID);
+            PityCounterState state = counter.ToState();
+
+            IReadOnlyList<GachaRollResult> rolls = _dropResolver.Resolve(gacha, state, count);
+            counter.FromState(state);
+
+            var rewards = new List<GachaRewardItem>(rolls.Count);
+            bool hardPityHit = false;
+            bool pickupPityHit = false;
+
+            foreach (GachaRollResult roll in rolls)
+            {
+                GachaRewardItem reward = GrantItem(roll);
+                rewards.Add(reward);
+                bool wasPickup = roll.TriggeredPickupPity;
+                counter.ApplyRoll(roll.Tier, wasPickup);
+                if (roll.TriggeredHardPity) hardPityHit = true;
+                if (roll.TriggeredPickupPity) pickupPityHit = true;
+            }
+
+            long nowUnix = _timeProvider != null ? _timeProvider.NowUnixSeconds : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            counter.SetLastPullAt(nowUnix);
+            _repository?.Save(counter);
+
+            IncrementPurchaseCounts(gachaMID, count);
+
+            GachaPullSummary summary = BuildSummary(gacha, rewards, hardPityHit, pickupPityHit, count);
+
+            if (hardPityHit || pickupPityHit)
+            {
+                _eventBus?.Publish(new GachaPityTriggeredEvent
                 {
-                    BannerId = bannerId
+                    GachaMID = gachaMID,
+                    HardPity = hardPityHit,
+                    PickupPity = pickupPityHit,
+                    PullCountAtTrigger = counter.TotalPullCount
                 });
-
-                Debug.Log($"[GachaSystem] Banner unregistered: {bannerId}");
-            }
-        }
-
-        public void SetPullStrategy(string bannerId, IPullStrategy strategy)
-        {
-            _strategies[bannerId] = strategy;
-            Debug.Log($"[GachaSystem] Strategy set for: {bannerId}");
-        }
-
-        private IPullStrategy GetStrategy(string bannerId)
-        {
-            if (_strategies.TryGetValue(bannerId, out IPullStrategy strategy))
-            {
-                return strategy;
-            }
-            return _defaultStrategy;
-        }
-
-        private PityCounter GetOrCreatePityCounter(string bannerId)
-        {
-            if (_pityCounters.TryGetValue(bannerId, out PityCounter counter))
-            {
-                return counter;
             }
 
-            // SaveSystem에서 로드 시도
-            counter = LoadPityCounter(bannerId);
-            if (counter == null)
+            string bannerMID = _gachaToBanner.TryGetValue(gachaMID, out string b) ? b : null;
+            _eventBus?.Publish(new GachaPullCompletedEvent
             {
-                counter = new PityCounter(bannerId);
-            }
+                GachaMID = gachaMID,
+                BannerMID = bannerMID,
+                Count = count,
+                Rewards = rewards,
+                Summary = summary
+            });
 
-            _pityCounters[bannerId] = counter;
-            return counter;
+            Debug.Log($"[GachaSystem] Pull completed: {gachaMID} x{count} (SSR:{summary.SSRCount} SR:{summary.SRCount} R:{summary.RCount})");
+
+            callback?.Invoke(new PullResult
+            {
+                Success = true,
+                GachaMID = gachaMID,
+                FailureReason = null,
+                Rewards = rewards,
+                Summary = summary
+            });
         }
 
-        private GachaReward[] ApplyMultiGuarantee(GachaReward[] rewards, GachaBannerData banner)
+        private GachaRewardItem GrantItem(GachaRollResult roll)
         {
-            ItemGrade minGrade = banner.MultiGuaranteedMinGrade;
-            bool hasMinGrade = false;
-            int lowestIndex = rewards.Length - 1;
-            ItemGrade lowestGrade = ItemGrade.Legendary;
+            ItemAddResult addResult = _inventory != null
+                ? _inventory.AddItem(roll.ItemMID, 1, "Gacha")
+                : default;
 
-            for (int i = 0; i < rewards.Length; i++)
+            bool wasConverted = addResult.ConvertedItems != null && addResult.ConvertedItems.Count > 0;
+            int finalMID = wasConverted ? addResult.ConvertedItems[0].MID : roll.ItemMID;
+            int count = wasConverted ? addResult.ConvertedItems[0].Count : addResult.AddedCount;
+
+            return new GachaRewardItem
             {
-                if (rewards[i].Grade >= minGrade)
+                OriginalItemMID = roll.ItemMID,
+                FinalItemMID = finalMID,
+                Count = count > 0 ? count : 1,
+                Tier = roll.Tier,
+                IsDuplicate = wasConverted,
+                WasConverted = wasConverted,
+                IsNew = !wasConverted
+            };
+        }
+
+        private GachaPullSummary BuildSummary(IGacha gacha, List<GachaRewardItem> rewards, bool hardPity, bool pickupPity, int originalCount)
+        {
+            int ssr = 0, sr = 0, r = 0, n = 0;
+            foreach (GachaRewardItem item in rewards)
+            {
+                switch (item.Tier)
                 {
-                    hasMinGrade = true;
-                    break;
-                }
-
-                if (rewards[i].Grade < lowestGrade)
-                {
-                    lowestGrade = rewards[i].Grade;
-                    lowestIndex = i;
-                }
-            }
-
-            if (!hasMinGrade && banner.DropTable != null)
-            {
-                // 최하위 등급 슬롯을 최소 보장 등급으로 승격
-                DropEntry upgraded = FindEntryByMinGrade(banner.DropTable, minGrade);
-
-                if (upgraded != null)
-                {
-                    rewards[lowestIndex] = new GachaReward
-                    {
-                        RewardId = upgraded.ItemId,
-                        RewardType = upgraded.ItemType,
-                        Grade = upgraded.Grade,
-                        Amount = 1,
-                        IsNew = false,
-                        IsDuplicate = false
-                    };
-
-                    Debug.Log($"[GachaSystem] Multi guarantee applied: upgraded to {upgraded.Grade}");
+                    case GachaTierRank.SSR: ssr++; break;
+                    case GachaTierRank.SR: sr++; break;
+                    case GachaTierRank.R: r++; break;
+                    default: n++; break;
                 }
             }
 
-            return rewards;
+            bool guaranteedApplied = originalCount == 10 && gacha.BonusGuaranteedTier != GuaranteedTier.None;
+            bool bonus11thApplied = originalCount == 10 && gacha.Bonus11th;
+
+            return new GachaPullSummary
+            {
+                PullCount = rewards.Count,
+                SSRCount = ssr,
+                SRCount = sr,
+                RCount = r,
+                NCount = n,
+                HardPityTriggered = hardPity,
+                PickupPityTriggered = pickupPity,
+                GuaranteedBonusApplied = guaranteedApplied,
+                Bonus11thApplied = bonus11thApplied
+            };
         }
 
-        private DropEntry FindEntryByMinGrade(DropTable dropTable, ItemGrade minGrade)
+        private void IncrementPurchaseCounts(string gachaMID, int count)
         {
-            var candidates = new List<DropEntry>();
+            if (_repository == null) return;
 
-            foreach (DropEntry entry in dropTable.Entries)
-            {
-                if (entry.Grade >= minGrade)
-                {
-                    candidates.Add(entry);
-                }
-            }
-
-            if (candidates.Count == 0) return null;
-
-            // 후보 중 가중치 랜덤
-            int totalWeight = 0;
-            foreach (DropEntry entry in candidates)
-            {
-                totalWeight += entry.Weight;
-            }
-
-            int roll = UnityEngine.Random.Range(0, totalWeight);
-            int accumulated = 0;
-
-            foreach (DropEntry entry in candidates)
-            {
-                accumulated += entry.Weight;
-                if (roll < accumulated)
-                {
-                    return entry;
-                }
-            }
-
-            return candidates[candidates.Count - 1];
+            _repository.SetPurchaseCount(gachaMID, PurchaseScope.Daily,
+                _repository.GetPurchaseCount(gachaMID, PurchaseScope.Daily) + count);
+            _repository.SetPurchaseCount(gachaMID, PurchaseScope.Period,
+                _repository.GetPurchaseCount(gachaMID, PurchaseScope.Period) + count);
+            _repository.SetPurchaseCount(gachaMID, PurchaseScope.Lifetime,
+                _repository.GetPurchaseCount(gachaMID, PurchaseScope.Lifetime) + count);
         }
 
-        private GachaReward[] ProcessDuplicates(GachaReward[] rewards, GachaBannerData banner)
+        private void FailPull(string gachaMID, int count, string reason, Action<PullResult> callback)
         {
-            if (banner.DuplicatePolicy == DuplicatePolicy.Allow) return rewards;
-            if (_duplicateHandler == null) return rewards;
-
-            for (int i = 0; i < rewards.Length; i++)
+            _eventBus?.Publish(new GachaPullFailedEvent
             {
-                if (rewards[i].IsDuplicate)
-                {
-                    rewards[i] = _duplicateHandler.HandleDuplicate(rewards[i]);
+                GachaMID = gachaMID,
+                Count = count,
+                Reason = reason
+            });
 
-                    _eventBus?.Publish(new GachaDuplicateEvent
-                    {
-                        BannerId = banner.BannerId,
-                        RewardId = rewards[i].RewardId,
-                        Grade = rewards[i].Grade,
-                        Policy = banner.DuplicatePolicy
-                    });
-                }
-            }
-
-            return rewards;
+            Debug.Log($"[GachaSystem] Pull failed: {gachaMID} x{count} (reason: {reason})");
+            callback?.Invoke(new PullResult
+            {
+                Success = false,
+                GachaMID = gachaMID,
+                FailureReason = reason,
+                Rewards = null,
+                Summary = default
+            });
         }
 
-        private void SavePityCounter(PityCounter counter)
+        private bool IsWithinBannerPeriod(IBanner banner, DateTime nowUtc)
         {
-            if (_saveSystem == null) return;
-
-            try
-            {
-                string key = PITY_SAVE_PREFIX + counter.BannerId;
-                _saveSystem.Save(SAVE_SLOT, key, counter);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[GachaSystem] Failed to save pity counter: {e.Message}");
-            }
-        }
-
-        private PityCounter LoadPityCounter(string bannerId)
-        {
-            if (_saveSystem == null) return null;
-
-            try
-            {
-                string key = PITY_SAVE_PREFIX + bannerId;
-                if (!_saveSystem.HasKey(SAVE_SLOT, key)) return null;
-                return _saveSystem.Load<PityCounter>(SAVE_SLOT, key);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[GachaSystem] Failed to load pity counter: {e.Message}");
-                return null;
-            }
-        }
-
-        private bool IsBannerActive(GachaBannerData banner)
-        {
-            if (string.IsNullOrEmpty(banner.StartDate) && string.IsNullOrEmpty(banner.EndDate))
+            if (string.IsNullOrEmpty(banner.PeriodStartUtc) && string.IsNullOrEmpty(banner.PeriodEndUtc))
             {
                 return true;
             }
 
-            DateTime now = DateTime.Now;
+            DateTime start = TryParseUtc(banner.PeriodStartUtc, DateTime.MinValue);
+            DateTime end = TryParseUtc(banner.PeriodEndUtc, DateTime.MaxValue);
+            return nowUtc >= start && nowUtc < end;
+        }
 
-            if (!string.IsNullOrEmpty(banner.StartDate) && DateTime.TryParse(banner.StartDate, out DateTime start))
+        private bool IsBannerUnlocked(IBanner banner, IGachaContext context)
+        {
+            if (banner.UnlockType == BannerUnlockType.None) return true;
+            if (context == null) return false;
+
+            switch (banner.UnlockType)
             {
-                if (now < start) return false;
+                case BannerUnlockType.MinLevel:
+                    return int.TryParse(banner.UnlockValue, out int minLevel) && context.PlayerLevel >= minLevel;
+                case BannerUnlockType.QuestClear:
+                    return int.TryParse(banner.UnlockValue, out int questMID) && context.IsQuestCleared(questMID);
+                default:
+                    return true;
+            }
+        }
+
+        private bool IsGachaVisible(string gachaMID, IGachaContext context, out string blockReason)
+        {
+            if (!_gachaToBanner.TryGetValue(gachaMID, out string bannerMID))
+            {
+                blockReason = null;
+                return true;
             }
 
-            if (!string.IsNullOrEmpty(banner.EndDate) && DateTime.TryParse(banner.EndDate, out DateTime end))
+            if (!_banners.TryGetValue(bannerMID, out IBanner banner))
             {
-                if (now > end) return false;
+                blockReason = null;
+                return true;
             }
 
+            DateTime nowUtc = _timeProvider != null ? _timeProvider.NowUtc : DateTime.UtcNow;
+
+            if (!banner.IsActive)
+            {
+                blockReason = "banner_inactive";
+                return false;
+            }
+
+            if (!IsWithinBannerPeriod(banner, nowUtc))
+            {
+                blockReason = "banner_out_of_period";
+                return false;
+            }
+
+            if (!IsBannerUnlocked(banner, context))
+            {
+                blockReason = "banner_locked";
+                return false;
+            }
+
+            blockReason = null;
             return true;
         }
 
-        private void AssignDefaultStrategy(GachaBannerData banner)
+        private PityCounter EnsureCounter(string gachaMID)
         {
-            switch (banner.PityType)
+            if (!_pityCounters.TryGetValue(gachaMID, out PityCounter counter))
             {
-                case PityType.SoftPity:
-                    _strategies[banner.BannerId] = new SoftPityPullStrategy(
-                        banner.SoftPityStartCount,
-                        banner.HardPityCount,
-                        banner.SoftPityRateIncrease
-                    );
-                    Debug.Log($"[GachaSystem] Auto-assigned SoftPityPullStrategy for: {banner.BannerId}");
-                    break;
-
-                case PityType.HardPity:
-                case PityType.PickupGuarantee:
-                    _strategies[banner.BannerId] = new SoftPityPullStrategy(
-                        banner.HardPityCount,
-                        banner.HardPityCount,
-                        0f
-                    );
-                    Debug.Log($"[GachaSystem] Auto-assigned HardPity strategy for: {banner.BannerId}");
-                    break;
-
-                case PityType.None:
-                default:
-                    // _defaultStrategy (WeightedPullStrategy) 사용
-                    break;
+                counter = new PityCounter(gachaMID);
+                _pityCounters[gachaMID] = counter;
             }
+            return counter;
+        }
+
+        private void LoadPityCounters()
+        {
+            _pityCounters.Clear();
+            if (_repository == null) return;
+
+            IReadOnlyList<IPityCounter> saved = _repository.LoadAll();
+            if (saved == null) return;
+
+            foreach (IPityCounter c in saved)
+            {
+                if (c == null || string.IsNullOrEmpty(c.GachaMID)) continue;
+                _pityCounters[c.GachaMID] = new PityCounter(c.GachaMID, c.PullsSinceLastSSR, c.PullsSinceLastPickup, c.TotalPullCount, c.LastPullAtUtc);
+            }
+        }
+
+        private int EffectiveCost10Item(IGacha gacha)
+        {
+            return gacha.Cost10Item > 0 ? gacha.Cost10Item : gacha.Cost1Item;
+        }
+
+        private int EffectiveCost10Amount(IGacha gacha)
+        {
+            return gacha.Cost10Amount > 0 ? gacha.Cost10Amount : gacha.Cost1Amount * 10;
+        }
+
+        private static PullEligibility Fail(string reason)
+        {
+            return new PullEligibility { CanPull = false, BlockReason = reason };
+        }
+
+        private static DateTime TryParseUtc(string raw, DateTime fallback)
+        {
+            if (string.IsNullOrEmpty(raw)) return fallback;
+            if (DateTime.TryParse(raw, System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal,
+                    out DateTime parsed))
+            {
+                return parsed;
+            }
+            return fallback;
         }
     }
 }
