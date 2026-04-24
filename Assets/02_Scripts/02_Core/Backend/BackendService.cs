@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 using BackEnd;
 
@@ -84,7 +85,8 @@ namespace PublicFramework
 
                 var json = bro.GetReturnValuetoJSON();
                 var raw = json != null && json["utcTime"] != null ? json["utcTime"].ToString() : null;
-                if (!string.IsNullOrEmpty(raw) && DateTime.TryParse(raw, out DateTime serverTime))
+                if (!string.IsNullOrEmpty(raw) && DateTime.TryParse(raw, CultureInfo.InvariantCulture,
+                    DateTimeStyles.RoundtripKind, out DateTime serverTime))
                 {
                     callback?.Invoke(true, serverTime);
                     return;

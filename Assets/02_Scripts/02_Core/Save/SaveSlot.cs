@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace PublicFramework
@@ -22,7 +23,8 @@ namespace PublicFramework
 
         public DateTime LastSavedAt
         {
-            get => DateTime.TryParse(_lastSavedAt, out var dt) ? dt : DateTime.MinValue;
+            get => DateTime.TryParse(_lastSavedAt, CultureInfo.InvariantCulture,
+                DateTimeStyles.RoundtripKind, out var dt) ? dt : DateTime.MinValue;
             set => _lastSavedAt = value.ToString("O");
         }
 

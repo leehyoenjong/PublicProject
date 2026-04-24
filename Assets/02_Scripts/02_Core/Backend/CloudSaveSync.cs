@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -424,7 +425,8 @@ namespace PublicFramework
                 }
 
                 string iso = ExtractCellString(selected, COLUMN_SAVED_AT);
-                if (string.IsNullOrEmpty(iso) || !DateTime.TryParse(iso, out DateTime remote))
+                if (string.IsNullOrEmpty(iso) || !DateTime.TryParse(iso, CultureInfo.InvariantCulture,
+                    DateTimeStyles.RoundtripKind, out DateTime remote))
                 {
                     callback?.Invoke(false, DateTime.MinValue, BackendError.NotFound);
                     return;
@@ -505,7 +507,8 @@ namespace PublicFramework
                 {
                     var row = rows[i];
                     string iso = ExtractCellString(row, COLUMN_SAVED_AT);
-                    if (DateTime.TryParse(iso, out DateTime at) && at >= newestAt)
+                    if (DateTime.TryParse(iso, CultureInfo.InvariantCulture,
+                        DateTimeStyles.RoundtripKind, out DateTime at) && at >= newestAt)
                     {
                         newestAt = at;
                         newest = row;
