@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace PublicFramework
@@ -38,7 +39,10 @@ namespace PublicFramework
             get
             {
                 if (string.IsNullOrEmpty(_expiryTime)) return false;
-                return DateTime.TryParse(_expiryTime, out DateTime expiry) && DateTime.UtcNow > expiry;
+                // RoundtripKind 로 파싱해 Kind=Utc 보존. 그렇지 않으면 Local 변환되어
+                // timezone offset 만큼 비교 결과가 어긋남.
+                return DateTime.TryParse(_expiryTime, CultureInfo.InvariantCulture,
+                    DateTimeStyles.RoundtripKind, out DateTime expiry) && DateTime.UtcNow > expiry;
             }
         }
     }

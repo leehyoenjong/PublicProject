@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace PublicFramework
@@ -362,7 +363,8 @@ namespace PublicFramework
                 {
                     if (_mails[i].State != MailState.Expired) continue;
 
-                    if (DateTime.TryParse(_mails[i].ExpiryTime, out DateTime expiry))
+                    if (DateTime.TryParse(_mails[i].ExpiryTime, CultureInfo.InvariantCulture,
+                        DateTimeStyles.RoundtripKind, out DateTime expiry))
                     {
                         if ((DateTime.UtcNow - expiry).TotalDays >= _config.ExpiredAutoDeleteDays)
                         {
