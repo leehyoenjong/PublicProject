@@ -30,7 +30,8 @@ namespace PublicFramework
         Spawn,
         Move,
         PlaySfx,
-        PlayVfx
+        PlayVfx,
+        PlayAnimation
     }
 
     /// <summary>

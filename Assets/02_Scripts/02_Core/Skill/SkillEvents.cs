@@ -61,4 +61,20 @@ namespace PublicFramework
         public string TargetId;
         public float Amount;
     }
+
+    /// <summary>
+    /// PlayAnimation 액션이 발행. 캐릭터/몬스터 컨트롤러가 구독해 Animator 재생.
+    /// TargetRole=Self → CasterId 의 Animator, Target → TargetId 의 Animator.
+    /// Duration 0 이면 자동 재생 길이에 맡김(수동 종료 없음).
+    /// </summary>
+    public struct SkillAnimationEvent
+    {
+        public string SkillId;
+        public string CasterId;
+        public string TargetId;
+        public string AnimKey;
+        public string TargetRole;
+        public int Layer;
+        public float Duration;
+    }
 }

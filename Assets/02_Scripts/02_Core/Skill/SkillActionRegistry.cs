@@ -30,6 +30,7 @@ namespace PublicFramework
             registry.Register(new MoveAction());
             registry.Register(new PlaySfxAction());
             registry.Register(new PlayVfxAction());
+            registry.Register(new PlayAnimationAction());
             return registry;
         }
     }
