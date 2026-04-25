@@ -340,6 +340,91 @@ namespace PublicFramework.Tests
             return config;
         }
 
+        public static MonsterInfo MakeMonsterInfo(
+            string mid,
+            MonsterType type = MonsterType.Normal,
+            int nameKey = 0,
+            int descKey = 0,
+            string iconAddress = "",
+            string classTag = "",
+            string elementTag = "",
+            string baseStatMID = "",
+            SkillData[] baseSkills = null,
+            string dropTableMID = "",
+            string aiPresetMID = "",
+            int level = 1,
+            int expReward = 0,
+            int goldReward = 0,
+            string[] onSpawnEvents = null,
+            string[] onDeathEvents = null,
+            string hitReactionId = "")
+        {
+            var info = ScriptableObject.CreateInstance<MonsterInfo>();
+            SetField(info, "_mid", mid);
+            SetField(info, "_nameKey", nameKey);
+            SetField(info, "_descKey", descKey);
+            SetField(info, "_iconAddress", iconAddress);
+            SetField(info, "_type", type);
+            SetField(info, "_classTag", classTag);
+            SetField(info, "_elementTag", elementTag);
+            SetField(info, "_baseStatMID", baseStatMID);
+            SetField(info, "_baseSkills", baseSkills ?? System.Array.Empty<SkillData>());
+            SetField(info, "_dropTableMID", dropTableMID);
+            SetField(info, "_aiPresetMID", aiPresetMID);
+            SetField(info, "_level", level);
+            SetField(info, "_expReward", expReward);
+            SetField(info, "_goldReward", goldReward);
+            SetField(info, "_onSpawnEvents", onSpawnEvents ?? System.Array.Empty<string>());
+            SetField(info, "_onDeathEvents", onDeathEvents ?? System.Array.Empty<string>());
+            SetField(info, "_hitReactionId", hitReactionId);
+            return info;
+        }
+
+        public static DropEntry MakeDropEntry(
+            int itemMID,
+            int weight,
+            int order = 1,
+            int minCount = 1,
+            int maxCount = 1,
+            int minPlayerLevel = 0,
+            int repeatLimit = 0)
+        {
+            var entry = new DropEntry();
+            SetField(entry, "_order", order);
+            SetField(entry, "_itemMID", itemMID);
+            SetField(entry, "_weight", weight);
+            SetField(entry, "_minCount", minCount);
+            SetField(entry, "_maxCount", maxCount);
+            SetField(entry, "_minPlayerLevel", minPlayerLevel);
+            SetField(entry, "_repeatLimit", repeatLimit);
+            return entry;
+        }
+
+        public static DropTableData MakeDropTableData(string mid, params DropEntry[] entries)
+        {
+            var data = ScriptableObject.CreateInstance<DropTableData>();
+            SetField(data, "_mid", mid);
+            SetField(data, "_entries", entries ?? System.Array.Empty<DropEntry>());
+            return data;
+        }
+
+        public static MonsterEventCatalogEntry MakeMonsterEventCatalogEntry(
+            string eventId, MonsterEventKind kind = MonsterEventKind.Death, int descKey = 0)
+        {
+            var entry = new MonsterEventCatalogEntry();
+            SetField(entry, "_eventId", eventId);
+            SetField(entry, "_kind", kind);
+            SetField(entry, "_descKey", descKey);
+            return entry;
+        }
+
+        public static MonsterEventCatalog MakeMonsterEventCatalog(params MonsterEventCatalogEntry[] entries)
+        {
+            var catalog = ScriptableObject.CreateInstance<MonsterEventCatalog>();
+            SetField(catalog, "_entries", entries ?? System.Array.Empty<MonsterEventCatalogEntry>());
+            return catalog;
+        }
+
         public static void SetPrivateField(object target, string fieldName, object value)
         {
             SetField(target, fieldName, value);
