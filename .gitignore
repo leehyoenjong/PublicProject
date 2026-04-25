@@ -104,3 +104,6 @@ InitTestScene*.unity*
 /docs/
 /Documentation~/
 /SampleData/
+
+# MCP secrets (contains API tokens — never commit)
+.mcp.json

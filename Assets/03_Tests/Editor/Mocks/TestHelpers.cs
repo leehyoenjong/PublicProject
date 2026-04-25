@@ -281,6 +281,65 @@ namespace PublicFramework.Tests
             dict[instance.InstanceId] = instance;
         }
 
+        public static CharacterDialogueEntry MakeCharacterDialogue(DialogueEvent ev, int lineKey)
+        {
+            var entry = new CharacterDialogueEntry();
+            SetField(entry, "_event", ev);
+            SetField(entry, "_lineKey", lineKey);
+            return entry;
+        }
+
+        public static CharacterProfileEntry MakeCharacterProfile(string key, string value, int valueKey = 0)
+        {
+            var entry = new CharacterProfileEntry();
+            SetField(entry, "_key", key);
+            SetField(entry, "_value", value);
+            SetField(entry, "_valueKey", valueKey);
+            return entry;
+        }
+
+        public static CharacterInfo MakeCharacterInfo(
+            int itemMID,
+            CharacterRole role = CharacterRole.Dealer,
+            string classTag = "",
+            string elementTag = "",
+            string baseStatMID = "",
+            SkillData[] baseSkills = null,
+            SkillSlotStrategy slotStrategy = SkillSlotStrategy.Fixed,
+            int slotValue = 3,
+            int defaultSkinMID = 0,
+            string voiceSetId = "",
+            string defaultPositionId = "",
+            CharacterDialogueEntry[] dialogues = null,
+            CharacterProfileEntry[] profiles = null)
+        {
+            var data = ScriptableObject.CreateInstance<CharacterInfo>();
+            SetField(data, "_itemMID", itemMID);
+            SetField(data, "_role", role);
+            SetField(data, "_classTag", classTag);
+            SetField(data, "_elementTag", elementTag);
+            SetField(data, "_baseStatMID", baseStatMID);
+            SetField(data, "_baseSkills", baseSkills ?? System.Array.Empty<SkillData>());
+            SetField(data, "_slotStrategy", slotStrategy);
+            SetField(data, "_slotValue", slotValue);
+            SetField(data, "_defaultSkinMID", defaultSkinMID);
+            SetField(data, "_voiceSetId", voiceSetId);
+            SetField(data, "_defaultPositionId", defaultPositionId);
+            SetField(data, "_dialogues", dialogues ?? System.Array.Empty<CharacterDialogueEntry>());
+            SetField(data, "_profiles", profiles ?? System.Array.Empty<CharacterProfileEntry>());
+            return data;
+        }
+
+        public static DeckConfig MakeDeckConfig(int maxDecks = 1, int partySize = 1, bool requireLeader = false, bool allowDuplicate = false)
+        {
+            var config = ScriptableObject.CreateInstance<DeckConfig>();
+            SetField(config, "_maxDecks", maxDecks);
+            SetField(config, "_partySize", partySize);
+            SetField(config, "_requireLeader", requireLeader);
+            SetField(config, "_allowDuplicate", allowDuplicate);
+            return config;
+        }
+
         public static void SetPrivateField(object target, string fieldName, object value)
         {
             SetField(target, fieldName, value);
