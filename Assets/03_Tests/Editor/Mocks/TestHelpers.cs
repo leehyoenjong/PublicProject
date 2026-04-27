@@ -425,6 +425,50 @@ namespace PublicFramework.Tests
             return catalog;
         }
 
+        public static PetInfo MakePetInfo(
+            string mid,
+            int itemMID = 0,
+            int nameKey = 0,
+            int descKey = 0,
+            string iconAddress = "",
+            PetRole roles = PetRole.None,
+            string classTag = "",
+            string elementTag = "",
+            string baseStatMID = "",
+            SkillData[] baseSkills = null,
+            int skillSlotMax = 0,
+            string aiPresetMID = "",
+            PetFollowStrategy followStrategy = PetFollowStrategy.Behind,
+            float followDistance = 0f,
+            float catchUpDistance = 0f,
+            PetCollisionPolicy collisionPolicy = PetCollisionPolicy.Ghost,
+            string[] onAcquireEvents = null,
+            string[] onEquipEvents = null,
+            string[] onUnequipEvents = null)
+        {
+            var info = ScriptableObject.CreateInstance<PetInfo>();
+            SetField(info, "_mid", mid);
+            SetField(info, "_itemMID", itemMID);
+            SetField(info, "_nameKey", nameKey);
+            SetField(info, "_descKey", descKey);
+            SetField(info, "_iconAddress", iconAddress);
+            SetField(info, "_roles", roles);
+            SetField(info, "_classTag", classTag);
+            SetField(info, "_elementTag", elementTag);
+            SetField(info, "_baseStatMID", baseStatMID);
+            SetField(info, "_baseSkills", baseSkills ?? System.Array.Empty<SkillData>());
+            SetField(info, "_skillSlotMax", skillSlotMax);
+            SetField(info, "_aiPresetMID", aiPresetMID);
+            SetField(info, "_followStrategy", followStrategy);
+            SetField(info, "_followDistance", followDistance);
+            SetField(info, "_catchUpDistance", catchUpDistance);
+            SetField(info, "_collisionPolicy", collisionPolicy);
+            SetField(info, "_onAcquireEvents", onAcquireEvents ?? System.Array.Empty<string>());
+            SetField(info, "_onEquipEvents", onEquipEvents ?? System.Array.Empty<string>());
+            SetField(info, "_onUnequipEvents", onUnequipEvents ?? System.Array.Empty<string>());
+            return info;
+        }
+
         public static void SetPrivateField(object target, string fieldName, object value)
         {
             SetField(target, fieldName, value);
