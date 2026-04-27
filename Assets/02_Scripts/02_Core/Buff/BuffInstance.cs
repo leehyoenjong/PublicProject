@@ -187,10 +187,10 @@ namespace PublicFramework
             {
                 var modifier = new StatModifier(
                     entry.StatType,
-                    entry.ModType,
+                    entry.Layer,
                     entry.Value,
-                    StatLayer.Buff,
-                    this
+                    source: this,
+                    sourceTag: ModifierSource.Buff
                 );
                 _modifiers.Add(modifier);
             }
@@ -210,10 +210,10 @@ namespace PublicFramework
 
                 var modifier = new StatModifier(
                     entry.StatType,
-                    entry.ModType,
+                    entry.Layer,
                     scaledValue,
-                    StatLayer.Buff,
-                    this
+                    source: this,
+                    sourceTag: ModifierSource.Buff
                 );
                 _modifiers.Add(modifier);
             }

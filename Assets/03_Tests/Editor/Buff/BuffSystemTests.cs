@@ -21,7 +21,7 @@ namespace PublicFramework.Tests.Buff
 
         private static PassiveStat[] OnePassive(float value = 10f)
         {
-            return new[] { new PassiveStat(StatType.ATK, StatModType.Flat, value) };
+            return new[] { new PassiveStat(StatType.Attack, StatLayer.Flat, value) };
         }
 
         // ---------- Apply: 기본 ----------
@@ -64,7 +64,7 @@ namespace PublicFramework.Tests.Buff
             FakeStatContainer container = _stats.GetOrCreate(TARGET);
             Assert.AreEqual(1, container.AddModifierCalls);
             Assert.AreEqual(1, container.Modifiers.Count);
-            Assert.AreEqual(StatType.ATK, container.Modifiers[0].TargetStat);
+            Assert.AreEqual(StatType.Attack, container.Modifiers[0].TargetStat);
             Assert.AreEqual(15f, container.Modifiers[0].Value, 0.001f);
         }
 

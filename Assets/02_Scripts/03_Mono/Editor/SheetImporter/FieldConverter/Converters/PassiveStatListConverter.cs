@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 namespace PublicFramework.Editor.SheetImporter
 {
     /// <summary>
-    /// `{StatType,StatModType,Value},{StatType,StatModType,Value}` 형식을 PassiveStat[] 로 변환.
+    /// `{StatType,StatLayer,Value},{StatType,StatLayer,Value}` 형식을 PassiveStat[] 로 변환.
     /// 공백 허용. enum 파싱은 대소문자 무관(Enum.TryParse ignoreCase=true).
-    /// 예: `{ATK,Flat,10},{HP,Percent,5}`
+    /// 예: `{Attack,Flat,10},{HP,Percent,5},{CritDamage,Multiplicative,1.5}`
     /// </summary>
     public class PassiveStatListConverter : IFieldConverter
     {
@@ -29,7 +29,7 @@ namespace PublicFramework.Editor.SheetImporter
             if (matches.Count == 0)
             {
                 value = null;
-                error = FieldConverterRegistry.FormatError(raw, targetType, "유효한 `{StatType,ModType,Value}` 항목이 없습니다.");
+                error = FieldConverterRegistry.FormatError(raw, targetType, "유효한 `{StatType,Layer,Value}` 항목이 없습니다.");
                 return false;
             }
 
@@ -43,10 +43,10 @@ namespace PublicFramework.Editor.SheetImporter
                     error = FieldConverterRegistry.FormatError(raw, targetType, $"항목 {i} StatType 파싱 실패: '{m.Groups[1].Value}'");
                     return false;
                 }
-                if (!Enum.TryParse(m.Groups[2].Value, true, out StatModType modType))
+                if (!Enum.TryParse(m.Groups[2].Value, true, out StatLayer layer))
                 {
                     value = null;
-                    error = FieldConverterRegistry.FormatError(raw, targetType, $"항목 {i} StatModType 파싱 실패: '{m.Groups[2].Value}'");
+                    error = FieldConverterRegistry.FormatError(raw, targetType, $"항목 {i} StatLayer 파싱 실패: '{m.Groups[2].Value}'");
                     return false;
                 }
                 if (!float.TryParse(m.Groups[3].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out float v))
@@ -56,7 +56,7 @@ namespace PublicFramework.Editor.SheetImporter
                     return false;
                 }
 
-                list.Add(new PassiveStat(statType, modType, v));
+                list.Add(new PassiveStat(statType, layer, v));
             }
 
             value = list.ToArray();

@@ -4,6 +4,7 @@ namespace PublicFramework
     {
         public string OwnerId;
         public StatType Type;
+        public string CustomKey;       // 커스텀 스탯이면 키, 아니면 null
         public float OldValue;
         public float NewValue;
     }
@@ -12,15 +13,17 @@ namespace PublicFramework
     {
         public string OwnerId;
         public StatType Type;
-        public StatModType ModType;
-        public float Value;
+        public string CustomKey;
         public StatLayer Layer;
+        public float Value;
+        public ModifierSource SourceTag;
     }
 
     public struct ModifierRemovedEvent
     {
         public string OwnerId;
         public StatType Type;
+        public string CustomKey;
         public StatLayer Layer;
     }
 }

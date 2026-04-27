@@ -144,24 +144,24 @@ namespace PublicFramework
             if (atkTotal > 0f)
             {
                 container.AddModifier(new StatModifier(
-                    StatType.ATK, StatModType.Flat, atkTotal,
-                    StatLayer.Equipment, equipment));
+                    StatType.Attack, StatLayer.Flat, atkTotal,
+                    source: equipment, sourceTag: ModifierSource.Equipment));
             }
 
             float defTotal = levelBonus * 0.8f + gradeBonus * 0.6f + transcendBonus * 2f;
             if (defTotal > 0f)
             {
                 container.AddModifier(new StatModifier(
-                    StatType.DEF, StatModType.Flat, defTotal,
-                    StatLayer.Equipment, equipment));
+                    StatType.Defense, StatLayer.Flat, defTotal,
+                    source: equipment, sourceTag: ModifierSource.Equipment));
             }
 
             float hpTotal = (levelBonus + gradeBonus + transcendBonus) * 10f;
             if (hpTotal > 0f)
             {
                 container.AddModifier(new StatModifier(
-                    StatType.MaxHP, StatModType.Flat, hpTotal,
-                    StatLayer.Equipment, equipment));
+                    StatType.HP, StatLayer.Flat, hpTotal,
+                    source: equipment, sourceTag: ModifierSource.Equipment));
             }
 
             if (equipment.AwakeningSlots != null)
@@ -173,12 +173,12 @@ namespace PublicFramework
                     StatType? statType = MapAwakeningOption(slot.OptionId);
                     if (statType.HasValue)
                     {
-                        StatModType modType = (statType == StatType.CritRate || statType == StatType.CritDamage)
-                            ? StatModType.Percent : StatModType.Flat;
+                        StatLayer layer = (statType == StatType.CritRate || statType == StatType.CritDamage)
+                            ? StatLayer.Percent : StatLayer.Flat;
 
                         container.AddModifier(new StatModifier(
-                            statType.Value, modType, slot.OptionValue,
-                            StatLayer.Equipment, equipment));
+                            statType.Value, layer, slot.OptionValue,
+                            source: equipment, sourceTag: ModifierSource.Equipment));
                     }
                 }
             }
@@ -207,9 +207,9 @@ namespace PublicFramework
         {
             return optionId switch
             {
-                "ATK_FLAT" => StatType.ATK,
-                "DEF_FLAT" => StatType.DEF,
-                "HP_FLAT" => StatType.MaxHP,
+                "ATK_FLAT" => StatType.Attack,
+                "DEF_FLAT" => StatType.Defense,
+                "HP_FLAT" => StatType.HP,
                 "CRIT_RATE" => StatType.CritRate,
                 "CRIT_DMG" => StatType.CritDamage,
                 _ => null
