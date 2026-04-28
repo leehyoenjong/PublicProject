@@ -13,7 +13,7 @@ namespace PublicFramework
         [SerializeField, SheetAlias("MID")] private string _chapterId;
         [SerializeField, LocalizationKey, SheetAlias("name")] private int _displayName;
         [SerializeField, LocalizationKey, SheetAlias("desc")] private int _description;
-        [SerializeField] private Sprite _keyVisual;
+        [SerializeField, SheetAlias("keyVisual")] private string _keyVisualAddress;
 
         [Header("분류")]
         [SerializeField] private ChapterType _chapterType;
@@ -28,7 +28,7 @@ namespace PublicFramework
         public string ChapterId => _chapterId;
         public int DisplayName => _displayName;
         public int Description => _description;
-        public Sprite KeyVisual => _keyVisual;
+        public string KeyVisualAddress => _keyVisualAddress;
         public ChapterType ChapterType => _chapterType;
         public int SortOrder => _sortOrder;
         public string UnlockChapterId => _unlockChapterId;

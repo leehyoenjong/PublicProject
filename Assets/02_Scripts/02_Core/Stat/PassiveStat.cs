@@ -11,7 +11,7 @@ namespace PublicFramework
     public class PassiveStat
     {
         [SerializeField] private StatType _statType;
-        [SerializeField] private StatLayer _layer;
+        [SerializeField, SheetAlias("modType")] private StatLayer _layer;
         [SerializeField] private float _value;
 
         public StatType StatType => _statType;
