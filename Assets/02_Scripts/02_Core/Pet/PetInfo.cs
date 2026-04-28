@@ -24,6 +24,7 @@ namespace PublicFramework
 
         [Header("스탯·스킬")]
         [SerializeField, SheetAlias("baseStatMID")] private string _baseStatMID;
+        [SerializeField] private StatDataEntry[] _baseStats;
         [SerializeField, SheetAlias("baseSkillMIDs")] private SkillData[] _baseSkills;
         [SerializeField, SheetAlias("skillSlotMax")] private int _skillSlotMax;
 

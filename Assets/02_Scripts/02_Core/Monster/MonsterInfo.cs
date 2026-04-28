@@ -23,6 +23,7 @@ namespace PublicFramework
 
         [Header("스탯·스킬")]
         [SerializeField, SheetAlias("baseStatMID")] private string _baseStatMID;
+        [SerializeField] private StatDataEntry[] _baseStats;
         [SerializeField, SheetAlias("baseSkillMIDs")] private SkillData[] _baseSkills;
 
         [Header("드롭·AI")]

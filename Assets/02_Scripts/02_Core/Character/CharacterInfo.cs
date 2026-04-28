@@ -20,6 +20,7 @@ namespace PublicFramework
 
         [Header("스탯")]
         [SerializeField, SheetAlias("baseStatMID")] private string _baseStatMID;
+        [SerializeField] private StatDataEntry[] _baseStats;
 
         [Header("기본 스킬 (콤마 구분 MID → SO 자동 매칭)")]
         [SerializeField, SheetAlias("baseSkillMIDs")] private SkillData[] _baseSkills;

@@ -13,7 +13,7 @@ namespace PublicFramework.Tests
 
         public string OwnerId { get; set; } = "fake";
         public int Level { get; private set; } = 1;
-        public float CurrentHP { get; private set; }
+        public float CurrentHP { get; set; }
         public float CurrentMP { get; private set; }
         public bool IsAlive => CurrentHP > 0f;
         public int HistoryCapacity { get; set; } = 100;
@@ -21,7 +21,10 @@ namespace PublicFramework.Tests
         public IReadOnlyList<IStatModifier> AllModifiers => Modifiers;
         public float MaxMP => 0f;
 
-        public float GetFinalValue(StatType type) => 0f;
+        private readonly Dictionary<StatType, float> _finalValues = new();
+        public void SetFinalValue(StatType type, float value) => _finalValues[type] = value;
+        public float GetFinalValue(StatType type) =>
+            _finalValues.TryGetValue(type, out float v) ? v : 0f;
         public float GetBaseValue(StatType type) => 0f;
         public void SetBaseValue(StatType type, float value) { }
         public void SetGrowthCurve(StatType type, LevelCurve curve) { }
