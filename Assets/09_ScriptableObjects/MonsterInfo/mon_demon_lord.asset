@@ -19,8 +19,7 @@ MonoBehaviour:
   _type: 3
   _classTag: Demon
   _elementTag: Dark
-  _baseStatMID: stat_mon_demon_lord
-  _baseStats: []
+  _baseStatGroup: {fileID: 11400000, guid: c24b4263aeefd4609ae78e1040ce44d3, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: cfa29ff7c64394e3cbe8a76685ea8aab, type: 2}
   - {fileID: 11400000, guid: 6dcff11a5304345819f067d29dd076a4, type: 2}

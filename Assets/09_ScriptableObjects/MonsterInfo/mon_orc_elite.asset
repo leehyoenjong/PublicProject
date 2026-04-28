@@ -19,38 +19,7 @@ MonoBehaviour:
   _type: 1
   _classTag: Beast
   _elementTag: Earth
-  _baseStatMID: stat_mon_orc_elite
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 400
-    _curve: 0
-    _growth: 40
-  - _stat: 3
-    _customKey: 
-    _baseValue: 25
-    _curve: 0
-    _growth: 3
-  - _stat: 1
-    _customKey: 
-    _baseValue: 15
-    _curve: 0
-    _growth: 1.5
-  - _stat: 7
-    _customKey: 
-    _baseValue: 1
-    _curve: 0
-    _growth: 0.03
-  - _stat: 5
-    _customKey: 
-    _baseValue: 0.05
-    _curve: 0
-    _growth: 0.003
-  - _stat: 6
-    _customKey: 
-    _baseValue: 1.5
-    _curve: 0
-    _growth: 0.04
+  _baseStatGroup: {fileID: 11400000, guid: d082e0be6ea3c4fb4a73d473fdd7150b, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: 4f100dee45d8e4822942ddff05a7cd60, type: 2}
   - {fileID: 11400000, guid: 1b58f279c3e614fff9588001da17475d, type: 2}

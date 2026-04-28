@@ -19,58 +19,7 @@ MonoBehaviour:
   _type: 2
   _classTag: Beast
   _elementTag: Fire
-  _baseStatMID: stat_mon_dragon_boss
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 5000
-    _curve: 2
-    _growth: 0.15
-  - _stat: 0
-    _customKey: 
-    _baseValue: 5000
-    _curve: 2
-    _growth: 0.15
-  - _stat: 3
-    _customKey: 
-    _baseValue: 200
-    _curve: 1
-    _growth: 2
-  - _stat: 3
-    _customKey: 
-    _baseValue: 200
-    _curve: 1
-    _growth: 2
-  - _stat: 1
-    _customKey: 
-    _baseValue: 100
-    _curve: 0
-    _growth: 10
-  - _stat: 1
-    _customKey: 
-    _baseValue: 100
-    _curve: 0
-    _growth: 10
-  - _stat: 13
-    _customKey: 
-    _baseValue: 0.3
-    _curve: 0
-    _growth: 0.005
-  - _stat: 13
-    _customKey: 
-    _baseValue: 0.3
-    _curve: 0
-    _growth: 0.005
-  - _stat: 5
-    _customKey: 
-    _baseValue: 0.08
-    _curve: 0
-    _growth: 0.003
-  - _stat: 6
-    _customKey: 
-    _baseValue: 2
-    _curve: 0
-    _growth: 0.05
+  _baseStatGroup: {fileID: 11400000, guid: d98cae2ff329d48a8adbc57c649532f5, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: bdca9120766464c4bb7d8011c4a4e7a5, type: 2}
   - {fileID: 11400000, guid: 8aeecf927e46549ada5955b923cf8778, type: 2}

@@ -20,8 +20,7 @@ MonoBehaviour:
   _roles: 16
   _classTag: Bird
   _elementTag: Wind
-  _baseStatMID: stat_pet_hawk
-  _baseStats: []
+  _baseStatGroup: {fileID: 11400000, guid: 9594bffb2966b477eb2488f33c2da550, type: 2}
   _baseSkills: []
   _skillSlotMax: 0
   _aiPresetMID: ai_pet_passive

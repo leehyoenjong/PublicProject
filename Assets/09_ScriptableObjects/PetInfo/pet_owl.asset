@@ -20,23 +20,7 @@ MonoBehaviour:
   _roles: 12
   _classTag: Bird
   _elementTag: Wind
-  _baseStatMID: stat_pet_owl
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 60
-    _curve: 0
-    _growth: 10
-  - _stat: 8
-    _customKey: 
-    _baseValue: 2.5
-    _curve: 0
-    _growth: 0.05
-  - _stat: 0
-    _customKey: Focus
-    _baseValue: 30
-    _curve: 0
-    _growth: 2
+  _baseStatGroup: {fileID: 11400000, guid: 4c5ced8d5153343618658b647b6fd9b1, type: 2}
   _baseSkills: []
   _skillSlotMax: 1
   _aiPresetMID: ai_pet_passive

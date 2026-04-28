@@ -19,8 +19,7 @@ MonoBehaviour:
   _type: 4
   _classTag: Beast
   _elementTag: Fire
-  _baseStatMID: stat_mon_pumpkin
-  _baseStats: []
+  _baseStatGroup: {fileID: 11400000, guid: 6a2954bd59a29449380168dcbb389e35, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: a819c7fe253f84b18b29b34ebcde0b30, type: 2}
   _dropTableMID: drop_pumpkin

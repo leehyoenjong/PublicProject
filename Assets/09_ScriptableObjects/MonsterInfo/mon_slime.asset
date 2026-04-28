@@ -19,33 +19,7 @@ MonoBehaviour:
   _type: 0
   _classTag: Beast
   _elementTag: Water
-  _baseStatMID: stat_mon_slime
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 80
-    _curve: 0
-    _growth: 10
-  - _stat: 3
-    _customKey: 
-    _baseValue: 8
-    _curve: 0
-    _growth: 1
-  - _stat: 1
-    _customKey: 
-    _baseValue: 3
-    _curve: 0
-    _growth: 0.5
-  - _stat: 7
-    _customKey: 
-    _baseValue: 0.8
-    _curve: 0
-    _growth: 0.02
-  - _stat: 8
-    _customKey: 
-    _baseValue: 1.5
-    _curve: 0
-    _growth: 0.02
+  _baseStatGroup: {fileID: 11400000, guid: b27d22e5c66b74acaa64e1ef649ae307, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: 73102d8b0977441f1a2121e6205154e1, type: 2}
   _dropTableMID: drop_slime

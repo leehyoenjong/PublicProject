@@ -20,43 +20,7 @@ MonoBehaviour:
   _roles: 9
   _classTag: Dragon
   _elementTag: Fire
-  _baseStatMID: stat_pet_dragon
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 250
-    _curve: 0
-    _growth: 30
-  - _stat: 3
-    _customKey: 
-    _baseValue: 30
-    _curve: 0
-    _growth: 5
-  - _stat: 1
-    _customKey: 
-    _baseValue: 18
-    _curve: 0
-    _growth: 2.5
-  - _stat: 7
-    _customKey: 
-    _baseValue: 0.8
-    _curve: 0
-    _growth: 0.04
-  - _stat: 5
-    _customKey: 
-    _baseValue: 0.06
-    _curve: 0
-    _growth: 0.005
-  - _stat: 6
-    _customKey: 
-    _baseValue: 1.7
-    _curve: 0
-    _growth: 0.06
-  - _stat: 13
-    _customKey: 
-    _baseValue: 0.2
-    _curve: 0
-    _growth: 0.005
+  _baseStatGroup: {fileID: 11400000, guid: aca6a8bfe21154c788a39f7f64ac5709, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: 0713813cff83242b98db73e9cda1daba, type: 2}
   _skillSlotMax: 3

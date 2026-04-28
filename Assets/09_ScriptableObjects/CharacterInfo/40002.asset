@@ -16,38 +16,7 @@ MonoBehaviour:
   _role: 1
   _classTag: Mage
   _elementTag: Fire
-  _baseStatMID: stat_char_mage_01
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 400
-    _curve: 0
-    _growth: 40
-  - _stat: 3
-    _customKey: 
-    _baseValue: 70
-    _curve: 0
-    _growth: 7
-  - _stat: 1
-    _customKey: 
-    _baseValue: 15
-    _curve: 0
-    _growth: 1.5
-  - _stat: 5
-    _customKey: 
-    _baseValue: 0.15
-    _curve: 0
-    _growth: 0.005
-  - _stat: 6
-    _customKey: 
-    _baseValue: 1.8
-    _curve: 0
-    _growth: 0.03
-  - _stat: 12
-    _customKey: 
-    _baseValue: 2
-    _curve: 0
-    _growth: 0.3
+  _baseStatGroup: {fileID: 11400000, guid: 9681a519d68d641359ea540cdd96f868, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: c6c6bc9f191734684a4b0ad1c1860d1b, type: 2}
   _slotStrategy: 1

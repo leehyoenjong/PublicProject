@@ -16,38 +16,7 @@ MonoBehaviour:
   _role: 2
   _classTag: Cleric
   _elementTag: Light
-  _baseStatMID: stat_char_cleric_01
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 500
-    _curve: 0
-    _growth: 50
-  - _stat: 3
-    _customKey: 
-    _baseValue: 30
-    _curve: 0
-    _growth: 3
-  - _stat: 1
-    _customKey: 
-    _baseValue: 25
-    _curve: 0
-    _growth: 2.5
-  - _stat: 7
-    _customKey: 
-    _baseValue: 1
-    _curve: 0
-    _growth: 0.02
-  - _stat: 11
-    _customKey: 
-    _baseValue: 4
-    _curve: 0
-    _growth: 0.7
-  - _stat: 12
-    _customKey: 
-    _baseValue: 3
-    _curve: 0
-    _growth: 0.4
+  _baseStatGroup: {fileID: 11400000, guid: f8f15b78bb11b4a3c88bf3ae7d8e6888, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: d8fb978c226d546e198f9913465f4434, type: 2}
   - {fileID: 11400000, guid: bad4ce2e93f1a49d9bf56a62e39935c9, type: 2}

@@ -16,38 +16,7 @@ MonoBehaviour:
   _role: 0
   _classTag: Warrior
   _elementTag: Earth
-  _baseStatMID: stat_char_warrior_01
-  _baseStats:
-  - _stat: 0
-    _customKey: 
-    _baseValue: 800
-    _curve: 0
-    _growth: 80
-  - _stat: 3
-    _customKey: 
-    _baseValue: 40
-    _curve: 0
-    _growth: 4
-  - _stat: 1
-    _customKey: 
-    _baseValue: 50
-    _curve: 0
-    _growth: 5
-  - _stat: 7
-    _customKey: 
-    _baseValue: 0.9
-    _curve: 0
-    _growth: 0.02
-  - _stat: 11
-    _customKey: 
-    _baseValue: 3
-    _curve: 0
-    _growth: 0.6
-  - _stat: 9
-    _customKey: 
-    _baseValue: 0
-    _curve: 0
-    _growth: 0.005
+  _baseStatGroup: {fileID: 11400000, guid: 897727b6d398d49a2b6015f11c1878c1, type: 2}
   _baseSkills:
   - {fileID: 11400000, guid: 184932d97dc7746a2a9eb352979a3e4d, type: 2}
   - {fileID: 11400000, guid: 46c1416342515436db6fb1a58e777d38, type: 2}

@@ -20,8 +20,7 @@ MonoBehaviour:
   _roles: 10
   _classTag: Beast
   _elementTag: Water
-  _baseStatMID: stat_pet_slime
-  _baseStats: []
+  _baseStatGroup: {fileID: 11400000, guid: e31ed51255b1f4817a241abb1d14d030, type: 2}
   _baseSkills: []
   _skillSlotMax: 0
   _aiPresetMID: ai_pet_passive
