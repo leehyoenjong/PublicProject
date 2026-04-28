@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7d9746def9a48dfac0fd7e44260f08, type: 3}
+  m_Name: skill_pumpkin_bomb_hit
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.SkillData
+  _skillId: skill_pumpkin_bomb_hit
+  _displayName: 5125
+  _description: 5126
+  _icon: {fileID: 0}
+  _category: 0
+  _tags:
+  - Fire
+  - Internal
+  _targetType: 3
+  _range: 0
+  _radius: 2
+  _cooldown: 0
+  _costType: 0
+  _costAmount: 0
+  _maxLevel: 1
+  _actions:
+  - _actionType: 1
+    _delay: 0
+    _duration: 0
+    _param1: 30
+    _param2: Fire
+    _param3: Attack
+  _levelTable: []

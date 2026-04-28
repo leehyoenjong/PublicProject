@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd60018e5e48480fbb0346bdab1d7da, type: 3}
+  m_Name: 40002
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.CharacterInfo
+  _itemMID: 40002
+  _role: 1
+  _classTag: Mage
+  _elementTag: Fire
+  _baseStatMID: stat_char_mage_01
+  _baseStats:
+  - _stat: 0
+    _customKey: 
+    _baseValue: 400
+    _curve: 0
+    _growth: 40
+  - _stat: 3
+    _customKey: 
+    _baseValue: 70
+    _curve: 0
+    _growth: 7
+  - _stat: 1
+    _customKey: 
+    _baseValue: 15
+    _curve: 0
+    _growth: 1.5
+  - _stat: 5
+    _customKey: 
+    _baseValue: 0.15
+    _curve: 0
+    _growth: 0.005
+  - _stat: 6
+    _customKey: 
+    _baseValue: 1.8
+    _curve: 0
+    _growth: 0.03
+  - _stat: 12
+    _customKey: 
+    _baseValue: 2
+    _curve: 0
+    _growth: 0.3
+  _baseSkills:
+  - {fileID: 11400000, guid: c6c6bc9f191734684a4b0ad1c1860d1b, type: 2}
+  _slotStrategy: 1
+  _slotValue: 10
+  _defaultSkinMID: 0
+  _voiceSetId: vs_mage_01
+  _defaultPositionId: back_left
+  _dialogues: []
+  _profiles: []

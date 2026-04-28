@@ -26,5 +26,5 @@ MonoBehaviour:
       _amount: 3
     _passiveStats:
     - _statType: 1
-      _modType: 0
+      _layer: 0
       _value: 5

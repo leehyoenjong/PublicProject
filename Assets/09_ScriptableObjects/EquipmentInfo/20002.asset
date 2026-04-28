@@ -18,8 +18,8 @@ MonoBehaviour:
   _skills: []
   _baseStats:
   - _statType: 1
-    _modType: 0
+    _layer: 0
     _value: 5
-  - _statType: 2
-    _modType: 0
+  - _statType: 0
+    _layer: 0
     _value: 20

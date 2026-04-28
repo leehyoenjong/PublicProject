@@ -27,24 +27,24 @@ MonoBehaviour:
     - _rewardId: 1002
       _amount: 3
     _passiveStats:
-    - _statType: 0
-      _modType: 0
+    - _statType: 3
+      _layer: 0
       _value: 10
     - _statType: 1
-      _modType: 0
+      _layer: 0
       _value: 5
   - _requiredAmount: 0
     _rewards: []
     _passiveStats:
-    - _statType: 0
-      _modType: 1
+    - _statType: 3
+      _layer: 1
       _value: 3
   - _requiredAmount: 0
     _rewards: []
     _passiveStats:
-    - _statType: 0
-      _modType: 1
+    - _statType: 3
+      _layer: 1
       _value: 10
-    - _statType: 2
-      _modType: 0
+    - _statType: 0
+      _layer: 0
       _value: 100

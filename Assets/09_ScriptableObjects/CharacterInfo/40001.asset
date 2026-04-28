@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd60018e5e48480fbb0346bdab1d7da, type: 3}
+  m_Name: 40001
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.CharacterInfo
+  _itemMID: 40001
+  _role: 0
+  _classTag: Warrior
+  _elementTag: Earth
+  _baseStatMID: stat_char_warrior_01
+  _baseStats:
+  - _stat: 0
+    _customKey: 
+    _baseValue: 800
+    _curve: 0
+    _growth: 80
+  - _stat: 3
+    _customKey: 
+    _baseValue: 40
+    _curve: 0
+    _growth: 4
+  - _stat: 1
+    _customKey: 
+    _baseValue: 50
+    _curve: 0
+    _growth: 5
+  - _stat: 7
+    _customKey: 
+    _baseValue: 0.9
+    _curve: 0
+    _growth: 0.02
+  - _stat: 11
+    _customKey: 
+    _baseValue: 3
+    _curve: 0
+    _growth: 0.6
+  - _stat: 9
+    _customKey: 
+    _baseValue: 0
+    _curve: 0
+    _growth: 0.005
+  _baseSkills:
+  - {fileID: 11400000, guid: 184932d97dc7746a2a9eb352979a3e4d, type: 2}
+  - {fileID: 11400000, guid: 46c1416342515436db6fb1a58e777d38, type: 2}
+  _slotStrategy: 0
+  _slotValue: 3
+  _defaultSkinMID: 50001
+  _voiceSetId: vs_warrior_01
+  _defaultPositionId: front_center
+  _dialogues: []
+  _profiles: []

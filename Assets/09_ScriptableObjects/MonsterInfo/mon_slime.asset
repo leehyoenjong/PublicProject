@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8212ba82e80048a19c1f9bcdfff8de7, type: 3}
+  m_Name: mon_slime
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.MonsterInfo
+  _mid: mon_slime
+  _nameKey: 6001
+  _descKey: 6002
+  _iconAddress: icons/monsters/slime
+  _type: 0
+  _classTag: Beast
+  _elementTag: Water
+  _baseStatMID: stat_mon_slime
+  _baseStats:
+  - _stat: 0
+    _customKey: 
+    _baseValue: 80
+    _curve: 0
+    _growth: 10
+  - _stat: 3
+    _customKey: 
+    _baseValue: 8
+    _curve: 0
+    _growth: 1
+  - _stat: 1
+    _customKey: 
+    _baseValue: 3
+    _curve: 0
+    _growth: 0.5
+  - _stat: 7
+    _customKey: 
+    _baseValue: 0.8
+    _curve: 0
+    _growth: 0.02
+  - _stat: 8
+    _customKey: 
+    _baseValue: 1.5
+    _curve: 0
+    _growth: 0.02
+  _baseSkills:
+  - {fileID: 11400000, guid: 73102d8b0977441f1a2121e6205154e1, type: 2}
+  _dropTableMID: drop_slime
+  _aiPresetMID: ai_basic_melee
+  _level: 1
+  _expReward: 10
+  _goldReward: 5
+  _onSpawnEvents: []
+  _onDeathEvents: []
+  _hitReactionId: hit_basic

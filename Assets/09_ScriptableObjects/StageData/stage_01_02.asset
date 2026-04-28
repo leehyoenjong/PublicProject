@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe483d571bbf74e23967ea2c90b0abbf, type: 3}
+  m_Name: stage_01_02
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.StageData
+  _stageId: stage_01_02
+  _displayName: 9103
+  _description: 9104
+  _chapterId: chapter_01
+  _sortOrder: 2
+  _stageType: 0
+  _prerequisiteStageIds:
+  - stage_01_01
+  _requiredLevel: 1
+  _requiredItemIds: []
+  _dailyEnterLimit: 0
+  _staminaCost: 8
+  _ticketItemId: 
+  _ticketAmount: 0
+  _currencyId: 
+  _currencyAmount: 0
+  _starConditions: []
+  _autoUnlocked: 0
+  _sweepEnabled: 0
+  _sceneKey: scenes/Battle_Field_01
+  _bgmId: bgm_battle_normal
+  _backgroundId: bg_field_01
+  _envEffectId: 
+  _timeLimitSeconds: 0
+  _winCondition: 0
+  _loseCondition: 0
+  _firstClearRewards:
+  - _rewardId: 1001
+    _amount: 200
+  - _rewardId: 1002
+    _amount: 1
+  _repeatRewards:
+  - _rewardId: 1001
+    _amount: 50
+  _sweepRewards:
+  - _rewardId: 1001
+    _amount: 50
+  _waves:
+  - _monsters:
+    - _monsterMID: mon_slime
+      _count: 3
+      _spawnTiming: 0
+      _spawnPattern: 0
+    _transitionCondition: 0
+    _transitionTargetMonsterMID: 
+    _transitionTimer: 0
+    _bossPhases: []
+    _bossEntryHook: 
+    _phaseTransitionHook: 
+  - _monsters:
+    - _monsterMID: mon_orc_elite
+      _count: 1
+      _spawnTiming: 0
+      _spawnPattern: 0
+    _transitionCondition: 0
+    _transitionTargetMonsterMID: 
+    _transitionTimer: 0
+    _bossPhases: []
+    _bossEntryHook: 
+    _phaseTransitionHook: 
+  _events: []

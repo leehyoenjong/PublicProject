@@ -25,6 +25,6 @@ MonoBehaviour:
     - _rewardId: 1001
       _amount: 10
     _passiveStats:
-    - _statType: 0
-      _modType: 0
+    - _statType: 3
+      _layer: 0
       _value: 5

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d04804113e9464b9def67409d2a228, type: 3}
+  m_Name: pet_hawk
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.PetInfo
+  _mid: pet_hawk
+  _itemMID: 70005
+  _nameKey: 7009
+  _descKey: 7010
+  _iconAddress: icons/pets/hawk
+  _roles: 16
+  _classTag: Bird
+  _elementTag: Wind
+  _baseStatMID: stat_pet_hawk
+  _baseStats: []
+  _baseSkills: []
+  _skillSlotMax: 0
+  _aiPresetMID: ai_pet_passive
+  _followStrategy: 3
+  _followDistance: 5
+  _catchUpDistance: 15
+  _collisionPolicy: 0
+  _onAcquireEvents: []
+  _onEquipEvents: []
+  _onUnequipEvents: []

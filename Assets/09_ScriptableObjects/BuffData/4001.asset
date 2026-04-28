@@ -30,6 +30,6 @@ MonoBehaviour:
   _tags:
   - Buff
   _targetStats:
-  - _statType: 0
-    _modType: 1
+  - _statType: 3
+    _layer: 1
     _value: 20

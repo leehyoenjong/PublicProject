@@ -108,3 +108,53 @@ MonoBehaviour:
   - _key: 8004
     _value: "SSR \uD53D\uC5C5 \uD655\uB960 \uC0C1\uC2B9. \uD53D\uC5C5 \uCC9C\uC7A5
       180\uD68C."
+  - _key: 6001
+    _value: "\uC2AC\uB77C\uC784"
+  - _key: 6002
+    _value: "\uB048\uC801\uC774\uB294 \uC810\uC561 \uB369\uC5B4\uB9AC. \uAC00\uC7A5
+      \uD754\uD55C \uC7A1\uBAB9."
+  - _key: 6003
+    _value: "\uC815\uC608 \uC624\uD06C"
+  - _key: 6004
+    _value: "\uC232 \uBD80\uC871\uC758 \uC815\uC608 \uC804\uC0AC. \uBB34\uAC70\uC6B4
+      \uB3C4\uB07C\uB97C \uD718\uB450\uB978\uB2E4."
+  - _key: 6005
+    _value: "\uACE0\uB300 \uC6A9"
+  - _key: 6006
+    _value: "\uC0B0\uB9E5\uC758 \uC9C0\uBC30\uC790. \uD654\uC5FC \uBE0C\uB808\uC2A4\uB85C
+      \uAD11\uBC94\uC704 \uD53C\uD574\uB97C \uC785\uD78C\uB2E4."
+  - _key: 6007
+    _value: "\uB9C8\uC655"
+  - _key: 6008
+    _value: "\uC5B4\uB460\uC758 \uAD70\uC8FC. \uCC98\uCE58 \uC2DC \uC2DC\uB124\uB9C8\uD2F1\uC774
+      \uBC1C\uB3D9\uB41C\uB2E4."
+  - _key: 6009
+    _value: "\uD638\uBC15\uC655"
+  - _key: 6010
+    _value: "\uAC00\uC744 \uC774\uBCA4\uD2B8 \uD55C\uC815. \uCC98\uCE58 \uC2DC \uC774\uBCA4\uD2B8
+      \uCF54\uC778\uC744 \uB5A8\uC5B4\uB728\uB9B0\uB2E4."
+  - _key: 7001
+    _value: "\uD654\uC5FC \uC5EC\uC6B0"
+  - _key: 7002
+    _value: "Battle+Follower. \uC801\uC5D0\uAC8C \uB3CC\uC9C4\uD574 \uBB3C\uC5B4\uB72F\uACE0
+      \uC8FC\uC778\uC5D0\uAC8C \uBCF5\uADC0\uD55C\uB2E4."
+  - _key: 7003
+    _value: "\uD604\uC790 \uBD80\uC5C9\uC774"
+  - _key: 7004
+    _value: "SpecialAbility. \uC8FC\uBCC0 \uC544\uC774\uD15C\uC744 \uC790\uB3D9\uC73C\uB85C
+      \uC90D\uB294\uB2E4."
+  - _key: 7005
+    _value: "\uC5B4\uB9B0 \uC6A9"
+  - _key: 7006
+    _value: "Battle+Aerial. \uACF5\uC911\uC5D0\uC11C \uD654\uC5FC \uBE0C\uB808\uC2A4\uB85C
+      \uC801\uC744 \uC81C\uC555\uD55C\uB2E4."
+  - _key: 7007
+    _value: "\uC218\uC815 \uC2AC\uB77C\uC784"
+  - _key: 7008
+    _value: "StatBoost+Follower. \uC7A5\uCC29 \uC2DC \uC8FC\uC778 \uC2A4\uD0EF\uC744
+      \uC77C\uC815 \uBE44\uC728 \uC0C1\uC2B9\uC2DC\uD0A8\uB2E4."
+  - _key: 7009
+    _value: "\uC0AC\uB0E5 \uB9E4"
+  - _key: 7010
+    _value: "Farming. \uD2B9\uC815 \uD0C0\uC785 \uBAAC\uC2A4\uD130\uC758 \uB4DC\uB86D\uB960\uC744
+      \uC0C1\uC2B9\uC2DC\uD0A8\uB2E4."

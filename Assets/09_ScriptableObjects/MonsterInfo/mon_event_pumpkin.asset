@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8212ba82e80048a19c1f9bcdfff8de7, type: 3}
+  m_Name: mon_event_pumpkin
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.MonsterInfo
+  _mid: mon_event_pumpkin
+  _nameKey: 6009
+  _descKey: 6010
+  _iconAddress: icons/monsters/pumpkin
+  _type: 4
+  _classTag: Beast
+  _elementTag: Fire
+  _baseStatMID: stat_mon_pumpkin
+  _baseStats: []
+  _baseSkills:
+  - {fileID: 11400000, guid: a819c7fe253f84b18b29b34ebcde0b30, type: 2}
+  _dropTableMID: drop_pumpkin
+  _aiPresetMID: ai_basic_melee
+  _level: 5
+  _expReward: 30
+  _goldReward: 20
+  _onSpawnEvents: []
+  _onDeathEvents:
+  - DropExtra
+  _hitReactionId: hit_basic

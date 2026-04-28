@@ -13,6 +13,25 @@ MonoBehaviour:
   m_Name: SkillDataCollection
   m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.SkillDataCollection
   _items:
+  - {fileID: 11400000, guid: 59fe80c96067d4ce5893e3a489f056a3, type: 2}
+  - {fileID: 11400000, guid: 4f100dee45d8e4822942ddff05a7cd60, type: 2}
+  - {fileID: 11400000, guid: bad4ce2e93f1a49d9bf56a62e39935c9, type: 2}
+  - {fileID: 11400000, guid: cfa29ff7c64394e3cbe8a76685ea8aab, type: 2}
+  - {fileID: 11400000, guid: 0713813cff83242b98db73e9cda1daba, type: 2}
+  - {fileID: 11400000, guid: bdca9120766464c4bb7d8011c4a4e7a5, type: 2}
   - {fileID: 11400000, guid: 22b4561b4247649ee848319b21498ba2, type: 2}
+  - {fileID: 11400000, guid: c6c6bc9f191734684a4b0ad1c1860d1b, type: 2}
+  - {fileID: 11400000, guid: 339cc648fdbcd4f269db77f87a36ea50, type: 2}
   - {fileID: 11400000, guid: 44ac0290b49df4456936170f4f5500f7, type: 2}
+  - {fileID: 11400000, guid: 99e4b1ae7d10c44ce9731767b81ff3fe, type: 2}
+  - {fileID: 11400000, guid: 46c1416342515436db6fb1a58e777d38, type: 2}
   - {fileID: 11400000, guid: dc8e86ee9990649b0bdcf0b9886cb2b2, type: 2}
+  - {fileID: 11400000, guid: d8fb978c226d546e198f9913465f4434, type: 2}
+  - {fileID: 11400000, guid: a819c7fe253f84b18b29b34ebcde0b30, type: 2}
+  - {fileID: 11400000, guid: cc9929a8e508e4fc995562aec77dacfa, type: 2}
+  - {fileID: 11400000, guid: 184932d97dc7746a2a9eb352979a3e4d, type: 2}
+  - {fileID: 11400000, guid: 73102d8b0977441f1a2121e6205154e1, type: 2}
+  - {fileID: 11400000, guid: 6dcff11a5304345819f067d29dd076a4, type: 2}
+  - {fileID: 11400000, guid: 8aeecf927e46549ada5955b923cf8778, type: 2}
+  - {fileID: 11400000, guid: 1b58f279c3e614fff9588001da17475d, type: 2}
+  - {fileID: 11400000, guid: 4747c1921f99f49089ccb22ee8bc849b, type: 2}

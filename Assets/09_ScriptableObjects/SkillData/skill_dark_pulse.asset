@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7d9746def9a48dfac0fd7e44260f08, type: 3}
+  m_Name: skill_dark_pulse
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.SkillData
+  _skillId: skill_dark_pulse
+  _displayName: 5117
+  _description: 5118
+  _icon: {fileID: 0}
+  _category: 0
+  _tags:
+  - Dark
+  - AOE
+  _targetType: 3
+  _range: 7
+  _radius: 3
+  _cooldown: 8
+  _costType: 0
+  _costAmount: 0
+  _maxLevel: 1
+  _actions:
+  - _actionType: 6
+    _delay: 0
+    _duration: 0.4
+    _param1: Assets/03_Prefabs/Vfx/DarkPulseVfx.prefab
+    _param2: 
+    _param3: 
+  - _actionType: 1
+    _delay: 0.4
+    _duration: 0
+    _param1: 45
+    _param2: Dark
+    _param3: Attack
+  _levelTable: []

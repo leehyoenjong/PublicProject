@@ -102,3 +102,43 @@ MonoBehaviour:
     _value: Spring Event Pickup Gacha
   - _key: 8004
     _value: Increased SSR pickup rate. Pickup pity at 180.
+  - _key: 6001
+    _value: Slime
+  - _key: 6002
+    _value: Sticky goo blob. The most common mob.
+  - _key: 6003
+    _value: Elite Orc
+  - _key: 6004
+    _value: Elite warrior of the forest tribe. Wields a heavy axe.
+  - _key: 6005
+    _value: Ancient Dragon
+  - _key: 6006
+    _value: Lord of the mountains. Deals AoE damage with fire breath.
+  - _key: 6007
+    _value: Demon Lord
+  - _key: 6008
+    _value: Lord of darkness. Triggers a cinematic on defeat.
+  - _key: 6009
+    _value: Pumpkin King
+  - _key: 6010
+    _value: Limited autumn event. Drops event coins.
+  - _key: 7001
+    _value: Fire Fox
+  - _key: 7002
+    _value: Battle+Follower. Charges enemies and returns to its owner.
+  - _key: 7003
+    _value: Sage Owl
+  - _key: 7004
+    _value: SpecialAbility. Auto-picks nearby items.
+  - _key: 7005
+    _value: Young Dragon
+  - _key: 7006
+    _value: Battle+Aerial. Suppresses enemies with aerial fire breath.
+  - _key: 7007
+    _value: Crystal Slime
+  - _key: 7008
+    _value: StatBoost+Follower. Buffs owner stats while equipped.
+  - _key: 7009
+    _value: Hunter Hawk
+  - _key: 7010
+    _value: Farming. Increases drop rate of specific monster types.

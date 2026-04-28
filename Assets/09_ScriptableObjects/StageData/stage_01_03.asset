@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe483d571bbf74e23967ea2c90b0abbf, type: 3}
+  m_Name: stage_01_03
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.StageData
+  _stageId: stage_01_03
+  _displayName: 9105
+  _description: 9106
+  _chapterId: chapter_01
+  _sortOrder: 3
+  _stageType: 1
+  _prerequisiteStageIds:
+  - stage_01_02
+  _requiredLevel: 1
+  _requiredItemIds: []
+  _dailyEnterLimit: 0
+  _staminaCost: 12
+  _ticketItemId: 
+  _ticketAmount: 0
+  _currencyId: 
+  _currencyAmount: 0
+  _starConditions: []
+  _autoUnlocked: 0
+  _sweepEnabled: 0
+  _sceneKey: scenes/Battle_Boss_01
+  _bgmId: bgm_battle_boss
+  _backgroundId: bg_boss_01
+  _envEffectId: 
+  _timeLimitSeconds: 180
+  _winCondition: 1
+  _loseCondition: 0
+  _firstClearRewards:
+  - _rewardId: 1001
+    _amount: 500
+  - _rewardId: 1002
+    _amount: 3
+  _repeatRewards:
+  - _rewardId: 1001
+    _amount: 100
+  _sweepRewards:
+  - _rewardId: 1001
+    _amount: 100
+  _waves:
+  - _monsters:
+    - _monsterMID: mon_slime
+      _count: 3
+      _spawnTiming: 0
+      _spawnPattern: 0
+    _transitionCondition: 0
+    _transitionTargetMonsterMID: 
+    _transitionTimer: 0
+    _bossPhases: []
+    _bossEntryHook: 
+    _phaseTransitionHook: 
+  - _monsters:
+    - _monsterMID: mon_dragon_boss
+      _count: 1
+      _spawnTiming: 0
+      _spawnPattern: 0
+    _transitionCondition: 1
+    _transitionTargetMonsterMID: 
+    _transitionTimer: 0
+    _bossPhases:
+    - _hpThreshold: 0.5
+      _patternHook: phase_normal
+    - _hpThreshold: 0.2
+      _patternHook: phase_enrage
+    _bossEntryHook: Intro:dragon
+    _phaseTransitionHook: Cinematic:phase
+  _events:
+  - _eventType: 2
+    _targetId: tutorial_boss_intro
+    _triggerType: 0
+    _triggerValue: 
+    _rewardItems: []
+    _description: 9201
+    _canRepeat: 0

@@ -18,6 +18,6 @@ MonoBehaviour:
   _skills:
   - {fileID: 11400000, guid: 22b4561b4247649ee848319b21498ba2, type: 2}
   _baseStats:
-  - _statType: 0
-    _modType: 0
+  - _statType: 3
+    _layer: 0
     _value: 10

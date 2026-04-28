@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd60018e5e48480fbb0346bdab1d7da, type: 3}
+  m_Name: 40003
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.CharacterInfo
+  _itemMID: 40003
+  _role: 2
+  _classTag: Cleric
+  _elementTag: Light
+  _baseStatMID: stat_char_cleric_01
+  _baseStats:
+  - _stat: 0
+    _customKey: 
+    _baseValue: 500
+    _curve: 0
+    _growth: 50
+  - _stat: 3
+    _customKey: 
+    _baseValue: 30
+    _curve: 0
+    _growth: 3
+  - _stat: 1
+    _customKey: 
+    _baseValue: 25
+    _curve: 0
+    _growth: 2.5
+  - _stat: 7
+    _customKey: 
+    _baseValue: 1
+    _curve: 0
+    _growth: 0.02
+  - _stat: 11
+    _customKey: 
+    _baseValue: 4
+    _curve: 0
+    _growth: 0.7
+  - _stat: 12
+    _customKey: 
+    _baseValue: 3
+    _curve: 0
+    _growth: 0.4
+  _baseSkills:
+  - {fileID: 11400000, guid: d8fb978c226d546e198f9913465f4434, type: 2}
+  - {fileID: 11400000, guid: bad4ce2e93f1a49d9bf56a62e39935c9, type: 2}
+  _slotStrategy: 2
+  _slotValue: 1
+  _defaultSkinMID: 50003
+  _voiceSetId: vs_cleric_01
+  _defaultPositionId: back_center
+  _dialogues: []
+  _profiles: []

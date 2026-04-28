@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8212ba82e80048a19c1f9bcdfff8de7, type: 3}
+  m_Name: mon_dragon_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.MonsterInfo
+  _mid: mon_dragon_boss
+  _nameKey: 6005
+  _descKey: 6006
+  _iconAddress: icons/monsters/dragon
+  _type: 2
+  _classTag: Beast
+  _elementTag: Fire
+  _baseStatMID: stat_mon_dragon_boss
+  _baseStats:
+  - _stat: 0
+    _customKey: 
+    _baseValue: 5000
+    _curve: 2
+    _growth: 0.15
+  - _stat: 0
+    _customKey: 
+    _baseValue: 5000
+    _curve: 2
+    _growth: 0.15
+  - _stat: 3
+    _customKey: 
+    _baseValue: 200
+    _curve: 1
+    _growth: 2
+  - _stat: 3
+    _customKey: 
+    _baseValue: 200
+    _curve: 1
+    _growth: 2
+  - _stat: 1
+    _customKey: 
+    _baseValue: 100
+    _curve: 0
+    _growth: 10
+  - _stat: 1
+    _customKey: 
+    _baseValue: 100
+    _curve: 0
+    _growth: 10
+  - _stat: 13
+    _customKey: 
+    _baseValue: 0.3
+    _curve: 0
+    _growth: 0.005
+  - _stat: 13
+    _customKey: 
+    _baseValue: 0.3
+    _curve: 0
+    _growth: 0.005
+  - _stat: 5
+    _customKey: 
+    _baseValue: 0.08
+    _curve: 0
+    _growth: 0.003
+  - _stat: 6
+    _customKey: 
+    _baseValue: 2
+    _curve: 0
+    _growth: 0.05
+  _baseSkills:
+  - {fileID: 11400000, guid: bdca9120766464c4bb7d8011c4a4e7a5, type: 2}
+  - {fileID: 11400000, guid: 8aeecf927e46549ada5955b923cf8778, type: 2}
+  - {fileID: 11400000, guid: 4747c1921f99f49089ccb22ee8bc849b, type: 2}
+  _dropTableMID: drop_dragon
+  _aiPresetMID: ai_boss_pattern
+  _level: 30
+  _expReward: 5000
+  _goldReward: 3000
+  _onSpawnEvents:
+  - Intro:boss
+  - Cinematic:dragon
+  _onDeathEvents:
+  - StageClear
+  _hitReactionId: hit_boss

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7d9746def9a48dfac0fd7e44260f08, type: 3}
+  m_Name: skill_war_cry
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.SkillData
+  _skillId: skill_war_cry
+  _displayName: 5109
+  _description: 5110
+  _icon: {fileID: 0}
+  _category: 0
+  _tags:
+  - Buff
+  - SelfRoar
+  _targetType: 1
+  _range: 0
+  _radius: 0
+  _cooldown: 12
+  _costType: 0
+  _costAmount: 0
+  _maxLevel: 1
+  _actions:
+  - _actionType: 5
+    _delay: 0
+    _duration: 0
+    _param1: Assets/07_Audio/war_cry.wav
+    _param2: 
+    _param3: 
+  - _actionType: 7
+    _delay: 0
+    _duration: 0.8
+    _param1: roar
+    _param2: Self
+    _param3: 0
+  - _actionType: 0
+    _delay: 0.3
+    _duration: 0
+    _param1: buff_atk_up
+    _param2: Self
+    _param3: 
+  _levelTable: []
