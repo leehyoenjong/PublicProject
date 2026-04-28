@@ -252,6 +252,7 @@ MonoBehaviour:
       _lastDataColumn: 0
       _parentIdHeader:
       _orderByHeader:
+      _parentLookupField: _baseStatMID
       _aliases: []
   - _entryName: "챕터"
     _mode: 0
@@ -318,6 +319,7 @@ MonoBehaviour:
       _lastDataColumn: 0
       _parentIdHeader:
       _orderByHeader:
+      _parentLookupField: _baseStatMID
       _aliases: []
   - _entryName: "캐릭터"
     _mode: 0
@@ -340,4 +342,5 @@ MonoBehaviour:
       _lastDataColumn: 0
       _parentIdHeader:
       _orderByHeader:
+      _parentLookupField: _baseStatMID
       _aliases: []
