@@ -469,6 +469,153 @@ namespace PublicFramework.Tests
             return info;
         }
 
+        // ===== Stage =====
+
+        public static StarConditionEntry MakeStarCondition(ConditionType type, int amount)
+        {
+            var entry = new StarConditionEntry();
+            SetField(entry, "_conditionType", type);
+            SetField(entry, "_amount", amount);
+            return entry;
+        }
+
+        public static WaveMonsterEntry MakeWaveMonster(string monsterMID, int count = 1, float spawnTiming = 0f, SpawnPattern pattern = SpawnPattern.Simultaneous)
+        {
+            var entry = new WaveMonsterEntry();
+            SetField(entry, "_monsterMID", monsterMID);
+            SetField(entry, "_count", count);
+            SetField(entry, "_spawnTiming", spawnTiming);
+            SetField(entry, "_spawnPattern", pattern);
+            return entry;
+        }
+
+        public static BossPhaseEntry MakeBossPhase(float hpThreshold, string patternHook = "")
+        {
+            var entry = new BossPhaseEntry();
+            SetField(entry, "_hpThreshold", hpThreshold);
+            SetField(entry, "_patternHook", patternHook);
+            return entry;
+        }
+
+        public static WaveData MakeWaveData(
+            WaveMonsterEntry[] monsters = null,
+            WaveTransitionCondition transition = WaveTransitionCondition.AllKill,
+            string transitionTargetMonsterMID = "",
+            float transitionTimer = 0f,
+            BossPhaseEntry[] bossPhases = null,
+            string bossEntryHook = "",
+            string phaseTransitionHook = "")
+        {
+            var data = new WaveData();
+            SetField(data, "_monsters", monsters ?? System.Array.Empty<WaveMonsterEntry>());
+            SetField(data, "_transitionCondition", transition);
+            SetField(data, "_transitionTargetMonsterMID", transitionTargetMonsterMID);
+            SetField(data, "_transitionTimer", transitionTimer);
+            SetField(data, "_bossPhases", bossPhases ?? System.Array.Empty<BossPhaseEntry>());
+            SetField(data, "_bossEntryHook", bossEntryHook);
+            SetField(data, "_phaseTransitionHook", phaseTransitionHook);
+            return data;
+        }
+
+        public static StageEventEntry MakeStageEvent(
+            StageEventType eventType,
+            string targetId,
+            StageEventTrigger trigger,
+            string triggerValue = "",
+            QuestReward[] rewards = null,
+            int description = 0,
+            bool canRepeat = false)
+        {
+            var entry = new StageEventEntry();
+            SetField(entry, "_eventType", eventType);
+            SetField(entry, "_targetId", targetId);
+            SetField(entry, "_triggerType", trigger);
+            SetField(entry, "_triggerValue", triggerValue);
+            SetField(entry, "_rewardItems", rewards ?? System.Array.Empty<QuestReward>());
+            SetField(entry, "_description", description);
+            SetField(entry, "_canRepeat", canRepeat);
+            return entry;
+        }
+
+        public static ChapterData MakeChapterData(
+            string chapterId,
+            ChapterType chapterType = ChapterType.Normal,
+            int order = 0,
+            string unlockChapterId = "",
+            QuestReward[] completeRewards = null)
+        {
+            var data = ScriptableObject.CreateInstance<ChapterData>();
+            SetField(data, "_chapterId", chapterId);
+            SetField(data, "_chapterType", chapterType);
+            SetField(data, "_sortOrder", order);
+            SetField(data, "_unlockChapterId", unlockChapterId);
+            SetField(data, "_chapterCompleteRewards", completeRewards ?? System.Array.Empty<QuestReward>());
+            return data;
+        }
+
+        public static StageData MakeStageData(
+            string stageId,
+            string chapterId = "",
+            StageType stageType = StageType.Normal,
+            int order = 0,
+            string[] prereqStageIds = null,
+            int requiredLevel = 0,
+            string[] requiredItemIds = null,
+            int dailyEnterLimit = 0,
+            int staminaCost = 0,
+            string ticketItemId = "",
+            int ticketAmount = 0,
+            string currencyId = "",
+            int currencyAmount = 0,
+            StarConditionEntry[] starConditions = null,
+            bool autoUnlocked = false,
+            bool sweepEnabled = false,
+            float timeLimitSeconds = 0f,
+            StageWinCondition winCondition = StageWinCondition.AllKill,
+            StageLoseCondition loseCondition = StageLoseCondition.AllDead,
+            QuestReward[] firstClearRewards = null,
+            QuestReward[] repeatRewards = null,
+            QuestReward[] sweepRewards = null,
+            WaveData[] waves = null,
+            StageEventEntry[] events = null)
+        {
+            var data = ScriptableObject.CreateInstance<StageData>();
+            SetField(data, "_stageId", stageId);
+            SetField(data, "_chapterId", chapterId);
+            SetField(data, "_stageType", stageType);
+            SetField(data, "_sortOrder", order);
+            SetField(data, "_prerequisiteStageIds", prereqStageIds ?? System.Array.Empty<string>());
+            SetField(data, "_requiredLevel", requiredLevel);
+            SetField(data, "_requiredItemIds", requiredItemIds ?? System.Array.Empty<string>());
+            SetField(data, "_dailyEnterLimit", dailyEnterLimit);
+            SetField(data, "_staminaCost", staminaCost);
+            SetField(data, "_ticketItemId", ticketItemId);
+            SetField(data, "_ticketAmount", ticketAmount);
+            SetField(data, "_currencyId", currencyId);
+            SetField(data, "_currencyAmount", currencyAmount);
+            SetField(data, "_starConditions", starConditions ?? System.Array.Empty<StarConditionEntry>());
+            SetField(data, "_autoUnlocked", autoUnlocked);
+            SetField(data, "_sweepEnabled", sweepEnabled);
+            SetField(data, "_timeLimitSeconds", timeLimitSeconds);
+            SetField(data, "_winCondition", winCondition);
+            SetField(data, "_loseCondition", loseCondition);
+            SetField(data, "_firstClearRewards", firstClearRewards ?? System.Array.Empty<QuestReward>());
+            SetField(data, "_repeatRewards", repeatRewards ?? System.Array.Empty<QuestReward>());
+            SetField(data, "_sweepRewards", sweepRewards ?? System.Array.Empty<QuestReward>());
+            SetField(data, "_waves", waves ?? System.Array.Empty<WaveData>());
+            SetField(data, "_events", events ?? System.Array.Empty<StageEventEntry>());
+            return data;
+        }
+
+        public static StageConfig MakeStageConfig(int maxStamina = 120, float recoverSeconds = 360f, bool autoBattleAllowed = false)
+        {
+            var config = ScriptableObject.CreateInstance<StageConfig>();
+            SetField(config, "_maxStamina", maxStamina);
+            SetField(config, "_staminaRecoverSeconds", recoverSeconds);
+            SetField(config, "_autoBattleAllowedByDefault", autoBattleAllowed);
+            return config;
+        }
+
         public static void SetPrivateField(object target, string fieldName, object value)
         {
             SetField(target, fieldName, value);
