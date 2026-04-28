@@ -318,7 +318,7 @@ namespace PublicFramework.Tests
             SetField(data, "_role", role);
             SetField(data, "_classTag", classTag);
             SetField(data, "_elementTag", elementTag);
-            SetField(data, "_baseStatMID", baseStatMID);
+            SetField(data, "_baseStatGroup", MakeStatGroupRef(baseStatMID));
             SetField(data, "_baseSkills", baseSkills ?? System.Array.Empty<SkillData>());
             SetField(data, "_slotStrategy", slotStrategy);
             SetField(data, "_slotValue", slotValue);
@@ -367,7 +367,7 @@ namespace PublicFramework.Tests
             SetField(info, "_type", type);
             SetField(info, "_classTag", classTag);
             SetField(info, "_elementTag", elementTag);
-            SetField(info, "_baseStatMID", baseStatMID);
+            SetField(info, "_baseStatGroup", MakeStatGroupRef(baseStatMID));
             SetField(info, "_baseSkills", baseSkills ?? System.Array.Empty<SkillData>());
             SetField(info, "_dropTableMID", dropTableMID);
             SetField(info, "_aiPresetMID", aiPresetMID);
@@ -455,7 +455,7 @@ namespace PublicFramework.Tests
             SetField(info, "_roles", roles);
             SetField(info, "_classTag", classTag);
             SetField(info, "_elementTag", elementTag);
-            SetField(info, "_baseStatMID", baseStatMID);
+            SetField(info, "_baseStatGroup", MakeStatGroupRef(baseStatMID));
             SetField(info, "_baseSkills", baseSkills ?? System.Array.Empty<SkillData>());
             SetField(info, "_skillSlotMax", skillSlotMax);
             SetField(info, "_aiPresetMID", aiPresetMID);
@@ -643,6 +643,24 @@ namespace PublicFramework.Tests
             SetField(preset, "_rootIndex", rootIndex);
             SetField(preset, "_nodes", nodes ?? System.Array.Empty<BehaviorNodeEntry>());
             return preset;
+        }
+
+        // ===== Stat =====
+
+        public static StatGroupData MakeStatGroupData(string statGroupId, params StatDataEntry[] entries)
+        {
+            var sg = ScriptableObject.CreateInstance<StatGroupData>();
+            SetField(sg, "_statGroupId", statGroupId);
+            SetField(sg, "_entries", entries ?? System.Array.Empty<StatDataEntry>());
+            return sg;
+        }
+
+        private static StatGroupData MakeStatGroupRef(string statGroupId)
+        {
+            if (string.IsNullOrEmpty(statGroupId)) return null;
+            var sg = ScriptableObject.CreateInstance<StatGroupData>();
+            SetField(sg, "_statGroupId", statGroupId);
+            return sg;
         }
 
         public static void SetPrivateField(object target, string fieldName, object value)

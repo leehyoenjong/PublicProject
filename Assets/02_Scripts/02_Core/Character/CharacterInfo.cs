@@ -19,8 +19,7 @@ namespace PublicFramework
         [SerializeField, SheetAlias("elementTag")] private string _elementTag;
 
         [Header("스탯")]
-        [SerializeField, SheetAlias("baseStatMID")] private string _baseStatMID;
-        [SerializeField] private StatDataEntry[] _baseStats;
+        [SerializeField, SheetAlias("baseStatMID")] private StatGroupData _baseStatGroup;
 
         [Header("기본 스킬 (콤마 구분 MID → SO 자동 매칭)")]
         [SerializeField, SheetAlias("baseSkillMIDs")] private SkillData[] _baseSkills;
@@ -43,7 +42,8 @@ namespace PublicFramework
         public ItemCategory OwnerCategory => ItemCategory.Character;
         public int ItemMID => _itemMID;
         public string UnitId => _itemMID.ToString();
-        public string BaseStatMID => _baseStatMID;
+        public string BaseStatMID => _baseStatGroup != null ? _baseStatGroup.StatGroupId : null;
+        public StatGroupData BaseStatGroup => _baseStatGroup;
         public CharacterRole Role => _role;
         public string ClassTag => _classTag;
         public string ElementTag => _elementTag;

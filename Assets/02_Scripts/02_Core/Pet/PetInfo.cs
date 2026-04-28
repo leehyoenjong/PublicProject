@@ -23,8 +23,7 @@ namespace PublicFramework
         [SerializeField, SheetAlias("elementTag")] private string _elementTag;
 
         [Header("스탯·스킬")]
-        [SerializeField, SheetAlias("baseStatMID")] private string _baseStatMID;
-        [SerializeField] private StatDataEntry[] _baseStats;
+        [SerializeField, SheetAlias("baseStatMID")] private StatGroupData _baseStatGroup;
         [SerializeField, SheetAlias("baseSkillMIDs")] private SkillData[] _baseSkills;
         [SerializeField, SheetAlias("skillSlotMax")] private int _skillSlotMax;
 
@@ -45,7 +44,8 @@ namespace PublicFramework
         public ItemCategory OwnerCategory => ItemCategory.Pet;
         public string MID => _mid;
         public string UnitId => _mid;
-        public string BaseStatMID => _baseStatMID;
+        public string BaseStatMID => _baseStatGroup != null ? _baseStatGroup.StatGroupId : null;
+        public StatGroupData BaseStatGroup => _baseStatGroup;
         public int ItemMID => _itemMID;
         public int NameKey => _nameKey;
         public int DescKey => _descKey;
