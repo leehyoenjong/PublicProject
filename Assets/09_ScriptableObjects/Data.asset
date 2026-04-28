@@ -231,3 +231,113 @@ MonoBehaviour:
       _parentIdHeader: 
       _orderByHeader: 
       _aliases: []
+  - _entryName: "펫"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=381643603#gid=381643603
+    _targetScript: {fileID: 11500000, guid: 12d04804113e9464b9def67409d2a228, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _mid
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: f51bb1d663ac24f4fb7cb92b4da31a75, type: 3}
+    _childTables:
+    - _parentFieldName: _baseStats
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
+  - _entryName: "챕터"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1882444335#gid=1882444335
+    _targetScript: {fileID: 11500000, guid: fbacfb6b45c7b401482a6ecf148007bc, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _chapterId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 61c3c970cef5a497aaba2f8195018d88, type: 3}
+    _childTables: []
+  - _entryName: "스테이지"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1361517974#gid=1361517974
+    _targetScript: {fileID: 11500000, guid: fe483d571bbf74e23967ea2c90b0abbf, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _stageId
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 3c04ced0589cb4ab19146bd744795e40, type: 3}
+    _childTables:
+    - _parentFieldName: _waves
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=714622326#gid=714622326
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+    - _parentFieldName: _events
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=982973760#gid=982973760
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader: 
+      _orderByHeader: 
+      _aliases: []
+  - _entryName: "몬스터"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=167781618#gid=167781618
+    _targetScript: {fileID: 11500000, guid: a8212ba82e80048a19c1f9bcdfff8de7, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _mid
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: dcc1ab7c7388f4002bf9e84c4cd67e29, type: 3}
+    _childTables:
+    - _parentFieldName: _baseStats
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
+  - _entryName: "캐릭터"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=320337674#gid=320337674
+    _targetScript: {fileID: 11500000, guid: cfd60018e5e48480fbb0346bdab1d7da, type: 3}
+    _outputFolder: 
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _itemMID
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 877f36856398c4a6aa4c38cd063fef4b, type: 3}
+    _childTables:
+    - _parentFieldName: _baseStats
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
