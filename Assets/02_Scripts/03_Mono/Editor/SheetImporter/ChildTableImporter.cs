@@ -70,6 +70,33 @@ namespace PublicFramework.Editor.SheetImporter
                 return state.ToResult();
             }
 
+            // _parentLookupField 가 설정된 경우 부모 SO 의 해당 필드값으로 키 재매핑.
+            // (예: PetData._baseStatMID = "stat_pet_fox" 와 자식 parentId 매칭. 다대일 공유 시트 지원.)
+            if (!string.IsNullOrEmpty(link.ParentLookupField))
+            {
+                FieldInfo lookupField = parentType.GetField(link.ParentLookupField, FIELD_FLAGS);
+                if (lookupField == null)
+                {
+                    state.Error($"[{parentLabel}.{linkLabel}] 부모 타입 '{parentType.Name}' 에 lookup 필드 '{link.ParentLookupField}' 가 없습니다.");
+                    return state.ToResult();
+                }
+
+                var remapped = new Dictionary<string, ScriptableObject>(StringComparer.Ordinal);
+                foreach (var kv in parents)
+                {
+                    string key = lookupField.GetValue(kv.Value) as string;
+                    if (string.IsNullOrEmpty(key)) continue;
+                    if (!remapped.ContainsKey(key)) remapped[key] = kv.Value;
+                }
+                parents = remapped;
+
+                if (parents.Count == 0)
+                {
+                    state.Error($"[{parentLabel}.{linkLabel}] 부모 SO 들의 '{link.ParentLookupField}' 값이 모두 비어 있습니다.");
+                    return state.ToResult();
+                }
+            }
+
             FieldInfo parentField = parentType.GetField(link.ParentFieldName, FIELD_FLAGS);
             if (parentField == null)
             {
@@ -195,7 +222,12 @@ namespace PublicFramework.Editor.SheetImporter
             {
                 if (!parents.TryGetValue(kv.Key, out var parentSo))
                 {
-                    state.Error($"[{parentLabel}.{linkLabel}] parentId '{kv.Key}' 에 해당하는 부모 SO 를 찾을 수 없습니다 (경로: {parentFolder}).");
+                    // _parentLookupField 가 설정된 경우 자식 시트가 다도메인 공유 가능성이 있어
+                    // 매칭 안 되는 parentId 는 다른 도메인 소속으로 간주하여 silent skip.
+                    if (string.IsNullOrEmpty(link.ParentLookupField))
+                    {
+                        state.Error($"[{parentLabel}.{linkLabel}] parentId '{kv.Key}' 에 해당하는 부모 SO 를 찾을 수 없습니다 (경로: {parentFolder}).");
+                    }
                     continue;
                 }
 

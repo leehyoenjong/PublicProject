@@ -140,7 +140,9 @@ namespace PublicFramework.Editor.SheetImporter
 
     /// <summary>
     /// 자식 테이블 링크. 부모 GenericSO 엔트리의 배열/리스트 필드에 시트 행을 주입한다.
-    /// 자식 시트의 parentIdHeader 컬럼은 부모 SO 의 MID(파일명)와 매칭에 사용된다.
+    /// 자식 시트의 parentIdHeader 컬럼은 부모 SO 와 매칭에 사용된다.
+    /// 매칭 키는 기본적으로 부모 SO 의 파일명(MID)이며, _parentLookupField 가 설정된 경우
+    /// 부모 SO 의 해당 필드 값과 매칭한다 (예: 다대일 stat 묶음 공유).
     /// </summary>
     [Serializable]
     public class ChildTableLink
@@ -166,6 +168,9 @@ namespace PublicFramework.Editor.SheetImporter
         [Tooltip("같은 부모 내 요소 정렬 기준 컬럼 헤더. 비우면 시트 등장 순서. 기본 'order'.")]
         [SerializeField] private string _orderByHeader = "order";
 
+        [Tooltip("자식 parentId 와 매칭할 부모 SO 의 필드 이름 (예: '_baseStatMID'). 비우면 부모 파일명(MID) 매칭.")]
+        [SerializeField] private string _parentLookupField;
+
         [Tooltip("자식 요소 타입 전용 별칭 매핑. 헤더 자동 매핑으로 해결 안 되는 필드에만 등록.")]
         [SerializeField] private List<AliasMapping> _aliases = new List<AliasMapping>();
 
@@ -176,6 +181,7 @@ namespace PublicFramework.Editor.SheetImporter
         public int LastDataColumn => _lastDataColumn;
         public string ParentIdHeader => _parentIdHeader;
         public string OrderByHeader => _orderByHeader;
+        public string ParentLookupField => _parentLookupField;
         public IReadOnlyList<AliasMapping> Aliases => _aliases;
     }
 
