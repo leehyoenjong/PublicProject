@@ -13,6 +13,11 @@ namespace PublicFramework
         private readonly Dictionary<string, IMonsterInfo> _infoByMID = new();
         private readonly Dictionary<string, IDropTable> _dropTables = new();
         private readonly Dictionary<string, MonsterInstance> _instances = new();
+        private readonly Dictionary<string, BehaviorTreePreset> _aiPresets = new();
+        private readonly Dictionary<string, BehaviorContext> _aiContexts = new();
+        private BehaviorActionRegistry _actionRegistry;
+        private BehaviorTreeExecutor _treeExecutor;
+        private float _aiNowSeconds;
 
         private readonly IDropTableResolver _dropResolver;
         private readonly IRandomProvider _random;
@@ -219,6 +224,49 @@ namespace PublicFramework
                 ReactionId = inst.Info?.HitReactionId,
             });
             return true;
+        }
+
+        public void RegisterAIPreset(BehaviorTreePreset preset)
+        {
+            if (preset == null || string.IsNullOrEmpty(preset.PresetId)) return;
+            _aiPresets[preset.PresetId] = preset;
+        }
+
+        public void SetActionRegistry(BehaviorActionRegistry registry)
+        {
+            _actionRegistry = registry;
+            _treeExecutor = registry != null ? new BehaviorTreeExecutor(registry) : null;
+        }
+
+        public BehaviorContext GetAIContext(string instanceId)
+        {
+            if (string.IsNullOrEmpty(instanceId)) return null;
+            return _aiContexts.TryGetValue(instanceId, out BehaviorContext ctx) ? ctx : null;
+        }
+
+        public BehaviorNodeStatus TickAI(string instanceId, float deltaTime, IUnit target, Vector3 targetPosition, IStatContainer targetStats = null)
+        {
+            if (_treeExecutor == null) return BehaviorNodeStatus.Failure;
+            if (!_instances.TryGetValue(instanceId, out MonsterInstance inst)) return BehaviorNodeStatus.Failure;
+
+            string presetId = inst.Info?.AIPresetMID;
+            if (string.IsNullOrEmpty(presetId)) return BehaviorNodeStatus.Failure;
+            if (!_aiPresets.TryGetValue(presetId, out BehaviorTreePreset preset)) return BehaviorNodeStatus.Failure;
+
+            if (!_aiContexts.TryGetValue(instanceId, out BehaviorContext ctx))
+            {
+                ctx = new BehaviorContext { Self = inst, SelfStats = inst.Stats };
+                _aiContexts[instanceId] = ctx;
+            }
+
+            _aiNowSeconds += deltaTime;
+            ctx.Target = target;
+            ctx.TargetPosition = targetPosition;
+            ctx.TargetStats = targetStats;
+            ctx.DeltaTime = deltaTime;
+            ctx.NowSeconds = _aiNowSeconds;
+
+            return _treeExecutor.Tick(preset, ctx);
         }
 
         private List<string> TriggerHooks(IReadOnlyList<string> eventIds, MonsterEventKind kind, string monsterMID, string instanceId)

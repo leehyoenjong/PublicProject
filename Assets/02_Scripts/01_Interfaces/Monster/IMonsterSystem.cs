@@ -20,5 +20,11 @@ namespace PublicFramework
         bool ApplyHit(string instanceId, int damage);
 
         IBestiary Bestiary { get; }
+
+        // BT/AI (Phase 1.5)
+        void RegisterAIPreset(BehaviorTreePreset preset);
+        void SetActionRegistry(BehaviorActionRegistry registry);
+        BehaviorNodeStatus TickAI(string instanceId, float deltaTime, IUnit target, UnityEngine.Vector3 targetPosition, IStatContainer targetStats = null);
+        BehaviorContext GetAIContext(string instanceId);
     }
 }

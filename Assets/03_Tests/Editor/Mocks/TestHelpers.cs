@@ -616,6 +616,35 @@ namespace PublicFramework.Tests
             return config;
         }
 
+        // ===== Behavior Tree =====
+
+        public static BehaviorNodeEntry MakeBehaviorNode(
+            BehaviorNodeType nodeType,
+            int[] childIndices = null,
+            string actionKey = "",
+            string param1 = "",
+            string param2 = "",
+            string param3 = "")
+        {
+            var entry = new BehaviorNodeEntry();
+            SetField(entry, "_nodeType", nodeType);
+            SetField(entry, "_childIndices", childIndices ?? System.Array.Empty<int>());
+            SetField(entry, "_actionKey", actionKey);
+            SetField(entry, "_param1", param1);
+            SetField(entry, "_param2", param2);
+            SetField(entry, "_param3", param3);
+            return entry;
+        }
+
+        public static BehaviorTreePreset MakeBehaviorTreePreset(string presetId, int rootIndex, BehaviorNodeEntry[] nodes)
+        {
+            var preset = ScriptableObject.CreateInstance<BehaviorTreePreset>();
+            SetField(preset, "_presetId", presetId);
+            SetField(preset, "_rootIndex", rootIndex);
+            SetField(preset, "_nodes", nodes ?? System.Array.Empty<BehaviorNodeEntry>());
+            return preset;
+        }
+
         public static void SetPrivateField(object target, string fieldName, object value)
         {
             SetField(target, fieldName, value);
