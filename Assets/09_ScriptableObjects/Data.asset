@@ -231,6 +231,26 @@ MonoBehaviour:
       _parentIdHeader: 
       _orderByHeader: 
       _aliases: []
+  - _entryName: "스탯그룹"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1042452581#gid=1042452581
+    _targetScript: {fileID: 11500000, guid: 9e9113c1a355410cb6fce847ab8661bd, type: 3}
+    _outputFolder:
+    _headerRow: 2
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases: []
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 0b7aa86dd17140799eea8c3c74e118f2, type: 3}
+    _childTables:
+    - _parentFieldName: _entries
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
+      _headerRow: 2
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
   - _entryName: "펫"
     _mode: 0
     _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=381643603#gid=381643603
@@ -244,16 +264,7 @@ MonoBehaviour:
       _fieldName: _mid
     _keyHeader: MID
     _collectionScript: {fileID: 11500000, guid: f51bb1d663ac24f4fb7cb92b4da31a75, type: 3}
-    _childTables:
-    - _parentFieldName: _baseStats
-      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
-      _headerRow: 2
-      _firstDataColumn: 2
-      _lastDataColumn: 0
-      _parentIdHeader:
-      _orderByHeader:
-      _parentLookupField: _baseStatMID
-      _aliases: []
+    _childTables: []
   - _entryName: "챕터"
     _mode: 0
     _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1882444335#gid=1882444335
@@ -311,16 +322,7 @@ MonoBehaviour:
       _fieldName: _mid
     _keyHeader: MID
     _collectionScript: {fileID: 11500000, guid: dcc1ab7c7388f4002bf9e84c4cd67e29, type: 3}
-    _childTables:
-    - _parentFieldName: _baseStats
-      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
-      _headerRow: 2
-      _firstDataColumn: 2
-      _lastDataColumn: 0
-      _parentIdHeader:
-      _orderByHeader:
-      _parentLookupField: _baseStatMID
-      _aliases: []
+    _childTables: []
   - _entryName: "캐릭터"
     _mode: 0
     _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=320337674#gid=320337674
@@ -334,13 +336,4 @@ MonoBehaviour:
       _fieldName: _itemMID
     _keyHeader: MID
     _collectionScript: {fileID: 11500000, guid: 877f36856398c4a6aa4c38cd063fef4b, type: 3}
-    _childTables:
-    - _parentFieldName: _baseStats
-      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=89238711#gid=89238711
-      _headerRow: 2
-      _firstDataColumn: 2
-      _lastDataColumn: 0
-      _parentIdHeader:
-      _orderByHeader:
-      _parentLookupField: _baseStatMID
-      _aliases: []
+    _childTables: []
