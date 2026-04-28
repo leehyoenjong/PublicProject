@@ -13,7 +13,7 @@ namespace PublicFramework
 
         [Header("분류")]
         [SerializeField] private BuffCategory _category;
-        [SerializeField] private ModifierType _modifierType;
+        [SerializeField, SheetAlias("modType")] private ModifierType _modifierType;
         [SerializeField] private BuffSource _source;
 
         [Header("지속 시간")]
