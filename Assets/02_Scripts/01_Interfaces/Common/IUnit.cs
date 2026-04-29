@@ -9,5 +9,6 @@ namespace PublicFramework
     {
         string UnitId { get; }
         string BaseStatMID { get; }
+        StatGroupData BaseStatGroup { get; }
     }
 }
