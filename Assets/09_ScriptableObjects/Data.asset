@@ -327,7 +327,7 @@ MonoBehaviour:
     _mode: 0
     _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=320337674#gid=320337674
     _targetScript: {fileID: 11500000, guid: cfd60018e5e48480fbb0346bdab1d7da, type: 3}
-    _outputFolder: 
+    _outputFolder:
     _headerRow: 2
     _firstDataColumn: 2
     _lastDataColumn: 0
@@ -337,3 +337,49 @@ MonoBehaviour:
     _keyHeader: MID
     _collectionScript: {fileID: 11500000, guid: 877f36856398c4a6aa4c38cd063fef4b, type: 3}
     _childTables: []
+  - _entryName: "강화"
+    _mode: 0
+    _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=274972288#gid=274972288
+    _targetScript: {fileID: 11500000, guid: 5a82cb7f62ff147938afac1f8a7aacff, type: 3}
+    _outputFolder:
+    _headerRow: 1
+    _firstDataColumn: 2
+    _lastDataColumn: 0
+    _aliases:
+    - _sheetHeader: MID
+      _fieldName: _mid
+    _keyHeader: MID
+    _collectionScript: {fileID: 11500000, guid: 8e3bcc48acdb54c32af4382fe246689c, type: 3}
+    _childTables:
+    - _parentFieldName: _gradePolicies
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1339621718#gid=1339621718
+      _headerRow: 1
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
+    - _parentFieldName: _transcendSteps
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1784370563#gid=1784370563
+      _headerRow: 1
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
+    - _parentFieldName: _awakeningOptions
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=1159355168#gid=1159355168
+      _headerRow: 1
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
+    - _parentFieldName: _evolutionStages
+      _source: https://docs.google.com/spreadsheets/d/1aysXKGqQIK-ikUGtvxcZYpcaNcTD1SK46j5LAQyW8k4/edit?gid=2129471298#gid=2129471298
+      _headerRow: 1
+      _firstDataColumn: 2
+      _lastDataColumn: 0
+      _parentIdHeader:
+      _orderByHeader:
+      _aliases: []
