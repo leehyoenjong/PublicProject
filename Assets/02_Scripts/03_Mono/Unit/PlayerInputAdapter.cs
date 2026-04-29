@@ -17,7 +17,7 @@ namespace PublicFramework
         [SerializeField] private InputActionReference _skillAction;
 
         [Header("스킬 시전")]
-        [SerializeField] private string _skillId;
+        [SerializeField] private SkillData _skill;
 
         [Header("이동")]
         [SerializeField] private float _moveSpeed = 5f;
@@ -68,9 +68,9 @@ namespace PublicFramework
 
         private void OnSkillPerformed(InputAction.CallbackContext ctx)
         {
-            if (string.IsNullOrEmpty(_skillId)) return;
+            if (_skill == null || string.IsNullOrEmpty(_skill.SkillId)) return;
             if (_controller == null || !_controller.IsAlive) return;
-            _controller.CastSkill(_skillId);
+            _controller.CastSkill(_skill.SkillId);
         }
 
         private void Update()

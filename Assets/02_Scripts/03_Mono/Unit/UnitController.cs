@@ -24,8 +24,12 @@ namespace PublicFramework
         private StatGroupData _baseStatGroup;
         private IStatContainer _stats;
         private IEventBus _eventBus;
-        private ISkillSystem _skillSystem;
         private IStatSystem _statSystem;
+
+        // SkillSystem 만 lazy resolve — Initializer 와 Awake 순서 보장 없이도 안전.
+        // (Stats/EventBus 는 Awake 에서 BindStats/SubscribeEvents 가 호출돼야 의미 있어 lazy 효과 없음 → 1.4 부팅 정비 후 정상화)
+        private ISkillSystem SkillSystem
+            => ServiceLocator.Has<ISkillSystem>() ? ServiceLocator.Get<ISkillSystem>() : null;
         private string _instanceId;
         private bool _isAlive = true;
         private Coroutine _moveCoroutine;
@@ -83,7 +87,6 @@ namespace PublicFramework
         private void ResolveServices()
         {
             _eventBus = ServiceLocator.Has<IEventBus>() ? ServiceLocator.Get<IEventBus>() : null;
-            _skillSystem = ServiceLocator.Has<ISkillSystem>() ? ServiceLocator.Get<ISkillSystem>() : null;
             _statSystem = ServiceLocator.Has<IStatSystem>() ? ServiceLocator.Get<IStatSystem>() : null;
         }
 
@@ -196,12 +199,13 @@ namespace PublicFramework
         // ── 공개 API ──────────────────────────────────────────
         public bool CastSkill(string skillId, string targetInstanceId = null, int level = 1)
         {
-            if (_skillSystem == null)
+            ISkillSystem skillSystem = SkillSystem;
+            if (skillSystem == null)
             {
                 Debug.LogWarning("[UnitController] ISkillSystem 미등록 — CastSkill 무시", this);
                 return false;
             }
-            return _skillSystem.Cast(skillId, _instanceId, targetInstanceId, level);
+            return skillSystem.Cast(skillId, _instanceId, targetInstanceId, level);
         }
 
         public void TakeDirectDamage(float amount, string source = "direct")
