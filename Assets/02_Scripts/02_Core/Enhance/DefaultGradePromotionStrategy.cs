@@ -3,7 +3,7 @@ using UnityEngine;
 namespace PublicFramework
 {
     /// <summary>
-    /// 등급 승급 기본 전략. 확률 기반 + 천장 시스템.
+    /// 등급 승급 기본 전략. 확률 기반 + 천장 시스템 + 보호권/축복/연속시도(Phase 2-B) hook.
     /// </summary>
     public class DefaultGradePromotionStrategy : IEnhanceStrategy
     {
@@ -21,11 +21,14 @@ namespace PublicFramework
         public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
         {
             int beforeGrade = target.Grade;
+            EnhanceData gradeData = GetGradeData();
             GradePolicyEntry policy = GetPolicy(target.Grade);
             float baseProb = policy != null ? policy.PromotionProb : 0f;
             int maxPity = policy != null ? policy.PromotionMaxPity : 0;
 
-            bool success = _probabilityModel.Roll(baseProb, target.PityCount, maxPity);
+            float effectiveProb = ComputeEffectiveProb(baseProb, gradeData, context);
+
+            bool success = _probabilityModel.Roll(effectiveProb, target.PityCount, maxPity);
 
             if (success)
             {
@@ -55,11 +58,12 @@ namespace PublicFramework
             }
 
             target.PityCount += 1;
-            EnhanceFailPolicy failPolicy = policy != null ? policy.PromotionFailPolicy : EnhanceFailPolicy.Keep;
+            EnhanceFailPolicy basePolicy = policy != null ? policy.PromotionFailPolicy : EnhanceFailPolicy.Keep;
+            EnhanceFailPolicy effectivePolicy = context.UseProtectionTicket ? EnhanceFailPolicy.Keep : basePolicy;
 
-            ApplyFailPolicy(target, failPolicy);
+            ApplyFailPolicy(target, effectivePolicy);
 
-            Debug.Log($"[GradePromotion] Failed. Pity: {target.PityCount}/{maxPity} Policy: {failPolicy}");
+            Debug.Log($"[GradePromotion] Failed. Pity: {target.PityCount}/{maxPity} Policy: {effectivePolicy} (base: {basePolicy}, ticket: {context.UseProtectionTicket})");
 
             return new EnhanceResult
             {
@@ -67,7 +71,7 @@ namespace PublicFramework
                 Type = EnhanceType.Grade,
                 BeforeValue = beforeGrade,
                 AfterValue = target.Grade,
-                FailPolicy = failPolicy,
+                FailPolicy = effectivePolicy,
                 MaxPity = maxPity
             };
         }
@@ -103,6 +107,29 @@ namespace PublicFramework
             GradePolicyEntry policy = GetPolicy(target.Grade);
             int cost = policy != null ? policy.PromotionCost : 0;
 
+            if (context.UseProtectionTicket)
+            {
+                EnhanceData gradeData = GetGradeData();
+                int ticketCost = gradeData != null ? gradeData.ProtectionTicketCost : 0;
+                return new EnhanceCost
+                {
+                    Materials = new[]
+                    {
+                        new EnhanceMaterialEntry
+                        {
+                            MaterialType = EnhanceMaterialType.PromotionItem,
+                            Amount = cost
+                        },
+                        new EnhanceMaterialEntry
+                        {
+                            MaterialType = EnhanceMaterialType.ProtectionTicket,
+                            Amount = ticketCost
+                        }
+                    },
+                    CanAfford = true
+                };
+            }
+
             return new EnhanceCost
             {
                 Materials = new[]
@@ -119,16 +146,34 @@ namespace PublicFramework
 
         public float GetDisplayProbability(IEnhanceable target, EnhanceContext context)
         {
+            EnhanceData gradeData = GetGradeData();
             GradePolicyEntry policy = GetPolicy(target.Grade);
             float baseProb = policy != null ? policy.PromotionProb : 0f;
             int maxPity = policy != null ? policy.PromotionMaxPity : 0;
-            return _probabilityModel.GetDisplayProb(baseProb, target.PityCount, maxPity);
+            float effectiveProb = ComputeEffectiveProb(baseProb, gradeData, context);
+            return _probabilityModel.GetDisplayProb(effectiveProb, target.PityCount, maxPity);
+        }
+
+        private EnhanceData GetGradeData()
+        {
+            return _collection != null ? _collection.Find(EnhanceType.Grade) : null;
         }
 
         private GradePolicyEntry GetPolicy(int grade)
         {
-            EnhanceData gradeData = _collection != null ? _collection.Find(EnhanceType.Grade) : null;
+            EnhanceData gradeData = GetGradeData();
             return gradeData != null ? gradeData.FindGradePolicy(grade) : null;
+        }
+
+        private static float ComputeEffectiveProb(float baseProb, EnhanceData gradeData, EnhanceContext context)
+        {
+            float prob = baseProb;
+            if (gradeData != null)
+            {
+                if (context.UseBlessing) prob += gradeData.BlessingBoost;
+                if (context.ConsecutiveAttempts > 0) prob += gradeData.ConsecutiveBonusBase * context.ConsecutiveAttempts;
+            }
+            return Mathf.Clamp01(prob);
         }
 
         private void ApplyFailPolicy(IEnhanceable target, EnhanceFailPolicy policy)
