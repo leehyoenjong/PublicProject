@@ -140,8 +140,9 @@ namespace PublicFramework
             float levelBonus = target.Level;
             float gradeBonus = target.Grade * 5f;
             float transcendBonus = target.TranscendStep * 3f;
+            float evolutionBonus = target.EvolutionStage * 10f;
 
-            float atkTotal = levelBonus + gradeBonus + transcendBonus;
+            float atkTotal = levelBonus + gradeBonus + transcendBonus + evolutionBonus;
             if (atkTotal > 0f)
             {
                 container.AddModifier(new StatModifier(
@@ -149,7 +150,7 @@ namespace PublicFramework
                     source: target, sourceTag: ModifierSource.Equipment));
             }
 
-            float defTotal = levelBonus * 0.8f + gradeBonus * 0.6f + transcendBonus * 2f;
+            float defTotal = levelBonus * 0.8f + gradeBonus * 0.6f + transcendBonus * 2f + evolutionBonus * 1.5f;
             if (defTotal > 0f)
             {
                 container.AddModifier(new StatModifier(
@@ -157,7 +158,7 @@ namespace PublicFramework
                     source: target, sourceTag: ModifierSource.Equipment));
             }
 
-            float hpTotal = (levelBonus + gradeBonus + transcendBonus) * 10f;
+            float hpTotal = (levelBonus + gradeBonus + transcendBonus + evolutionBonus) * 10f;
             if (hpTotal > 0f)
             {
                 container.AddModifier(new StatModifier(
@@ -226,6 +227,7 @@ namespace PublicFramework
                 EnhanceType.Level => target.Level,
                 EnhanceType.Grade => target.Grade,
                 EnhanceType.Transcend => target.TranscendStep,
+                EnhanceType.Evolution => target.EvolutionStage,
                 EnhanceType.Awakening => 0,
                 _ => 0
             };

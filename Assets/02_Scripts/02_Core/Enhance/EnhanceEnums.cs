@@ -24,7 +24,8 @@ namespace PublicFramework
         PromotionItem,
         TranscendItem,
         AwakeningStone,
-        SameEquipment
+        SameEquipment,
+        EvolutionMaterial
     }
 
     public enum EquipmentGrade

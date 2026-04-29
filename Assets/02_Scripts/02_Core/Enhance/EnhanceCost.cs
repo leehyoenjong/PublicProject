@@ -16,5 +16,6 @@ namespace PublicFramework
     {
         public EnhanceMaterialType MaterialType;
         public int Amount;
+        public string MaterialMID;
     }
 }

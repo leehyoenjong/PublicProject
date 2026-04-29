@@ -725,7 +725,7 @@ namespace PublicFramework.Tests
             return collection;
         }
 
-        /// <summary>이전 EnhanceConfig 디폴트값과 동일한 4종(Level/Grade/Transcend/Awakening) 컬렉션. Evolution 미포함.</summary>
+        /// <summary>5종(Level/Grade/Transcend/Awakening/Evolution) 디폴트 컬렉션. 시트 baseline 값과 동일.</summary>
         public static EnhanceDataCollection MakeDefaultEnhanceCollection()
         {
             var gradePolicies = new[]
@@ -755,12 +755,20 @@ namespace PublicFramework.Tests
                 new AwakeningOptionEntry { OptionId = "CRIT_DMG", MinValue = 0.05f, MaxValue = 0.15f, Weight = 5 },
             };
 
+            var evolutionStages = new[]
+            {
+                MakeEvolutionStage(0, 100, EquipmentGrade.Legendary, 5, "item_evolution_stone"),
+                MakeEvolutionStage(1, 200, EquipmentGrade.Legendary, 5, "item_evolution_stone"),
+                MakeEvolutionStage(2, 400, EquipmentGrade.Legendary, 5, "item_evolution_stone"),
+            };
+
             var levelData = MakeEnhanceData(EnhanceType.Level);
             var gradeData = MakeEnhanceData(EnhanceType.Grade, gradePolicies: gradePolicies);
             var transcendData = MakeEnhanceData(EnhanceType.Transcend, transcendSteps: transcendSteps);
             var awakeningData = MakeEnhanceData(EnhanceType.Awakening, awakeningOptions: awakeningOptions);
+            var evolutionData = MakeEnhanceData(EnhanceType.Evolution, evolutionStages: evolutionStages);
 
-            return MakeEnhanceCollection(levelData, gradeData, transcendData, awakeningData);
+            return MakeEnhanceCollection(levelData, gradeData, transcendData, awakeningData, evolutionData);
         }
 
         public static void SetPrivateField(object target, string fieldName, object value)

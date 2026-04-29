@@ -11,6 +11,7 @@ namespace PublicFramework
         int Level { get; set; }
         int Grade { get; set; }
         int TranscendStep { get; set; }
+        int EvolutionStage { get; set; }
         int PityCount { get; set; }
         AwakeningSlotData[] AwakeningSlots { get; set; }
     }
