@@ -1,18 +1,17 @@
 using NUnit.Framework;
-using UnityEngine;
 
 namespace PublicFramework.Tests.Enhance
 {
     public class DefaultTranscendStrategyTests
     {
-        private EnhanceConfig _config;
+        private EnhanceDataCollection _collection;
         private DefaultTranscendStrategy _strategy;
 
         [SetUp]
         public void SetUp()
         {
-            _config = ScriptableObject.CreateInstance<EnhanceConfig>();
-            _strategy = new DefaultTranscendStrategy(_config);
+            _collection = TestHelpers.MakeDefaultEnhanceCollection();
+            _strategy = new DefaultTranscendStrategy(_collection);
         }
 
         private EquipmentInstanceData MakeLegendaryMaxLevel(int transcendStep = 0)

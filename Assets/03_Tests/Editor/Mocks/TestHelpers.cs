@@ -663,6 +663,106 @@ namespace PublicFramework.Tests
             return sg;
         }
 
+        public static GradePolicyEntry MakeGradePolicy(int gradeIndex, int maxLevel, float promotionProb = 0f, int promotionMaxPity = 0, int promotionCost = 0, EnhanceFailPolicy failPolicy = EnhanceFailPolicy.Keep)
+        {
+            var entry = new GradePolicyEntry();
+            SetField(entry, "_gradeIndex", gradeIndex);
+            SetField(entry, "_maxLevel", maxLevel);
+            SetField(entry, "_promotionProb", promotionProb);
+            SetField(entry, "_promotionMaxPity", promotionMaxPity);
+            SetField(entry, "_promotionCost", promotionCost);
+            SetField(entry, "_promotionFailPolicy", failPolicy);
+            return entry;
+        }
+
+        public static TranscendStepEntry MakeTranscendStep(int stepIndex, int cost, int requiredSameItemCount = 1)
+        {
+            var entry = new TranscendStepEntry();
+            SetField(entry, "_stepIndex", stepIndex);
+            SetField(entry, "_cost", cost);
+            SetField(entry, "_requiredSameItemCount", requiredSameItemCount);
+            return entry;
+        }
+
+        public static EvolutionStageEntry MakeEvolutionStage(int stageIndex, int cost, EquipmentGrade requiredGrade, int requiredTranscendStep, string materialMID)
+        {
+            var entry = new EvolutionStageEntry();
+            SetField(entry, "_stageIndex", stageIndex);
+            SetField(entry, "_cost", cost);
+            SetField(entry, "_requiredGrade", requiredGrade);
+            SetField(entry, "_requiredTranscendStep", requiredTranscendStep);
+            SetField(entry, "_materialMID", materialMID);
+            return entry;
+        }
+
+        public static EnhanceData MakeEnhanceData(
+            EnhanceType type,
+            GradePolicyEntry[] gradePolicies = null,
+            TranscendStepEntry[] transcendSteps = null,
+            AwakeningOptionEntry[] awakeningOptions = null,
+            EvolutionStageEntry[] evolutionStages = null,
+            int protectionTicketCost = 0,
+            float blessingBoost = 0f,
+            float consecutiveBonusBase = 0f)
+        {
+            var data = ScriptableObject.CreateInstance<EnhanceData>();
+            SetField(data, "_mid", $"enhance_{type.ToString().ToLower()}");
+            SetField(data, "_enhanceType", type);
+            SetField(data, "_gradePolicies", gradePolicies ?? System.Array.Empty<GradePolicyEntry>());
+            SetField(data, "_transcendSteps", transcendSteps ?? System.Array.Empty<TranscendStepEntry>());
+            SetField(data, "_awakeningOptions", awakeningOptions ?? System.Array.Empty<AwakeningOptionEntry>());
+            SetField(data, "_evolutionStages", evolutionStages ?? System.Array.Empty<EvolutionStageEntry>());
+            SetField(data, "_protectionTicketCost", protectionTicketCost);
+            SetField(data, "_blessingBoost", blessingBoost);
+            SetField(data, "_consecutiveBonusBase", consecutiveBonusBase);
+            return data;
+        }
+
+        public static EnhanceDataCollection MakeEnhanceCollection(params EnhanceData[] entries)
+        {
+            var collection = ScriptableObject.CreateInstance<EnhanceDataCollection>();
+            collection.SetItems(entries ?? System.Array.Empty<EnhanceData>());
+            return collection;
+        }
+
+        /// <summary>이전 EnhanceConfig 디폴트값과 동일한 4종(Level/Grade/Transcend/Awakening) 컬렉션. Evolution 미포함.</summary>
+        public static EnhanceDataCollection MakeDefaultEnhanceCollection()
+        {
+            var gradePolicies = new[]
+            {
+                MakeGradePolicy(0, 10, 1.0f, 0, 5, EnhanceFailPolicy.Keep),
+                MakeGradePolicy(1, 20, 0.8f, 3, 10, EnhanceFailPolicy.Keep),
+                MakeGradePolicy(2, 30, 0.5f, 5, 20, EnhanceFailPolicy.Keep),
+                MakeGradePolicy(3, 40, 0.2f, 10, 50, EnhanceFailPolicy.Keep),
+                MakeGradePolicy(4, 50, 0f, 0, 0, EnhanceFailPolicy.Keep),
+            };
+
+            var transcendSteps = new[]
+            {
+                MakeTranscendStep(0, 10),
+                MakeTranscendStep(1, 15),
+                MakeTranscendStep(2, 22),
+                MakeTranscendStep(3, 33),
+                MakeTranscendStep(4, 50),
+            };
+
+            var awakeningOptions = new[]
+            {
+                new AwakeningOptionEntry { OptionId = "ATK_FLAT", MinValue = 5f, MaxValue = 15f, Weight = 30 },
+                new AwakeningOptionEntry { OptionId = "DEF_FLAT", MinValue = 4f, MaxValue = 12f, Weight = 30 },
+                new AwakeningOptionEntry { OptionId = "HP_FLAT", MinValue = 25f, MaxValue = 75f, Weight = 25 },
+                new AwakeningOptionEntry { OptionId = "CRIT_RATE", MinValue = 0.02f, MaxValue = 0.08f, Weight = 10 },
+                new AwakeningOptionEntry { OptionId = "CRIT_DMG", MinValue = 0.05f, MaxValue = 0.15f, Weight = 5 },
+            };
+
+            var levelData = MakeEnhanceData(EnhanceType.Level);
+            var gradeData = MakeEnhanceData(EnhanceType.Grade, gradePolicies: gradePolicies);
+            var transcendData = MakeEnhanceData(EnhanceType.Transcend, transcendSteps: transcendSteps);
+            var awakeningData = MakeEnhanceData(EnhanceType.Awakening, awakeningOptions: awakeningOptions);
+
+            return MakeEnhanceCollection(levelData, gradeData, transcendData, awakeningData);
+        }
+
         public static void SetPrivateField(object target, string fieldName, object value)
         {
             SetField(target, fieldName, value);

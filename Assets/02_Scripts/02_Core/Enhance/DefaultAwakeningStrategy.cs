@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PublicFramework
@@ -7,12 +8,12 @@ namespace PublicFramework
     /// </summary>
     public class DefaultAwakeningStrategy : IEnhanceStrategy
     {
-        private readonly EnhanceConfig _config;
+        private readonly EnhanceDataCollection _collection;
         private readonly IEventBus _eventBus;
 
-        public DefaultAwakeningStrategy(EnhanceConfig config, IEventBus eventBus)
+        public DefaultAwakeningStrategy(EnhanceDataCollection collection, IEventBus eventBus)
         {
-            _config = config;
+            _collection = collection;
             _eventBus = eventBus;
         }
 
@@ -82,7 +83,9 @@ namespace PublicFramework
 
         public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
-            int cost = _config.GetAwakeningCost(context.TargetSlotIndex);
+            EnhanceData awakeningData = _collection != null ? _collection.Find(EnhanceType.Awakening) : null;
+            int costBase = awakeningData != null ? awakeningData.AwakeningCostBase : 0;
+            int cost = costBase * (1 + context.TargetSlotIndex);
 
             return new EnhanceCost
             {
@@ -105,33 +108,34 @@ namespace PublicFramework
 
         private AwakeningOptionEntry RollOption()
         {
-            AwakeningOptionEntry[] options = _config.GetAwakeningOptions();
+            EnhanceData awakeningData = _collection != null ? _collection.Find(EnhanceType.Awakening) : null;
+            IReadOnlyList<AwakeningOptionEntry> options = awakeningData != null ? awakeningData.AwakeningOptions : null;
 
-            if (options == null || options.Length == 0)
+            if (options == null || options.Count == 0)
             {
                 Debug.LogError("[Awakening] No options configured");
                 return new AwakeningOptionEntry { OptionId = "NONE", MinValue = 0f, MaxValue = 0f, Weight = 0 };
             }
 
             int totalWeight = 0;
-            foreach (AwakeningOptionEntry option in options)
+            for (int i = 0; i < options.Count; i++)
             {
-                totalWeight += option.Weight;
+                totalWeight += options[i].Weight;
             }
 
             int roll = Random.Range(0, totalWeight);
             int accumulated = 0;
 
-            foreach (AwakeningOptionEntry option in options)
+            for (int i = 0; i < options.Count; i++)
             {
-                accumulated += option.Weight;
+                accumulated += options[i].Weight;
                 if (roll < accumulated)
                 {
-                    return option;
+                    return options[i];
                 }
             }
 
-            return options[options.Length - 1];
+            return options[options.Count - 1];
         }
     }
 }

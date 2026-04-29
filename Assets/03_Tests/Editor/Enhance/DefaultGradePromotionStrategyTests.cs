@@ -1,11 +1,10 @@
 using NUnit.Framework;
-using UnityEngine;
 
 namespace PublicFramework.Tests.Enhance
 {
     public class DefaultGradePromotionStrategyTests
     {
-        private EnhanceConfig _config;
+        private EnhanceDataCollection _collection;
         private FakeProbabilityModel _probability;
         private FakeEventBus _eventBus;
         private DefaultGradePromotionStrategy _strategy;
@@ -13,15 +12,22 @@ namespace PublicFramework.Tests.Enhance
         [SetUp]
         public void SetUp()
         {
-            _config = ScriptableObject.CreateInstance<EnhanceConfig>();
+            _collection = TestHelpers.MakeDefaultEnhanceCollection();
             _probability = new FakeProbabilityModel();
             _eventBus = new FakeEventBus();
-            _strategy = new DefaultGradePromotionStrategy(_config, _probability, _eventBus);
+            _strategy = new DefaultGradePromotionStrategy(_collection, _probability, _eventBus);
+        }
+
+        private int GetMaxLevel(int grade)
+        {
+            EnhanceData gradeData = _collection.Find(EnhanceType.Grade);
+            GradePolicyEntry policy = gradeData.FindGradePolicy(grade);
+            return policy != null ? policy.MaxLevel : 0;
         }
 
         private EquipmentInstanceData MakeEquipment(int grade = 0, int level = -1, int pityCount = 0)
         {
-            int effectiveLevel = level < 0 ? _config.GetMaxLevel(grade) : level;
+            int effectiveLevel = level < 0 ? GetMaxLevel(grade) : level;
             return new EquipmentInstanceData
             {
                 InstanceId = "eq1",

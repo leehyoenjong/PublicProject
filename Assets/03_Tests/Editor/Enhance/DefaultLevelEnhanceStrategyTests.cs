@@ -1,18 +1,17 @@
 using NUnit.Framework;
-using UnityEngine;
 
 namespace PublicFramework.Tests.Enhance
 {
     public class DefaultLevelEnhanceStrategyTests
     {
-        private EnhanceConfig _config;
+        private EnhanceDataCollection _collection;
         private DefaultLevelEnhanceStrategy _strategy;
 
         [SetUp]
         public void SetUp()
         {
-            _config = ScriptableObject.CreateInstance<EnhanceConfig>();
-            _strategy = new DefaultLevelEnhanceStrategy(_config);
+            _collection = TestHelpers.MakeDefaultEnhanceCollection();
+            _strategy = new DefaultLevelEnhanceStrategy(_collection);
         }
 
         private EquipmentInstanceData MakeEquipment(int level = 0, int grade = 0)

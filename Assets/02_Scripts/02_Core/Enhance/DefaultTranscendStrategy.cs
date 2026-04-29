@@ -7,11 +7,11 @@ namespace PublicFramework
     /// </summary>
     public class DefaultTranscendStrategy : IEnhanceStrategy
     {
-        private readonly EnhanceConfig _config;
+        private readonly EnhanceDataCollection _collection;
 
-        public DefaultTranscendStrategy(EnhanceConfig config)
+        public DefaultTranscendStrategy(EnhanceDataCollection collection)
         {
-            _config = config;
+            _collection = collection;
         }
 
         public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
@@ -39,15 +39,17 @@ namespace PublicFramework
                 return false;
             }
 
-            int maxLevel = _config.GetMaxLevel(target.Grade);
+            EnhanceData gradeData = _collection != null ? _collection.Find(EnhanceType.Grade) : null;
+            GradePolicyEntry gradePolicy = gradeData != null ? gradeData.FindGradePolicy(target.Grade) : null;
+            int maxLevel = gradePolicy != null ? gradePolicy.MaxLevel : 0;
+
             if (target.Level < maxLevel)
             {
                 Debug.LogWarning($"[Transcend] Level not max: {target.Level}/{maxLevel}");
                 return false;
             }
 
-            int maxStep = _config.GetMaxTranscendStep();
-
+            int maxStep = GetMaxTranscendStep();
             if (target.TranscendStep >= maxStep)
             {
                 Debug.LogWarning($"[Transcend] Already max step: {target.TranscendStep}/{maxStep}");
@@ -59,7 +61,11 @@ namespace PublicFramework
 
         public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
-            int cost = _config.GetTranscendCost(target.TranscendStep);
+            EnhanceData transcendData = _collection != null ? _collection.Find(EnhanceType.Transcend) : null;
+            TranscendStepEntry step = transcendData != null ? transcendData.FindTranscendStep(target.TranscendStep) : null;
+
+            int cost = step != null ? step.Cost : 0;
+            int sameItemCount = step != null ? step.RequiredSameItemCount : 1;
 
             return new EnhanceCost
             {
@@ -73,7 +79,7 @@ namespace PublicFramework
                     new EnhanceMaterialEntry
                     {
                         MaterialType = EnhanceMaterialType.SameEquipment,
-                        Amount = 1
+                        Amount = sameItemCount
                     }
                 },
                 CanAfford = true
@@ -83,6 +89,12 @@ namespace PublicFramework
         public float GetDisplayProbability(IEnhanceable target, EnhanceContext context)
         {
             return 1f;
+        }
+
+        private int GetMaxTranscendStep()
+        {
+            EnhanceData transcendData = _collection != null ? _collection.Find(EnhanceType.Transcend) : null;
+            return transcendData != null ? transcendData.TranscendSteps.Count : 0;
         }
     }
 }

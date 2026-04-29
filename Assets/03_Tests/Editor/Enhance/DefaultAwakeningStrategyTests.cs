@@ -5,16 +5,16 @@ namespace PublicFramework.Tests.Enhance
 {
     public class DefaultAwakeningStrategyTests
     {
-        private EnhanceConfig _config;
+        private EnhanceDataCollection _collection;
         private FakeEventBus _eventBus;
         private DefaultAwakeningStrategy _strategy;
 
         [SetUp]
         public void SetUp()
         {
-            _config = ScriptableObject.CreateInstance<EnhanceConfig>();
+            _collection = TestHelpers.MakeDefaultEnhanceCollection();
             _eventBus = new FakeEventBus();
-            _strategy = new DefaultAwakeningStrategy(_config, _eventBus);
+            _strategy = new DefaultAwakeningStrategy(_collection, _eventBus);
             Random.InitState(42);
         }
 

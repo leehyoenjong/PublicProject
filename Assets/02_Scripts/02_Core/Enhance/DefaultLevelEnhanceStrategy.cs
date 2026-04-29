@@ -7,11 +7,11 @@ namespace PublicFramework
     /// </summary>
     public class DefaultLevelEnhanceStrategy : IEnhanceStrategy
     {
-        private readonly EnhanceConfig _config;
+        private readonly EnhanceDataCollection _collection;
 
-        public DefaultLevelEnhanceStrategy(EnhanceConfig config)
+        public DefaultLevelEnhanceStrategy(EnhanceDataCollection collection)
         {
-            _config = config;
+            _collection = collection;
         }
 
         public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
@@ -33,11 +33,23 @@ namespace PublicFramework
 
         public bool CanEnhance(IEnhanceable target, EnhanceContext context)
         {
-            int maxLevel = _config.GetMaxLevel(target.Grade);
-
-            if (target.Level >= maxLevel)
+            EnhanceData gradeData = _collection != null ? _collection.Find(EnhanceType.Grade) : null;
+            if (gradeData == null)
             {
-                Debug.LogWarning($"[LevelEnhance] Already max level: {target.Level}/{maxLevel}");
+                Debug.LogWarning("[LevelEnhance] Grade data not found in collection");
+                return false;
+            }
+
+            GradePolicyEntry policy = gradeData.FindGradePolicy(target.Grade);
+            if (policy == null)
+            {
+                Debug.LogWarning($"[LevelEnhance] No grade policy for grade {target.Grade}");
+                return false;
+            }
+
+            if (target.Level >= policy.MaxLevel)
+            {
+                Debug.LogWarning($"[LevelEnhance] Already max level: {target.Level}/{policy.MaxLevel}");
                 return false;
             }
 
@@ -46,8 +58,17 @@ namespace PublicFramework
 
         public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
-            int goldCost = _config.GetLevelUpCost(target.Level, target.Grade);
-            int stoneCost = _config.GetLevelUpStoneCost(target.Level);
+            EnhanceData levelData = _collection != null ? _collection.Find(EnhanceType.Level) : null;
+            if (levelData == null)
+            {
+                return new EnhanceCost { Materials = System.Array.Empty<EnhanceMaterialEntry>(), CanAfford = false };
+            }
+
+            int goldCost = Mathf.RoundToInt(levelData.LevelCostBase
+                * Mathf.Pow(levelData.LevelCostMultiplier, target.Level)
+                * (1 + target.Grade * levelData.GradeCostMultiplier));
+
+            int stoneCost = Mathf.Max(1, Mathf.RoundToInt(levelData.StoneCostBase + target.Level * levelData.StoneCostMultiplier));
 
             return new EnhanceCost
             {

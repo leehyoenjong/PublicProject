@@ -5,7 +5,8 @@ namespace PublicFramework
         Level,
         Grade,
         Transcend,
-        Awakening
+        Awakening,
+        Evolution
     }
 
     public enum EnhanceFailPolicy
