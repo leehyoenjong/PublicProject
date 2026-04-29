@@ -14,40 +14,40 @@ namespace PublicFramework
             _config = config;
         }
 
-        public EnhanceResult Execute(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
         {
-            int beforeLevel = equipment.Level;
-            equipment.Level += 1;
+            int beforeLevel = target.Level;
+            target.Level += 1;
 
-            Debug.Log($"[LevelEnhance] Level up: {beforeLevel} → {equipment.Level}");
+            Debug.Log($"[LevelEnhance] Level up: {beforeLevel} → {target.Level}");
 
             return new EnhanceResult
             {
                 IsSuccess = true,
                 Type = EnhanceType.Level,
                 BeforeValue = beforeLevel,
-                AfterValue = equipment.Level,
+                AfterValue = target.Level,
                 FailPolicy = EnhanceFailPolicy.Keep
             };
         }
 
-        public bool CanEnhance(EquipmentInstanceData equipment, EnhanceContext context)
+        public bool CanEnhance(IEnhanceable target, EnhanceContext context)
         {
-            int maxLevel = _config.GetMaxLevel(equipment.Grade);
+            int maxLevel = _config.GetMaxLevel(target.Grade);
 
-            if (equipment.Level >= maxLevel)
+            if (target.Level >= maxLevel)
             {
-                Debug.LogWarning($"[LevelEnhance] Already max level: {equipment.Level}/{maxLevel}");
+                Debug.LogWarning($"[LevelEnhance] Already max level: {target.Level}/{maxLevel}");
                 return false;
             }
 
             return true;
         }
 
-        public EnhanceCost GetCost(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
-            int goldCost = _config.GetLevelUpCost(equipment.Level, equipment.Grade);
-            int stoneCost = _config.GetLevelUpStoneCost(equipment.Level);
+            int goldCost = _config.GetLevelUpCost(target.Level, target.Grade);
+            int stoneCost = _config.GetLevelUpStoneCost(target.Level);
 
             return new EnhanceCost
             {
@@ -68,7 +68,7 @@ namespace PublicFramework
             };
         }
 
-        public float GetDisplayProbability(EquipmentInstanceData equipment, EnhanceContext context)
+        public float GetDisplayProbability(IEnhanceable target, EnhanceContext context)
         {
             return 1f;
         }

@@ -7,7 +7,7 @@ namespace PublicFramework
     /// 장비 인스턴스 데이터. 직렬화 가능.
     /// </summary>
     [Serializable]
-    public class EquipmentInstanceData
+    public class EquipmentInstanceData : IEnhanceable
     {
         [SerializeField] private string _instanceId;
         [SerializeField] private string _equipmentId;

@@ -14,52 +14,52 @@ namespace PublicFramework
             _config = config;
         }
 
-        public EnhanceResult Execute(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
         {
-            int beforeStep = equipment.TranscendStep;
-            equipment.TranscendStep += 1;
+            int beforeStep = target.TranscendStep;
+            target.TranscendStep += 1;
 
-            Debug.Log($"[Transcend] Step up: {beforeStep} → {equipment.TranscendStep}");
+            Debug.Log($"[Transcend] Step up: {beforeStep} → {target.TranscendStep}");
 
             return new EnhanceResult
             {
                 IsSuccess = true,
                 Type = EnhanceType.Transcend,
                 BeforeValue = beforeStep,
-                AfterValue = equipment.TranscendStep,
+                AfterValue = target.TranscendStep,
                 FailPolicy = EnhanceFailPolicy.Keep
             };
         }
 
-        public bool CanEnhance(EquipmentInstanceData equipment, EnhanceContext context)
+        public bool CanEnhance(IEnhanceable target, EnhanceContext context)
         {
-            if (equipment.Grade < (int)EquipmentGrade.Legendary)
+            if (target.Grade < (int)EquipmentGrade.Legendary)
             {
-                Debug.LogWarning($"[Transcend] Grade not Legendary: {(EquipmentGrade)equipment.Grade}");
+                Debug.LogWarning($"[Transcend] Grade not Legendary: {(EquipmentGrade)target.Grade}");
                 return false;
             }
 
-            int maxLevel = _config.GetMaxLevel(equipment.Grade);
-            if (equipment.Level < maxLevel)
+            int maxLevel = _config.GetMaxLevel(target.Grade);
+            if (target.Level < maxLevel)
             {
-                Debug.LogWarning($"[Transcend] Level not max: {equipment.Level}/{maxLevel}");
+                Debug.LogWarning($"[Transcend] Level not max: {target.Level}/{maxLevel}");
                 return false;
             }
 
             int maxStep = _config.GetMaxTranscendStep();
 
-            if (equipment.TranscendStep >= maxStep)
+            if (target.TranscendStep >= maxStep)
             {
-                Debug.LogWarning($"[Transcend] Already max step: {equipment.TranscendStep}/{maxStep}");
+                Debug.LogWarning($"[Transcend] Already max step: {target.TranscendStep}/{maxStep}");
                 return false;
             }
 
             return true;
         }
 
-        public EnhanceCost GetCost(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
-            int cost = _config.GetTranscendCost(equipment.TranscendStep);
+            int cost = _config.GetTranscendCost(target.TranscendStep);
 
             return new EnhanceCost
             {
@@ -80,7 +80,7 @@ namespace PublicFramework
             };
         }
 
-        public float GetDisplayProbability(EquipmentInstanceData equipment, EnhanceContext context)
+        public float GetDisplayProbability(IEnhanceable target, EnhanceContext context)
         {
             return 1f;
         }

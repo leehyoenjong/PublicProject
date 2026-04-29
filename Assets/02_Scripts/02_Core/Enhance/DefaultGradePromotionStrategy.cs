@@ -18,82 +18,82 @@ namespace PublicFramework
             _eventBus = eventBus;
         }
 
-        public EnhanceResult Execute(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
         {
-            int beforeGrade = equipment.Grade;
-            float baseProb = _config.GetPromotionProbability(equipment.Grade);
-            int maxPity = _config.GetPromotionMaxPity(equipment.Grade);
+            int beforeGrade = target.Grade;
+            float baseProb = _config.GetPromotionProbability(target.Grade);
+            int maxPity = _config.GetPromotionMaxPity(target.Grade);
 
-            bool success = _probabilityModel.Roll(baseProb, equipment.PityCount, maxPity);
+            bool success = _probabilityModel.Roll(baseProb, target.PityCount, maxPity);
 
             if (success)
             {
-                bool wasPity = maxPity > 0 && equipment.PityCount >= maxPity - 1;
-                equipment.Grade += 1;
-                equipment.PityCount = 0;
+                bool wasPity = maxPity > 0 && target.PityCount >= maxPity - 1;
+                target.Grade += 1;
+                target.PityCount = 0;
 
                 if (wasPity)
                 {
                     _eventBus?.Publish(new PityReachedEvent
                     {
-                        InstanceId = equipment.InstanceId,
+                        InstanceId = target.InstanceId,
                         EnhanceType = EnhanceType.Grade
                     });
                 }
 
-                Debug.Log($"[GradePromotion] Grade up: {beforeGrade} → {equipment.Grade}");
+                Debug.Log($"[GradePromotion] Grade up: {beforeGrade} → {target.Grade}");
 
                 return new EnhanceResult
                 {
                     IsSuccess = true,
                     Type = EnhanceType.Grade,
                     BeforeValue = beforeGrade,
-                    AfterValue = equipment.Grade,
+                    AfterValue = target.Grade,
                     FailPolicy = EnhanceFailPolicy.Keep
                 };
             }
 
-            equipment.PityCount += 1;
-            EnhanceFailPolicy policy = _config.GetPromotionFailPolicy(equipment.Grade);
+            target.PityCount += 1;
+            EnhanceFailPolicy policy = _config.GetPromotionFailPolicy(target.Grade);
 
-            ApplyFailPolicy(equipment, policy);
+            ApplyFailPolicy(target, policy);
 
-            Debug.Log($"[GradePromotion] Failed. Pity: {equipment.PityCount}/{maxPity} Policy: {policy}");
+            Debug.Log($"[GradePromotion] Failed. Pity: {target.PityCount}/{maxPity} Policy: {policy}");
 
             return new EnhanceResult
             {
                 IsSuccess = false,
                 Type = EnhanceType.Grade,
                 BeforeValue = beforeGrade,
-                AfterValue = equipment.Grade,
+                AfterValue = target.Grade,
                 FailPolicy = policy,
                 MaxPity = maxPity
             };
         }
 
-        public bool CanEnhance(EquipmentInstanceData equipment, EnhanceContext context)
+        public bool CanEnhance(IEnhanceable target, EnhanceContext context)
         {
             int maxGrade = (int)EquipmentGrade.Legendary;
 
-            if (equipment.Grade >= maxGrade)
+            if (target.Grade >= maxGrade)
             {
-                Debug.LogWarning($"[GradePromotion] Already max grade: {(EquipmentGrade)equipment.Grade}");
+                Debug.LogWarning($"[GradePromotion] Already max grade: {(EquipmentGrade)target.Grade}");
                 return false;
             }
 
-            int maxLevel = _config.GetMaxLevel(equipment.Grade);
-            if (equipment.Level < maxLevel)
+            int maxLevel = _config.GetMaxLevel(target.Grade);
+            if (target.Level < maxLevel)
             {
-                Debug.LogWarning($"[GradePromotion] Level not max: {equipment.Level}/{maxLevel}");
+                Debug.LogWarning($"[GradePromotion] Level not max: {target.Level}/{maxLevel}");
                 return false;
             }
 
             return true;
         }
 
-        public EnhanceCost GetCost(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
-            int cost = _config.GetPromotionCost(equipment.Grade);
+            int cost = _config.GetPromotionCost(target.Grade);
 
             return new EnhanceCost
             {
@@ -109,35 +109,35 @@ namespace PublicFramework
             };
         }
 
-        private void ApplyFailPolicy(EquipmentInstanceData equipment, EnhanceFailPolicy policy)
+        private void ApplyFailPolicy(IEnhanceable target, EnhanceFailPolicy policy)
         {
             switch (policy)
             {
                 case EnhanceFailPolicy.Keep:
                     break;
                 case EnhanceFailPolicy.Decrease:
-                    if (equipment.Grade > 0)
+                    if (target.Grade > 0)
                     {
-                        equipment.Grade -= 1;
-                        Debug.Log($"[GradePromotion] Decrease applied: Grade → {equipment.Grade}");
+                        target.Grade -= 1;
+                        Debug.Log($"[GradePromotion] Decrease applied: Grade → {target.Grade}");
                     }
                     break;
                 case EnhanceFailPolicy.Reset:
-                    equipment.Grade = 0;
+                    target.Grade = 0;
                     Debug.Log("[GradePromotion] Reset applied: Grade → 0");
                     break;
                 case EnhanceFailPolicy.Destroy:
-                    equipment.Grade = -1;
+                    target.Grade = -1;
                     Debug.LogWarning("[GradePromotion] Destroy applied: equipment marked for destruction");
                     break;
             }
         }
 
-        public float GetDisplayProbability(EquipmentInstanceData equipment, EnhanceContext context)
+        public float GetDisplayProbability(IEnhanceable target, EnhanceContext context)
         {
-            float baseProb = _config.GetPromotionProbability(equipment.Grade);
-            int maxPity = _config.GetPromotionMaxPity(equipment.Grade);
-            return _probabilityModel.GetDisplayProb(baseProb, equipment.PityCount, maxPity);
+            float baseProb = _config.GetPromotionProbability(target.Grade);
+            int maxPity = _config.GetPromotionMaxPity(target.Grade);
+            return _probabilityModel.GetDisplayProb(baseProb, target.PityCount, maxPity);
         }
     }
 }

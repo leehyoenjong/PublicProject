@@ -16,10 +16,10 @@ namespace PublicFramework
             _eventBus = eventBus;
         }
 
-        public EnhanceResult Execute(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceResult Execute(IEnhanceable target, EnhanceContext context)
         {
             int slotIndex = context.TargetSlotIndex;
-            AwakeningSlotData slot = equipment.AwakeningSlots[slotIndex];
+            AwakeningSlotData slot = target.AwakeningSlots[slotIndex];
 
             AwakeningOptionEntry option = RollOption();
             float rolledValue = Random.Range(option.MinValue, option.MaxValue);
@@ -29,7 +29,7 @@ namespace PublicFramework
 
             _eventBus?.Publish(new AwakeningCompleteEvent
             {
-                InstanceId = equipment.InstanceId,
+                InstanceId = target.InstanceId,
                 SlotIndex = slotIndex,
                 OptionId = option.OptionId,
                 OptionValue = rolledValue
@@ -47,9 +47,9 @@ namespace PublicFramework
             };
         }
 
-        public bool CanEnhance(EquipmentInstanceData equipment, EnhanceContext context)
+        public bool CanEnhance(IEnhanceable target, EnhanceContext context)
         {
-            if (equipment.AwakeningSlots == null || equipment.AwakeningSlots.Length == 0)
+            if (target.AwakeningSlots == null || target.AwakeningSlots.Length == 0)
             {
                 Debug.LogWarning("[Awakening] No awakening slots");
                 return false;
@@ -57,13 +57,13 @@ namespace PublicFramework
 
             int slotIndex = context.TargetSlotIndex;
 
-            if (slotIndex < 0 || slotIndex >= equipment.AwakeningSlots.Length)
+            if (slotIndex < 0 || slotIndex >= target.AwakeningSlots.Length)
             {
                 Debug.LogWarning($"[Awakening] Invalid slot index: {slotIndex}");
                 return false;
             }
 
-            AwakeningSlotData slot = equipment.AwakeningSlots[slotIndex];
+            AwakeningSlotData slot = target.AwakeningSlots[slotIndex];
 
             if (!slot.IsUnlocked)
             {
@@ -80,7 +80,7 @@ namespace PublicFramework
             return true;
         }
 
-        public EnhanceCost GetCost(EquipmentInstanceData equipment, EnhanceContext context)
+        public EnhanceCost GetCost(IEnhanceable target, EnhanceContext context)
         {
             int cost = _config.GetAwakeningCost(context.TargetSlotIndex);
 
@@ -98,7 +98,7 @@ namespace PublicFramework
             };
         }
 
-        public float GetDisplayProbability(EquipmentInstanceData equipment, EnhanceContext context)
+        public float GetDisplayProbability(IEnhanceable target, EnhanceContext context)
         {
             return 1f;
         }
