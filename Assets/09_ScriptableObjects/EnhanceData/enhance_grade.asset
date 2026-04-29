@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a82cb7f62ff147938afac1f8a7aacff, type: 3}
+  m_Name: enhance_grade
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.EnhanceData
+  _mid: enhance_grade
+  _enhanceType: 1
+  _protectionTicketCost: 1
+  _blessingBoost: 0.1
+  _consecutiveBonusBase: 0.05
+  _gradePolicies:
+  - _gradeIndex: 0
+    _maxLevel: 10
+    _promotionProb: 1
+    _promotionMaxPity: 0
+    _promotionCost: 5
+    _promotionFailPolicy: 0
+  - _gradeIndex: 1
+    _maxLevel: 20
+    _promotionProb: 0.8
+    _promotionMaxPity: 3
+    _promotionCost: 10
+    _promotionFailPolicy: 0
+  - _gradeIndex: 2
+    _maxLevel: 30
+    _promotionProb: 0.5
+    _promotionMaxPity: 5
+    _promotionCost: 20
+    _promotionFailPolicy: 0
+  - _gradeIndex: 3
+    _maxLevel: 40
+    _promotionProb: 0.2
+    _promotionMaxPity: 10
+    _promotionCost: 50
+    _promotionFailPolicy: 0
+  - _gradeIndex: 4
+    _maxLevel: 50
+    _promotionProb: 0
+    _promotionMaxPity: 0
+    _promotionCost: 0
+    _promotionFailPolicy: 0
+  _transcendSteps: []
+  _awakeningOptions: []
+  _evolutionStages: []
+  _levelCostBase: 100
+  _levelCostMultiplier: 1.2
+  _gradeCostMultiplier: 0.5
+  _stoneCostBase: 1
+  _stoneCostMultiplier: 0.2
+  _awakeningCostBase: 20

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a82cb7f62ff147938afac1f8a7aacff, type: 3}
+  m_Name: enhance_transcend
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.EnhanceData
+  _mid: enhance_transcend
+  _enhanceType: 2
+  _protectionTicketCost: 0
+  _blessingBoost: 0
+  _consecutiveBonusBase: 0
+  _gradePolicies: []
+  _transcendSteps:
+  - _stepIndex: 0
+    _cost: 10
+    _requiredSameItemCount: 1
+  - _stepIndex: 1
+    _cost: 15
+    _requiredSameItemCount: 1
+  - _stepIndex: 2
+    _cost: 22
+    _requiredSameItemCount: 1
+  - _stepIndex: 3
+    _cost: 33
+    _requiredSameItemCount: 1
+  - _stepIndex: 4
+    _cost: 50
+    _requiredSameItemCount: 1
+  _awakeningOptions: []
+  _evolutionStages: []
+  _levelCostBase: 100
+  _levelCostMultiplier: 1.2
+  _gradeCostMultiplier: 0.5
+  _stoneCostBase: 1
+  _stoneCostMultiplier: 0.2
+  _awakeningCostBase: 20
