@@ -27,7 +27,8 @@ Assets/
 │   ├── 01_Interfaces/     # 인터페이스, 추상 클래스
 │   ├── 02_Core/           # 순수 C# 로직 (MonoBehaviour 의존 없음)
 │   ├── 03_Mono/           # MonoBehaviour 구현체
-│   └── 04_Utils/          # 유틸리티, 확장 메서드
+│   ├── 04_Utils/          # 유틸리티, 확장 메서드
+│   └── 05_Tests/          # EditMode/PlayMode 테스트 (Editor/ 하위)
 ├── 03_Prefabs/
 ├── 04_Materials/
 ├── 05_Sprites/
