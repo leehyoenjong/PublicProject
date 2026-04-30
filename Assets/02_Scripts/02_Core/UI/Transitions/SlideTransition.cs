@@ -27,7 +27,7 @@ namespace PublicFramework
 
             if (fromRect == null || toRect == null)
             {
-                Debug.LogError("[SlideTransition] RectTransform not found.");
+                Debug.LogError("[UI] 슬라이드전환: RectTransform 미발견.");
                 from.alpha = 0f;
                 to.alpha = 1f;
                 yield break;

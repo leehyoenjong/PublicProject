@@ -15,11 +15,11 @@ namespace PublicFramework
             try
             {
                 File.WriteAllBytes(path, data);
-                Debug.Log($"[LocalSaveStorage] Written {data.Length} bytes to {path}");
+                Debug.Log($"[세이브] {data.Length} 바이트 기록됨: {path}");
             }
             catch (Exception e)
             {
-                Debug.LogError($"[LocalSaveStorage] Write failed for slot {slotIndex}: {e}");
+                Debug.LogError($"[세이브] 슬롯 {slotIndex} 쓰기 실패: {e}");
                 throw;
             }
         }
@@ -29,19 +29,19 @@ namespace PublicFramework
             string path = SavePathHelper.GetSlotPath(slotIndex);
             if (!File.Exists(path))
             {
-                Debug.LogWarning($"[LocalSaveStorage] File not found: {path}");
+                Debug.LogWarning($"[세이브] 파일을 찾을 수 없음: {path}");
                 return null;
             }
 
             try
             {
                 byte[] data = File.ReadAllBytes(path);
-                Debug.Log($"[LocalSaveStorage] Read {data.Length} bytes from {path}");
+                Debug.Log($"[세이브] {data.Length} 바이트 읽음: {path}");
                 return data;
             }
             catch (Exception e)
             {
-                Debug.LogError($"[LocalSaveStorage] Read failed for slot {slotIndex}: {e}");
+                Debug.LogError($"[세이브] 슬롯 {slotIndex} 읽기 실패: {e}");
                 return null;
             }
         }
@@ -60,11 +60,11 @@ namespace PublicFramework
             try
             {
                 File.Delete(path);
-                Debug.Log($"[LocalSaveStorage] Deleted: {path}");
+                Debug.Log($"[세이브] 삭제됨: {path}");
             }
             catch (Exception e)
             {
-                Debug.LogError($"[LocalSaveStorage] Delete failed for slot {slotIndex}: {e}");
+                Debug.LogError($"[세이브] 슬롯 {slotIndex} 삭제 실패: {e}");
             }
         }
     }

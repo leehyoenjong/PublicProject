@@ -15,7 +15,7 @@ namespace PublicFramework
             if (context == null || entry == null) return;
             if (context.ObjectPool == null)
             {
-                Debug.LogError("[PlayVfxAction] IObjectPoolManager not provided");
+                Debug.LogError("[스킬액션] IObjectPoolManager가 제공되지 않음.");
                 return;
             }
 
@@ -26,7 +26,7 @@ namespace PublicFramework
             GameObject instance = context.ObjectPool.Spawn(poolId, pos, Quaternion.identity);
             if (instance == null)
             {
-                Debug.LogError($"[PlayVfxAction] Pool spawn failed: '{poolId}'");
+                Debug.LogError($"[스킬액션] 풀 스폰 실패: '{poolId}'");
                 return;
             }
 

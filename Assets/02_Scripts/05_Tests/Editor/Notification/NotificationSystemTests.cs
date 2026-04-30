@@ -95,7 +95,7 @@ namespace PublicFramework.Tests.Notification
         [Test]
         public void Schedule_NullData_ReturnsNullAndLogsError()
         {
-            LogAssert.Expect(LogType.Error, "[NotificationSystem] NotificationData is null");
+            LogAssert.Expect(LogType.Error, "[알림] NotificationData가 null임.");
 
             string id = _system.Schedule(null);
 

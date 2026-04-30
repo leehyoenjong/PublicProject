@@ -23,7 +23,7 @@ namespace PublicFramework
         {
             if (data == null)
             {
-                Debug.LogError("[Condition] ConditionData is null");
+                Debug.LogError("[조건] ConditionData가 null임.");
             }
             _data = data;
             _currentAmount = currentAmount;
@@ -35,7 +35,7 @@ namespace PublicFramework
             if (amount <= 0) return;
 
             _currentAmount = Mathf.Min(_currentAmount + amount, _data.RequiredAmount);
-            Debug.Log($"[Condition] {_data.ConditionId}: {_currentAmount}/{_data.RequiredAmount}");
+            Debug.Log($"[조건] {_data.ConditionId}: {_currentAmount}/{_data.RequiredAmount}");
         }
 
         public void Reset()

@@ -19,7 +19,7 @@ namespace PublicFramework
             int beforeStep = target.TranscendStep;
             target.TranscendStep += 1;
 
-            Debug.Log($"[Transcend] Step up: {beforeStep} → {target.TranscendStep}");
+            Debug.Log($"[강화] 초월 단계 증가: {beforeStep} → {target.TranscendStep}");
 
             return new EnhanceResult
             {
@@ -35,7 +35,7 @@ namespace PublicFramework
         {
             if (target.Grade < (int)EquipmentGrade.Legendary)
             {
-                Debug.LogWarning($"[Transcend] Grade not Legendary: {(EquipmentGrade)target.Grade}");
+                Debug.LogWarning($"[강화] 등급이 전설 미달: {(EquipmentGrade)target.Grade}");
                 return false;
             }
 
@@ -45,14 +45,14 @@ namespace PublicFramework
 
             if (target.Level < maxLevel)
             {
-                Debug.LogWarning($"[Transcend] Level not max: {target.Level}/{maxLevel}");
+                Debug.LogWarning($"[강화] 레벨 최대 미달: {target.Level}/{maxLevel}");
                 return false;
             }
 
             int maxStep = GetMaxTranscendStep();
             if (target.TranscendStep >= maxStep)
             {
-                Debug.LogWarning($"[Transcend] Already max step: {target.TranscendStep}/{maxStep}");
+                Debug.LogWarning($"[강화] 이미 최대 초월 단계: {target.TranscendStep}/{maxStep}");
                 return false;
             }
 

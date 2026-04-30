@@ -21,20 +21,20 @@ namespace PublicFramework
             _statSystem = statSystem;
             _eventBus = eventBus;
             _locSystem = locSystem;
-            Debug.Log("[BuffSystem] Init started");
+            Debug.Log("[버프] 초기화 시작.");
         }
 
         public BuffResult AddBuff(string targetId, BuffData buffData, string sourceId)
         {
             if (buffData == null)
             {
-                Debug.LogError("[BuffSystem] BuffData is null");
+                Debug.LogError("[버프] BuffData가 null임.");
                 return new BuffResult { Success = false, FailReason = "BuffData is null" };
             }
 
             if (string.IsNullOrEmpty(targetId))
             {
-                Debug.LogError("[BuffSystem] targetId is null or empty");
+                Debug.LogError("[버프] targetId가 null 또는 빈 값임.");
                 return new BuffResult { Success = false, FailReason = "targetId is null" };
             }
 
@@ -48,7 +48,7 @@ namespace PublicFramework
                     Reason = "Immune"
                 });
 
-                Debug.Log($"[BuffSystem] Buff immune: {buffData.BuffId} on {targetId}");
+                Debug.Log($"[버프] 버프 면역: {buffData.BuffId} → {targetId}");
                 return new BuffResult { Success = false, BuffId = buffData.BuffId, FailReason = "Immune" };
             }
 
@@ -98,7 +98,7 @@ namespace PublicFramework
             }
 
             CleanupEmptyList(targetId);
-            Debug.Log($"[BuffSystem] Removed {count} buffs from {targetId}");
+            Debug.Log($"[버프] {targetId}에서 버프 {count}개 제거됨.");
             return count;
         }
 
@@ -144,7 +144,7 @@ namespace PublicFramework
                 idSet.Add(buffIdOrCategory);
             }
 
-            Debug.Log($"[BuffSystem] Immunity added: {targetId} -> {buffIdOrCategory}");
+            Debug.Log($"[버프] 면역 추가됨: {targetId} → {buffIdOrCategory}");
         }
 
         public void RemoveImmunity(string targetId, string buffIdOrCategory)
@@ -253,7 +253,7 @@ namespace PublicFramework
                 Duration = instance.RemainingDuration
             });
 
-            Debug.Log($"[BuffSystem] Buff applied: {buffData.BuffId} on {targetId}");
+            Debug.Log($"[버프] 버프 적용됨: {buffData.BuffId} → {targetId}");
 
             return new BuffResult
             {
@@ -381,7 +381,7 @@ namespace PublicFramework
                 RemoveReason = reason
             });
 
-            Debug.Log($"[BuffSystem] Buff removed: {instance.BuffId} from {targetId} ({reason})");
+            Debug.Log($"[버프] 버프 제거됨: {instance.BuffId} ← {targetId} ({reason})");
         }
 
         private BuffInstance FindBuff(string targetId, string buffId)

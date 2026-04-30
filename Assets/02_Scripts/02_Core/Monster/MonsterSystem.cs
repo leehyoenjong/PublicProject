@@ -38,7 +38,7 @@ namespace PublicFramework
             _bestiary = bestiary ?? new Bestiary();
             _eventBus = eventBus;
             _timeProvider = timeProvider;
-            Debug.Log("[MonsterSystem] Init started");
+            Debug.Log("[몬스터] 초기화 시작.");
         }
 
         public IBestiary Bestiary => _bestiary;
@@ -70,7 +70,7 @@ namespace PublicFramework
 
             _eventCatalog = eventCatalog;
 
-            Debug.Log($"[MonsterSystem] Initialized — monsters: {_infoByMID.Count}, dropTables: {_dropTables.Count}");
+            Debug.Log($"[몬스터] 초기화 완료 — 몬스터: {_infoByMID.Count}, 드롭테이블: {_dropTables.Count}");
         }
 
         /// <summary>인터페이스 기반 Initialize — 테스트에서 Fake 주입 가능.</summary>
@@ -103,7 +103,7 @@ namespace PublicFramework
 
             _eventCatalog = eventCatalog;
 
-            Debug.Log($"[MonsterSystem] Initialized — monsters: {_infoByMID.Count}, dropTables: {_dropTables.Count}");
+            Debug.Log($"[몬스터] 초기화 완료 — 몬스터: {_infoByMID.Count}, 드롭테이블: {_dropTables.Count}");
         }
 
         public IMonsterInfo GetInfo(string monsterMID)
@@ -151,7 +151,7 @@ namespace PublicFramework
                 TriggeredHookIds = triggered,
             });
 
-            Debug.Log($"[MonsterSystem] Spawned: {info.MID} ({instanceId})");
+            Debug.Log($"[몬스터] 스폰됨: {info.MID} ({instanceId})");
             return inst;
         }
 
@@ -207,7 +207,7 @@ namespace PublicFramework
 
             _instances.Remove(instanceId);
 
-            Debug.Log($"[MonsterSystem] Defeated: {result.MonsterMID} ({instanceId}) drops={result.Drops?.Count ?? 0}");
+            Debug.Log($"[몬스터] 처치됨: {result.MonsterMID} ({instanceId}) 드롭={result.Drops?.Count ?? 0}");
             return result;
         }
 

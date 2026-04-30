@@ -17,14 +17,14 @@ namespace PublicFramework
             if (context == null || entry == null) return;
             if (context.EventBus == null)
             {
-                Debug.LogWarning("[PlayAnimationAction] IEventBus not provided");
+                Debug.LogWarning("[스킬액션] IEventBus가 제공되지 않음.");
                 return;
             }
 
             string animKey = entry.Param1;
             if (string.IsNullOrEmpty(animKey))
             {
-                Debug.LogError("[PlayAnimationAction] param1(animKey) is empty");
+                Debug.LogError("[스킬액션] param1(animKey)가 비어 있음.");
                 return;
             }
 

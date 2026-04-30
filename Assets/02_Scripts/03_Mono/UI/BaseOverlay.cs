@@ -22,21 +22,21 @@ namespace PublicFramework
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.blocksRaycasts = false;
             _canvasGroup.interactable = false;
-            Debug.Log($"[BaseOverlay] '{gameObject.name}' initialized.");
+            Debug.Log($"[오버레이] '{gameObject.name}' 초기화됨.");
         }
 
         public virtual void Show()
         {
             gameObject.SetActive(true);
             CanvasGroup.alpha = 1f;
-            Debug.Log($"[BaseOverlay] '{gameObject.name}' shown.");
+            Debug.Log($"[오버레이] '{gameObject.name}' 표시됨.");
         }
 
         public virtual void Hide()
         {
             CanvasGroup.alpha = 0f;
             gameObject.SetActive(false);
-            Debug.Log($"[BaseOverlay] '{gameObject.name}' hidden.");
+            Debug.Log($"[오버레이] '{gameObject.name}' 숨김.");
         }
     }
 }

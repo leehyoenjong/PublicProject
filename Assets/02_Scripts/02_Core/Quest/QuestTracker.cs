@@ -16,7 +16,7 @@ namespace PublicFramework
             _eventBus = eventBus;
 
             SubscribeEvents();
-            Debug.Log("[QuestTracker] Init started");
+            Debug.Log("[퀘스트] 추적기 초기화 시작.");
         }
 
         public void Dispose()

@@ -72,7 +72,7 @@ namespace PublicFramework.Tests.Buff
         public void AddBuff_NullBuffData_Fails()
         {
             UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error,
-                "[BuffSystem] BuffData is null");
+                "[버프] BuffData가 null임.");
 
             BuffResult result = _system.AddBuff(TARGET, null, SOURCE);
 
@@ -84,7 +84,7 @@ namespace PublicFramework.Tests.Buff
         public void AddBuff_EmptyTargetId_Fails()
         {
             UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error,
-                "[BuffSystem] targetId is null or empty");
+                "[버프] targetId가 null 또는 빈 값임.");
             BuffData data = TestHelpers.MakeBuffData("buf1");
 
             BuffResult result = _system.AddBuff("", data, SOURCE);

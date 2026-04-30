@@ -43,7 +43,7 @@ namespace PublicFramework
             }
             else
             {
-                Debug.LogWarning($"[TutorialPresenter] HighlightTarget '{step.HighlightTargetId}' not found in scene registry");
+                Debug.LogWarning($"[튜토리얼] HighlightTarget '{step.HighlightTargetId}' 씬 레지스트리에서 미발견");
                 _overlay.ClearHighlight();
             }
         }

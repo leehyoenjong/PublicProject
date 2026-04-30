@@ -72,7 +72,7 @@ namespace PublicFramework.Tests.Mail
         [Test]
         public void SendMail_NullMail_NoOp()
         {
-            LogAssert.Expect(LogType.Error, "[MailSystem] MailData is null");
+            LogAssert.Expect(LogType.Error, "[우편] MailData가 null임.");
 
             _system.SendMail(null);
 

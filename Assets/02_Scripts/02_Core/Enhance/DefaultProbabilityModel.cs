@@ -11,14 +11,14 @@ namespace PublicFramework
         {
             if (maxPity > 0 && pityCount >= maxPity - 1)
             {
-                Debug.Log("[ProbabilityModel] Pity reached — guaranteed success");
+                Debug.Log("[강화] 천장 도달 — 성공 확정.");
                 return true;
             }
 
             float roll = Random.value;
             bool success = roll <= baseProb;
 
-            Debug.Log($"[ProbabilityModel] Roll: {roll:F3} vs {baseProb:F3} → {(success ? "SUCCESS" : "FAIL")}");
+            Debug.Log($"[강화] 확률 롤: {roll:F3} vs {baseProb:F3} → {(success ? "성공" : "실패")}");
             return success;
         }
 

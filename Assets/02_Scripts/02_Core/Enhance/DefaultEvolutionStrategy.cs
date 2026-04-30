@@ -20,7 +20,7 @@ namespace PublicFramework
             int beforeStage = target.EvolutionStage;
             target.EvolutionStage += 1;
 
-            Debug.Log($"[Evolution] Stage up: {beforeStage} → {target.EvolutionStage}");
+            Debug.Log($"[강화] 진화 단계 증가: {beforeStage} → {target.EvolutionStage}");
 
             return new EnhanceResult
             {
@@ -37,19 +37,19 @@ namespace PublicFramework
             EvolutionStageEntry entry = GetStageEntry(target.EvolutionStage);
             if (entry == null)
             {
-                Debug.LogWarning($"[Evolution] No stage entry for stage {target.EvolutionStage} (max reached)");
+                Debug.LogWarning($"[강화] 진화 단계 항목 없음: {target.EvolutionStage} (최대 도달)");
                 return false;
             }
 
             if (target.Grade < (int)entry.RequiredGrade)
             {
-                Debug.LogWarning($"[Evolution] Grade not enough: {(EquipmentGrade)target.Grade}/{entry.RequiredGrade}");
+                Debug.LogWarning($"[강화] 등급 부족: {(EquipmentGrade)target.Grade}/{entry.RequiredGrade}");
                 return false;
             }
 
             if (target.TranscendStep < entry.RequiredTranscendStep)
             {
-                Debug.LogWarning($"[Evolution] Transcend not enough: {target.TranscendStep}/{entry.RequiredTranscendStep}");
+                Debug.LogWarning($"[강화] 초월 단계 부족: {target.TranscendStep}/{entry.RequiredTranscendStep}");
                 return false;
             }
 

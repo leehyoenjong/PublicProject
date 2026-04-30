@@ -22,7 +22,7 @@ namespace PublicFramework
         {
             _eventBus = eventBus;
             _saveSystem = saveSystem;
-            Debug.Log("[QuestSystem] Init started");
+            Debug.Log("[퀘스트] 초기화 시작.");
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace PublicFramework
         public void Initialize()
         {
             LoadQuestStates();
-            Debug.Log("[QuestSystem] Initialized — quest states loaded");
+            Debug.Log("[퀘스트] 초기화 완료 — 퀘스트 상태 로드됨.");
         }
 
         public void SetRewardHandler(IRewardHandler handler)
@@ -63,7 +63,7 @@ namespace PublicFramework
                 QuestType = quest.QuestType
             });
 
-            Debug.Log($"[QuestSystem] Quest accepted: {questId}");
+            Debug.Log($"[퀘스트] 수락됨: {questId}");
             return true;
         }
 
@@ -77,7 +77,7 @@ namespace PublicFramework
 
             _eventBus?.Publish(new QuestAbandonedEvent { QuestId = questId });
 
-            Debug.Log($"[QuestSystem] Quest abandoned (progress reset): {questId}");
+            Debug.Log($"[퀘스트] 포기됨 (진행도 초기화): {questId}");
             return true;
         }
 
@@ -102,7 +102,7 @@ namespace PublicFramework
 
             SaveQuestStates();
 
-            Debug.Log($"[QuestSystem] Quest reward claimed: {questId}");
+            Debug.Log($"[퀘스트] 보상 수령됨: {questId}");
             return true;
         }
 
@@ -205,7 +205,7 @@ namespace PublicFramework
                         QuestType = quest.QuestType
                     });
 
-                    Debug.Log($"[QuestSystem] Quest completed: {quest.QuestId}");
+                    Debug.Log($"[퀘스트] 완료됨: {quest.QuestId}");
                 }
             }
 
@@ -215,13 +215,13 @@ namespace PublicFramework
         public void ResetDaily()
         {
             ResetByType(QuestType.Daily);
-            Debug.Log("[QuestSystem] Daily quests reset");
+            Debug.Log("[퀘스트] 일일 퀘스트 초기화됨.");
         }
 
         public void ResetWeekly()
         {
             ResetByType(QuestType.Weekly);
-            Debug.Log("[QuestSystem] Weekly quests reset");
+            Debug.Log("[퀘스트] 주간 퀘스트 초기화됨.");
         }
 
         private void ResetByType(QuestType type)

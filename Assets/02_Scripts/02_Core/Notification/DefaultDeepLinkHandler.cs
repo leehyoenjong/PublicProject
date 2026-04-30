@@ -18,13 +18,13 @@ namespace PublicFramework
         {
             if (!CanHandle(deepLink))
             {
-                Debug.LogWarning($"[DeepLink] Cannot handle: {deepLink}");
+                Debug.LogWarning($"[알림] 딥링크 처리 불가: {deepLink}");
                 return;
             }
 
             string path = deepLink.Substring(SCHEME.Length);
 
-            Debug.Log($"[DeepLink] Routing: {path}");
+            Debug.Log($"[알림] 딥링크 라우팅: {path}");
         }
     }
 }

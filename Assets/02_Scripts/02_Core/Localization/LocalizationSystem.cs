@@ -29,7 +29,7 @@ namespace PublicFramework
             _currentLanguage = LanguageCode.Ko;
 
             LoadSavedLanguage();
-            Debug.Log($"[LocalizationSystem] Init started (language: {_currentLanguage})");
+            Debug.Log($"[로컬라이즈] 초기화 시작 (언어: {_currentLanguage})");
         }
 
         public void LoadTable(LocalizationTable table)
@@ -49,7 +49,7 @@ namespace PublicFramework
                 KeyCount = _tables[table.Language].Count
             });
 
-            Debug.Log($"[LocalizationSystem] Table loaded: {table.Language} ({_tables[table.Language].Count} keys)");
+            Debug.Log($"[로컬라이즈] 테이블 로드됨: {table.Language} ({_tables[table.Language].Count}개 키)");
         }
 
         public void SetLanguage(LanguageCode language)
@@ -61,7 +61,7 @@ namespace PublicFramework
 
             if (!_tables.ContainsKey(language))
             {
-                Debug.LogWarning($"[LocalizationSystem] Table for '{language}' not loaded — Fallback will apply");
+                Debug.LogWarning($"[로컬라이즈] '{language}' 테이블 미로드 — 폴백 적용됨.");
             }
 
             SaveLanguage();
@@ -72,7 +72,7 @@ namespace PublicFramework
                 NewLanguage = language
             });
 
-            Debug.Log($"[LocalizationSystem] Language changed: {oldLanguage} -> {language}");
+            Debug.Log($"[로컬라이즈] 언어 변경됨: {oldLanguage} → {language}");
         }
 
         public string GetText(int key, params object[] args)
@@ -96,7 +96,7 @@ namespace PublicFramework
                     Language = _currentLanguage
                 });
 
-                Debug.LogWarning($"[LocalizationSystem] Key not found: {key} ({_currentLanguage})");
+                Debug.LogWarning($"[로컬라이즈] 키를 찾을 수 없음: {key} ({_currentLanguage})");
                 return key.ToString();
             }
 
@@ -108,7 +108,7 @@ namespace PublicFramework
                 }
                 catch (System.FormatException e)
                 {
-                    Debug.LogWarning($"[LocalizationSystem] Format error for key '{key}': {e.Message}");
+                    Debug.LogWarning($"[로컬라이즈] 포맷 오류 (키='{key}'): {e.Message}");
                     return value;
                 }
             }

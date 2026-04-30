@@ -87,7 +87,7 @@ namespace PublicFramework
 
             if (totalWeight <= 0)
             {
-                Debug.LogWarning($"[DefaultDropResolver] Tier weight sum is 0 for gacha {gacha.MID}");
+                Debug.LogWarning($"[가챠] 티어 가중치 합이 0임: {gacha.MID}");
                 return GachaTierRank.N;
             }
 
@@ -112,7 +112,7 @@ namespace PublicFramework
 
             if (totalWeight <= 0)
             {
-                Debug.LogWarning($"[DefaultDropResolver] No drop entries for tier {tier} in gacha {gacha.MID}");
+                Debug.LogWarning($"[가챠] 드롭 항목 없음: 티어={tier}, 가챠={gacha.MID}");
                 return 0;
             }
 

@@ -15,14 +15,14 @@ namespace PublicFramework
         {
             _repo = repo;
             _bus = bus;
-            Debug.Log("[Inventory] Init");
+            Debug.Log("[인벤토리] 초기화 시작.");
         }
 
         public ItemAddResult AddItem(int mid, int count, object source)
         {
             if (count <= 0 || !_repo.TryGetItem(mid, out var item))
             {
-                Debug.LogWarning($"[Inventory] AddItem failed: mid={mid}, count={count}");
+                Debug.LogWarning($"[인벤토리] 아이템 추가 실패: mid={mid}, count={count}");
                 return new ItemAddResult(false, mid, count, 0, null, Array.Empty<ConvertedReward>());
             }
 
@@ -53,7 +53,7 @@ namespace PublicFramework
             int addable = Mathf.Min(count, room);
             inst.Count += addable;
             _bus.Publish(new ItemAcquiredEvent(item.MID, addable, inst.InstanceId, source));
-            Debug.Log($"[Inventory] Stack +{addable} mid={item.MID} total={inst.Count}");
+            Debug.Log($"[인벤토리] 스택 +{addable} mid={item.MID} 합계={inst.Count}");
             return new ItemAddResult(true, item.MID, count, addable, inst.InstanceId, Array.Empty<ConvertedReward>());
         }
 
@@ -68,7 +68,7 @@ namespace PublicFramework
                 lastId = id;
                 _bus.Publish(new ItemAcquiredEvent(item.MID, 1, id, source));
             }
-            Debug.Log($"[Inventory] Instance +{count} mid={item.MID}");
+            Debug.Log($"[인벤토리] 인스턴스 +{count} mid={item.MID}");
             return new ItemAddResult(true, item.MID, count, count, lastId, Array.Empty<ConvertedReward>());
         }
 
@@ -98,7 +98,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log($"[Inventory] Convert mid={item.MID} added={added} converted={converted.Count}");
+            Debug.Log($"[인벤토리] 변환 mid={item.MID} 추가={added} 변환={converted.Count}");
             return new ItemAddResult(true, item.MID, count, added, firstId, converted);
         }
 
@@ -114,7 +114,7 @@ namespace PublicFramework
                 _instances.Remove(id);
                 _stackIndex.Remove(mid);
             }
-            Debug.Log($"[Inventory] Consume mid={mid} count={count}");
+            Debug.Log($"[인벤토리] 소비 mid={mid} count={count}");
             return true;
         }
 
@@ -130,7 +130,7 @@ namespace PublicFramework
                 if (_stackIndex.TryGetValue(inst.MID, out var mapped) && mapped == instanceId)
                     _stackIndex.Remove(inst.MID);
             }
-            Debug.Log($"[Inventory] ConsumeInstance id={instanceId} count={count}");
+            Debug.Log($"[인벤토리] 인스턴스 소비 id={instanceId} count={count}");
             return true;
         }
 
@@ -188,7 +188,7 @@ namespace PublicFramework
                     _stackIndex.Remove(inst.MID);
                 _bus.Publish(new ItemExpiredEvent(inst.MID, id));
             }
-            if (toRemove.Count > 0) Debug.Log($"[Inventory] Purged {toRemove.Count} expired");
+            if (toRemove.Count > 0) Debug.Log($"[인벤토리] 만료 아이템 {toRemove.Count}개 제거됨.");
             return toRemove.Count;
         }
     }

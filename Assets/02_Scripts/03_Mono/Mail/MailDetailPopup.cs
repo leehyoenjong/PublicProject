@@ -65,7 +65,7 @@ namespace PublicFramework
             if (_claimButton != null) _claimButton.interactable = canClaim;
 
             SetVisible(true);
-            Debug.Log($"[MailDetailPopup] Show: {mailId}");
+            Debug.Log($"[우편] 상세 팝업 표시: {mailId}");
         }
 
         public void Hide()

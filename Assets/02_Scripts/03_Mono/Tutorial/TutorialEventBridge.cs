@@ -23,7 +23,7 @@ namespace PublicFramework
 
             if (_eventBus == null || _tutorial == null)
             {
-                Debug.LogWarning("[TutorialEventBridge] EventBus 또는 TutorialSystem 미등록");
+                Debug.LogWarning("[튜토리얼] EventBus 또는 TutorialSystem 미등록");
                 return;
             }
 

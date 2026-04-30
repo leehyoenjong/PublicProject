@@ -30,43 +30,43 @@ namespace PublicFramework
                     widget.Init();
                     widget.Show();
                     _widgets.Add(widget);
-                    Debug.Log($"[BaseBattleHUD] Widget '{entry.Id}' added.");
+                    Debug.Log($"[UI] 위젯 '{entry.Id}' 추가됨.");
                 }
                 else
                 {
-                    Debug.LogWarning($"[BaseBattleHUD] Widget '{entry.Id}' has no IBattleWidget component.");
+                    Debug.LogWarning($"[전투HUD] 위젯 '{entry.Id}'에 IBattleWidget 컴포넌트 없음.");
                 }
             }
 
             Show();
-            Debug.Log($"[BaseBattleHUD] HUD setup complete. Widgets: {_widgets.Count}");
+            Debug.Log($"[전투HUD] HUD 셋업 완료. 위젯 수: {_widgets.Count}");
         }
 
         public virtual void UpdateHP(string unitId, float ratio)
         {
-            Debug.Log($"[BaseBattleHUD] HP updated: {unitId} -> {ratio:P0}");
+            Debug.Log($"[전투HUD] HP 갱신: {unitId} → {ratio:P0}");
         }
 
         public virtual void UpdateSkill(string skillId, float coolRatio)
         {
-            Debug.Log($"[BaseBattleHUD] Skill updated: {skillId} -> {coolRatio:P0}");
+            Debug.Log($"[전투HUD] 스킬 갱신: {skillId} → {coolRatio:P0}");
         }
 
         public virtual void ShowDamageText(Vector3 position, int value, DamageType type)
         {
-            Debug.Log($"[BaseBattleHUD] Damage: {value} ({type}) at {position}");
+            Debug.Log($"[전투HUD] 데미지: {value} ({type}) 위치 {position}");
         }
 
         public virtual void UpdateWave(int current, int total)
         {
-            Debug.Log($"[BaseBattleHUD] Wave: {current}/{total}");
+            Debug.Log($"[전투HUD] 웨이브: {current}/{total}");
         }
 
         public void Cleanup()
         {
             ClearWidgets();
             Hide();
-            Debug.Log("[BaseBattleHUD] Cleanup complete.");
+            Debug.Log("[전투HUD] 정리 완료.");
         }
 
         private void ClearWidgets()

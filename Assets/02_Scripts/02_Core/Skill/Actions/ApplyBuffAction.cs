@@ -15,14 +15,14 @@ namespace PublicFramework
             if (context == null || entry == null) return;
             if (context.BuffSystem == null)
             {
-                Debug.LogError("[ApplyBuffAction] IBuffSystem not provided");
+                Debug.LogError("[스킬액션] IBuffSystem이 제공되지 않음.");
                 return;
             }
 
             string buffId = entry.Param1;
             if (string.IsNullOrEmpty(buffId))
             {
-                Debug.LogError("[ApplyBuffAction] param1(buffId) is empty");
+                Debug.LogError("[스킬액션] param1(buffId)가 비어 있음.");
                 return;
             }
 
@@ -30,14 +30,14 @@ namespace PublicFramework
             string targetId = ResolveTarget(context, targetRole);
             if (string.IsNullOrEmpty(targetId))
             {
-                Debug.LogWarning($"[ApplyBuffAction] Cannot resolve target '{targetRole}'");
+                Debug.LogWarning($"[스킬액션] 타겟을 찾을 수 없음: '{targetRole}'");
                 return;
             }
 
             BuffData data = SkillActionHelpers.FindBuffData(buffId);
             if (data == null)
             {
-                Debug.LogError($"[ApplyBuffAction] BuffData '{buffId}' not found");
+                Debug.LogError($"[스킬액션] BuffData를 찾을 수 없음: '{buffId}'");
                 return;
             }
 

@@ -27,7 +27,7 @@ namespace PublicFramework
             UpdateDynamic();
             SetVisible(true);
 
-            Debug.Log($"[BuffTooltip] Show: {data.BuffId}");
+            Debug.Log($"[버프툴팁] 표시: {data.BuffId}");
         }
 
         public void SetIcon(Sprite icon)

@@ -32,21 +32,21 @@ namespace PublicFramework
         private void OnDestroy()
         {
             ServiceLocator.Unregister<ISkillSystem>();
-            Debug.Log("[SkillSystemInitializer] Destroyed. ISkillSystem unregistered.");
+            Debug.Log("[스킬초기화] 파괴됨. ISkillSystem 등록 해제");
         }
 
         private void BuildBuffIndex()
         {
             if (_buffDataCollection == null)
             {
-                Debug.LogWarning("[SkillSystemInitializer] BuffDataCollection 미주입 — ApplyBuff 액션 조회 실패 가능");
+                Debug.LogWarning("[스킬초기화] BuffDataCollection 미주입 — ApplyBuff 액션 조회 실패 가능");
                 BuffDataIndex.Build(null);
                 return;
             }
 
             BuffDataIndex.Build(_buffDataCollection.Items);
             int count = _buffDataCollection.Items != null ? _buffDataCollection.Items.Count : 0;
-            Debug.Log($"[SkillSystemInitializer] BuffDataIndex built: {count} entries");
+            Debug.Log($"[스킬초기화] BuffDataIndex 구축: {count}개 항목");
         }
 
         private SkillSystem CreateSkillSystem()
@@ -58,9 +58,9 @@ namespace PublicFramework
             IObjectPoolManager objectPool = ServiceLocator.Has<IObjectPoolManager>() ? ServiceLocator.Get<IObjectPoolManager>() : null;
 
             if (eventBus == null)
-                Debug.LogWarning("[SkillSystemInitializer] IEventBus 미등록 — 스킬 이벤트 미발행");
+                Debug.LogWarning("[스킬초기화] IEventBus 미등록 — 스킬 이벤트 미발행");
             if (buffSystem == null)
-                Debug.LogWarning("[SkillSystemInitializer] IBuffSystem 미등록 — ApplyBuff 액션 무효");
+                Debug.LogWarning("[스킬초기화] IBuffSystem 미등록 — ApplyBuff 액션 무효");
 
             return new SkillSystem(eventBus, buffSystem, statSystem, soundManager, objectPool);
         }
@@ -69,7 +69,7 @@ namespace PublicFramework
         {
             if (_skillDataCollection == null || _skillDataCollection.Items == null || _skillDataCollection.Items.Count == 0)
             {
-                Debug.LogWarning("[SkillSystemInitializer] SkillDataCollection 비어있음 — 등록된 스킬 없음");
+                Debug.LogWarning("[스킬초기화] SkillDataCollection 비어있음 — 등록된 스킬 없음");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace PublicFramework
                 _skillSystem.RegisterSkill(data);
                 registered++;
             }
-            Debug.Log($"[SkillSystemInitializer] Registered {registered} skill(s).");
+            Debug.Log($"[스킬초기화] {registered}개 스킬 등록됨");
         }
     }
 }

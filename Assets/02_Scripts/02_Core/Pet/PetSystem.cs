@@ -21,7 +21,7 @@ namespace PublicFramework
             int clamped = maxSlots < 1 ? 1 : maxSlots;
             _slots = new PetInstance[clamped];
             _eventBus = eventBus;
-            Debug.Log($"[PetSystem] Init started — maxSlots: {clamped}");
+            Debug.Log($"[펫] 초기화 시작 — 최대 슬롯: {clamped}");
         }
 
         public int MaxSlots => _slots.Length;
@@ -44,7 +44,7 @@ namespace PublicFramework
                     }
                 }
             }
-            Debug.Log($"[PetSystem] Initialized — pets: {_infoByMID.Count}");
+            Debug.Log($"[펫] 초기화 완료 — 펫: {_infoByMID.Count}");
         }
 
         public void Initialize(IReadOnlyList<IPetInfo> pets)
@@ -64,7 +64,7 @@ namespace PublicFramework
                     }
                 }
             }
-            Debug.Log($"[PetSystem] Initialized — pets: {_infoByMID.Count}");
+            Debug.Log($"[펫] 초기화 완료 — 펫: {_infoByMID.Count}");
         }
 
         public void SetMaxSlots(int maxSlots)
@@ -86,7 +86,7 @@ namespace PublicFramework
                 }
             }
             _slots = newSlots;
-            Debug.Log($"[PetSystem] MaxSlots changed: {clamped}");
+            Debug.Log($"[펫] 최대 슬롯 변경됨: {clamped}");
         }
 
         public IPetInfo GetInfo(string petMID)
@@ -134,7 +134,7 @@ namespace PublicFramework
                 TriggeredHookIds = triggered,
             });
 
-            Debug.Log($"[PetSystem] Acquired: {info.MID} ({instanceId})");
+            Debug.Log($"[펫] 획득됨: {info.MID} ({instanceId})");
             return inst;
         }
 
@@ -154,7 +154,7 @@ namespace PublicFramework
                 InstanceId = instanceId,
             });
 
-            Debug.Log($"[PetSystem] Released: {inst.Info?.MID} ({instanceId})");
+            Debug.Log($"[펫] 해제됨: {inst.Info?.MID} ({instanceId})");
             return true;
         }
 
@@ -186,7 +186,7 @@ namespace PublicFramework
                 TriggeredHookIds = triggered,
             });
 
-            Debug.Log($"[PetSystem] Equipped: {inst.Info?.MID} → slot {slotIndex}");
+            Debug.Log($"[펫] 장착됨: {inst.Info?.MID} → 슬롯 {slotIndex}");
             return true;
         }
 
@@ -238,7 +238,7 @@ namespace PublicFramework
                 TriggeredHookIds = triggered,
             });
 
-            Debug.Log($"[PetSystem] Unequipped: {inst.Info?.MID} ← slot {slotIndex}");
+            Debug.Log($"[펫] 해제됨: {inst.Info?.MID} ← 슬롯 {slotIndex}");
         }
 
         private List<string> TriggerHooks(IReadOnlyList<string> eventIds, PetEventKind kind, string petMID, string instanceId)

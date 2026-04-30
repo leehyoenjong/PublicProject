@@ -15,7 +15,7 @@ namespace PublicFramework
             _inventory = inventory;
             _repo = repo;
             _bus = bus;
-            Debug.Log("[Equipment] Init");
+            Debug.Log("[장비] 초기화 시작.");
         }
 
         public bool Equip(string ownerId, string slotId, string itemInstanceId)
@@ -35,7 +35,7 @@ namespace PublicFramework
             slots.TryGetValue(slotId, out var oldId);
             slots[slotId] = itemInstanceId;
             _bus.Publish(new EquipChangedEvent(ownerId, slotId, oldId, itemInstanceId));
-            Debug.Log($"[Equipment] Equip owner={ownerId} slot={slotId} id={itemInstanceId}");
+            Debug.Log($"[장비] 장착: 소유자={ownerId} 슬롯={slotId} id={itemInstanceId}");
             return true;
         }
 
@@ -45,7 +45,7 @@ namespace PublicFramework
             if (!slots.TryGetValue(slotId, out var oldId)) return false;
             slots.Remove(slotId);
             _bus.Publish(new EquipChangedEvent(ownerId, slotId, oldId, null));
-            Debug.Log($"[Equipment] Unequip owner={ownerId} slot={slotId}");
+            Debug.Log($"[장비] 해제: 소유자={ownerId} 슬롯={slotId}");
             return true;
         }
 

@@ -21,7 +21,7 @@ namespace PublicFramework
         {
             _eventBus = eventBus;
             _saveSystem = saveSystem;
-            Debug.Log("[AchievementSystem] Init started");
+            Debug.Log("[도감] 초기화 시작.");
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace PublicFramework
         public void Initialize()
         {
             LoadData();
-            Debug.Log("[AchievementSystem] Initialized — achievement data loaded");
+            Debug.Log("[도감] 초기화 완료 — 업적 데이터 로드됨.");
         }
 
         public void SetRewardHandler(IRewardHandler handler)
@@ -104,7 +104,7 @@ namespace PublicFramework
             });
 
             SaveData();
-            Debug.Log($"[AchievementSystem] Reward claimed: {achievementId} tier {claimedTierIndex}");
+            Debug.Log($"[도감] 보상 수령: {achievementId} (티어={claimedTierIndex})");
             return true;
         }
 
@@ -197,7 +197,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log($"[AchievementSystem] Loaded {_achievements.Count} achievements");
+            Debug.Log($"[도감] {_achievements.Count}개 업적 로드됨.");
         }
     }
 }

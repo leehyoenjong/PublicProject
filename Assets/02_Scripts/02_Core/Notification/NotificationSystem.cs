@@ -37,14 +37,14 @@ namespace PublicFramework
             LoadChannelStates();
             InitializeChannels();
 
-            Debug.Log("[NotificationSystem] Init started");
+            Debug.Log("[알림] 초기화 시작.");
         }
 
         public string Schedule(NotificationData notification)
         {
             if (notification == null)
             {
-                Debug.LogError("[NotificationSystem] NotificationData is null");
+                Debug.LogError("[알림] NotificationData가 null임.");
                 return null;
             }
 
@@ -55,7 +55,7 @@ namespace PublicFramework
 
             if (!IsChannelEnabled(notification.ChannelId))
             {
-                Debug.Log($"[NotificationSystem] Channel disabled: {notification.ChannelId}");
+                Debug.Log($"[알림] 채널 비활성화됨: {notification.ChannelId}");
                 return null;
             }
 
@@ -69,7 +69,7 @@ namespace PublicFramework
                 DelaySeconds = notification.DelaySeconds
             });
 
-            Debug.Log($"[NotificationSystem] Scheduled: {notification.NotificationId} ({notification.Title}, delay: {notification.DelaySeconds}s)");
+            Debug.Log($"[알림] 예약됨: {notification.NotificationId} ({notification.Title}, 지연: {notification.DelaySeconds}s)");
             return notification.NotificationId;
         }
 
@@ -77,7 +77,7 @@ namespace PublicFramework
         {
             if (notification == null)
             {
-                Debug.LogError("[NotificationSystem] NotificationData is null");
+                Debug.LogError("[알림] NotificationData가 null임.");
                 return null;
             }
 
@@ -85,7 +85,7 @@ namespace PublicFramework
 
             if (id != null)
             {
-                Debug.Log($"[NotificationSystem] Repeating scheduled: {id} (interval: {intervalSeconds}s)");
+                Debug.Log($"[알림] 반복 예약됨: {id} (간격: {intervalSeconds}s)");
             }
 
             return id;
@@ -102,7 +102,7 @@ namespace PublicFramework
                     NotificationId = notificationId
                 });
 
-                Debug.Log($"[NotificationSystem] Cancelled: {notificationId}");
+                Debug.Log($"[알림] 취소됨: {notificationId}");
             }
         }
 
@@ -112,7 +112,7 @@ namespace PublicFramework
             _scheduledNotifications.Clear();
             SaveScheduledData();
 
-            Debug.Log($"[NotificationSystem] All cancelled ({count})");
+            Debug.Log($"[알림] 전체 취소됨 ({count})");
         }
 
         public void SetChannelEnabled(string channelId, bool enabled)
@@ -130,7 +130,7 @@ namespace PublicFramework
                 });
             }
 
-            Debug.Log($"[NotificationSystem] Channel {channelId}: {(enabled ? "ON" : "OFF")}");
+            Debug.Log($"[알림] 채널 {channelId}: {(enabled ? "켜짐" : "꺼짐")}");
         }
 
         public bool IsChannelEnabled(string channelId)
@@ -161,7 +161,7 @@ namespace PublicFramework
                 NewState = _permissionState
             });
 
-            Debug.Log("[NotificationSystem] Permission granted");
+            Debug.Log("[알림] 권한 허용됨.");
             onResult?.Invoke(true);
         }
 
@@ -174,7 +174,7 @@ namespace PublicFramework
                 Title = title
             });
 
-            Debug.Log($"[NotificationSystem] Received: {notificationId} ({title})");
+            Debug.Log($"[알림] 수신됨: {notificationId} ({title})");
         }
 
         public void OnNotificationOpened(string notificationId, string deepLink)
@@ -193,7 +193,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log($"[NotificationSystem] Opened: {notificationId} (deepLink: {deepLink})");
+            Debug.Log($"[알림] 열림: {notificationId} (딥링크: {deepLink})");
         }
 
         private void InitializeChannels()

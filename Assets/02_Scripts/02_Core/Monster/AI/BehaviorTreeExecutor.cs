@@ -37,7 +37,7 @@ namespace PublicFramework
                 case BehaviorNodeType.Condition:
                 case BehaviorNodeType.Action:    return TickActionOrCondition(node, context);
                 default:
-                    Debug.LogWarning($"[BehaviorTreeExecutor] Unknown node type: {node.NodeType}");
+                    Debug.LogWarning($"[몬스터] 알 수 없는 노드 타입: {node.NodeType}");
                     return BehaviorNodeStatus.Failure;
             }
         }
@@ -115,7 +115,7 @@ namespace PublicFramework
             IBehaviorAction action = _registry?.Get(node.ActionKey);
             if (action == null)
             {
-                Debug.LogWarning($"[BehaviorTreeExecutor] Unknown actionKey: {node.ActionKey}");
+                Debug.LogWarning($"[몬스터] 알 수 없는 액션 키: {node.ActionKey}");
                 return BehaviorNodeStatus.Failure;
             }
             return action.Tick(context, node.Param1, node.Param2, node.Param3);

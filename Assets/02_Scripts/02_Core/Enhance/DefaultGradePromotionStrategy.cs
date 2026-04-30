@@ -45,7 +45,7 @@ namespace PublicFramework
                     });
                 }
 
-                Debug.Log($"[GradePromotion] Grade up: {beforeGrade} → {target.Grade}");
+                Debug.Log($"[강화] 등급 승급: {beforeGrade} → {target.Grade}");
 
                 return new EnhanceResult
                 {
@@ -63,7 +63,7 @@ namespace PublicFramework
 
             ApplyFailPolicy(target, effectivePolicy);
 
-            Debug.Log($"[GradePromotion] Failed. Pity: {target.PityCount}/{maxPity} Policy: {effectivePolicy} (base: {basePolicy}, ticket: {context.UseProtectionTicket})");
+            Debug.Log($"[강화] 등급 승급 실패. 천장: {target.PityCount}/{maxPity} 정책: {effectivePolicy} (기본: {basePolicy}, 보호권: {context.UseProtectionTicket})");
 
             return new EnhanceResult
             {
@@ -82,20 +82,20 @@ namespace PublicFramework
 
             if (target.Grade >= maxGrade)
             {
-                Debug.LogWarning($"[GradePromotion] Already max grade: {(EquipmentGrade)target.Grade}");
+                Debug.LogWarning($"[강화] 이미 최대 등급: {(EquipmentGrade)target.Grade}");
                 return false;
             }
 
             GradePolicyEntry policy = GetPolicy(target.Grade);
             if (policy == null)
             {
-                Debug.LogWarning($"[GradePromotion] No grade policy for grade {target.Grade}");
+                Debug.LogWarning($"[강화] 등급 정책 없음: {target.Grade}");
                 return false;
             }
 
             if (target.Level < policy.MaxLevel)
             {
-                Debug.LogWarning($"[GradePromotion] Level not max: {target.Level}/{policy.MaxLevel}");
+                Debug.LogWarning($"[강화] 레벨 최대 미달: {target.Level}/{policy.MaxLevel}");
                 return false;
             }
 
@@ -186,16 +186,16 @@ namespace PublicFramework
                     if (target.Grade > 0)
                     {
                         target.Grade -= 1;
-                        Debug.Log($"[GradePromotion] Decrease applied: Grade → {target.Grade}");
+                        Debug.Log($"[강화] 등급 감소 적용: Grade → {target.Grade}");
                     }
                     break;
                 case EnhanceFailPolicy.Reset:
                     target.Grade = 0;
-                    Debug.Log("[GradePromotion] Reset applied: Grade → 0");
+                    Debug.Log("[강화] 등급 초기화 적용: Grade → 0");
                     break;
                 case EnhanceFailPolicy.Destroy:
                     target.Grade = -1;
-                    Debug.LogWarning("[GradePromotion] Destroy applied: equipment marked for destruction");
+                    Debug.LogWarning("[강화] 파괴 적용: 장비가 파괴 대상으로 표시됨.");
                     break;
             }
         }

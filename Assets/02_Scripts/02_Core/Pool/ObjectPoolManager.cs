@@ -12,14 +12,14 @@ namespace PublicFramework
         public ObjectPoolManager(Transform rootParent)
         {
             _rootParent = rootParent;
-            Debug.Log("[ObjectPoolManager] Init started.");
+            Debug.Log("[풀] 초기화 시작.");
         }
 
         public void CreatePool(GameObject prefab, PoolConfig config)
         {
             if (_pools.ContainsKey(config.Id))
             {
-                Debug.LogWarning($"[ObjectPoolManager] Pool '{config.Id}' already exists.");
+                Debug.LogWarning($"[풀] 풀 '{config.Id}'이(가) 이미 존재함.");
                 return;
             }
 
@@ -29,14 +29,14 @@ namespace PublicFramework
             ObjectPool pool = new ObjectPool(prefab, config, poolParent);
             _pools.Add(config.Id, pool);
 
-            Debug.Log($"[ObjectPoolManager] Pool '{config.Id}' created. Initial: {config.InitialSize}, Max: {config.MaxSize}");
+            Debug.Log($"[풀] 풀 '{config.Id}' 생성됨. 초기: {config.InitialSize}, 최대: {config.MaxSize}");
         }
 
         public GameObject Spawn(string id, Vector3 position, Quaternion rotation)
         {
             if (!_pools.TryGetValue(id, out ObjectPool pool))
             {
-                Debug.LogError($"[ObjectPoolManager] Pool '{id}' not found.");
+                Debug.LogError($"[풀] 풀 '{id}'을(를) 찾을 수 없음.");
                 return null;
             }
 
@@ -53,7 +53,7 @@ namespace PublicFramework
         {
             if (!_objectToPoolId.TryGetValue(obj, out string id))
             {
-                Debug.LogError("[ObjectPoolManager] Object not managed by any pool.");
+                Debug.LogError("[풀] 어떤 풀에도 속하지 않는 오브젝트.");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace PublicFramework
         {
             if (!_pools.TryGetValue(id, out ObjectPool pool))
             {
-                Debug.LogWarning($"[ObjectPoolManager] Pool '{id}' not found for clearing.");
+                Debug.LogWarning($"[풀] 풀 '{id}'을(를) 찾을 수 없어 삭제 불가.");
                 return;
             }
 
@@ -90,7 +90,7 @@ namespace PublicFramework
                 _objectToPoolId.Remove(obj);
             }
 
-            Debug.Log($"[ObjectPoolManager] Pool '{id}' cleared and removed.");
+            Debug.Log($"[풀] 풀 '{id}' 초기화 및 제거됨.");
         }
 
         public void ClearAll()
@@ -103,7 +103,7 @@ namespace PublicFramework
             _pools.Clear();
             _objectToPoolId.Clear();
 
-            Debug.Log("[ObjectPoolManager] All pools cleared.");
+            Debug.Log("[풀] 모든 풀 초기화됨.");
         }
     }
 }

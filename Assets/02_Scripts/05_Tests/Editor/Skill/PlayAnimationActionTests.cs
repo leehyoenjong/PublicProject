@@ -51,7 +51,7 @@ namespace PublicFramework.Tests.Skill
         [Test]
         public void Execute_EmptyAnimKey_LogsErrorAndNoEvent()
         {
-            LogAssert.Expect(LogType.Error, "[PlayAnimationAction] param1(animKey) is empty");
+            LogAssert.Expect(LogType.Error, "[스킬액션] param1(animKey)가 비어 있음.");
 
             _action.Execute(MakeContext(), MakeEntry(p1: ""));
 
@@ -75,7 +75,7 @@ namespace PublicFramework.Tests.Skill
         [Test]
         public void Execute_NoEventBus_LogsWarningAndSkips()
         {
-            LogAssert.Expect(LogType.Warning, "[PlayAnimationAction] IEventBus not provided");
+            LogAssert.Expect(LogType.Warning, "[스킬액션] IEventBus가 제공되지 않음.");
 
             var ctx = MakeContext();
             ctx.EventBus = null;

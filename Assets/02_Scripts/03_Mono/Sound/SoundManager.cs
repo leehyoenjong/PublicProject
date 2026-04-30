@@ -54,19 +54,19 @@ namespace PublicFramework
                 _sfxSources[i] = CreateAudioSource($"SFX_{i}", parent);
             }
 
-            Debug.Log($"[SoundManager] Init started. SFX pool: {sfxPoolSize}");
+            Debug.Log($"[사운드] 초기화 시작. SFX 풀: {sfxPoolSize}");
         }
 
         public void RegisterSound(SoundData data)
         {
             if (string.IsNullOrEmpty(data.Id))
             {
-                Debug.LogError("[SoundManager] SoundData Id is null or empty.");
+                Debug.LogError("[사운드] SoundData Id가 null 또는 빈 값.");
                 return;
             }
 
             _soundTable[data.Id] = data;
-            Debug.Log($"[SoundManager] Sound registered: {data.Id} ({data.Channel})");
+            Debug.Log($"[사운드] 사운드 등록됨: {data.Id} ({data.Channel})");
         }
 
         // --- BGM ---
@@ -91,7 +91,7 @@ namespace PublicFramework
             _activeBgmSource = nextSource;
             _currentBgmId = id;
 
-            Debug.Log($"[SoundManager] BGM play: {id}, FadeTime: {fadeTime}");
+            Debug.Log($"[사운드] BGM 재생: {id}, 페이드 시간: {fadeTime}");
         }
 
         public void StopBGM(float fadeTime = 1f)
@@ -99,7 +99,7 @@ namespace PublicFramework
             _coroutineRunner.StartCoroutine(FadeOutSource(_activeBgmSource, fadeTime));
             _currentBgmId = null;
             _currentBgmDataVolume = 0f;
-            Debug.Log("[SoundManager] BGM stopped.");
+            Debug.Log("[사운드] BGM 정지됨.");
         }
 
         // --- SFX ---
@@ -130,7 +130,7 @@ namespace PublicFramework
             AudioSource source = GetAvailableSFXSource(data.Priority);
             if (source == null)
             {
-                Debug.LogWarning($"[SoundManager] SFX pool exhausted. Skipping: {id}");
+                Debug.LogWarning($"[사운드] SFX 풀 소진됨. 건너뜀: {id}");
                 return;
             }
 
@@ -152,7 +152,7 @@ namespace PublicFramework
                 _coroutineRunner.StartCoroutine(TrackSFXEnd(source, id, data.Clip.length));
             }
 
-            Debug.Log($"[SoundManager] SFX play: {id}");
+            Debug.Log($"[사운드] SFX 재생: {id}");
         }
 
         public void StopSFX(string id)
@@ -171,7 +171,7 @@ namespace PublicFramework
             }
 
             _sfxPlayCount.Remove(id);
-            Debug.Log($"[SoundManager] SFX stopped: {id}");
+            Debug.Log($"[사운드] SFX 정지됨: {id}");
         }
 
         // --- Voice ---
@@ -190,7 +190,7 @@ namespace PublicFramework
 
             _currentVoiceDataVolume = data.Volume;
 
-            Debug.Log($"[SoundManager] Voice play: {id}");
+            Debug.Log($"[사운드] 보이스 재생: {id}");
         }
 
         public void StopVoice()
@@ -198,7 +198,7 @@ namespace PublicFramework
             _voiceSource.Stop();
             _voiceSource.clip = null;
             _currentVoiceDataVolume = 0f;
-            Debug.Log("[SoundManager] Voice stopped.");
+            Debug.Log("[사운드] 보이스 정지됨.");
         }
 
         // --- Stop All ---
@@ -218,7 +218,7 @@ namespace PublicFramework
             _sfxBaseVolumes.Clear();
             _sfxSourceToId.Clear();
             _sfxIdToSources.Clear();
-            Debug.Log("[SoundManager] All sounds stopped.");
+            Debug.Log("[사운드] 모든 사운드 정지됨.");
         }
 
         // --- Volume ---
@@ -227,28 +227,28 @@ namespace PublicFramework
         {
             _masterVolume = Mathf.Clamp01(volume);
             ApplyVolumes();
-            Debug.Log($"[SoundManager] Master volume: {_masterVolume}");
+            Debug.Log($"[사운드] 마스터 볼륨: {_masterVolume}");
         }
 
         public void SetBGMVolume(float volume)
         {
             _bgmVolume = Mathf.Clamp01(volume);
             ApplyVolumes();
-            Debug.Log($"[SoundManager] BGM volume: {_bgmVolume}");
+            Debug.Log($"[사운드] BGM 볼륨: {_bgmVolume}");
         }
 
         public void SetSFXVolume(float volume)
         {
             _sfxVolume = Mathf.Clamp01(volume);
             ApplyVolumes();
-            Debug.Log($"[SoundManager] SFX volume: {_sfxVolume}");
+            Debug.Log($"[사운드] SFX 볼륨: {_sfxVolume}");
         }
 
         public void SetVoiceVolume(float volume)
         {
             _voiceVolume = Mathf.Clamp01(volume);
             ApplyVolumes();
-            Debug.Log($"[SoundManager] Voice volume: {_voiceVolume}");
+            Debug.Log($"[사운드] 보이스 볼륨: {_voiceVolume}");
         }
 
         // --- Mute ---
@@ -277,7 +277,7 @@ namespace PublicFramework
                     break;
             }
 
-            Debug.Log($"[SoundManager] {channel} mute: {mute}");
+            Debug.Log($"[사운드] {channel} 음소거: {mute}");
         }
 
         public bool IsMuted(SoundChannel channel)
@@ -335,7 +335,7 @@ namespace PublicFramework
             else
                 _sfxPlayCount[id] = count;
 
-            Debug.Log($"[SoundManager] Stopped oldest SFX: {id}");
+            Debug.Log($"[사운드] 가장 오래된 SFX 정지됨: {id}");
         }
 
         private void RegisterSFXSource(AudioSource source, string id)
@@ -423,7 +423,7 @@ namespace PublicFramework
                 return true;
             }
 
-            Debug.LogError($"[SoundManager] Sound '{id}' not registered.");
+            Debug.LogError($"[사운드] 사운드 '{id}'이(가) 등록되어 있지 않음.");
             data = null;
             return false;
         }

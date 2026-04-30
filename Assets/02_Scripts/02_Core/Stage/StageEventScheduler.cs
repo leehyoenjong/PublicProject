@@ -98,7 +98,7 @@ namespace PublicFramework
                 TargetId = evt.TargetId
             });
 
-            Debug.Log($"[StageEventScheduler] Event completed: {instance.StageId} #{eventIndex} ({evt.EventType})");
+            Debug.Log($"[스테이지] 이벤트 완료: {instance.StageId} #{eventIndex} ({evt.EventType})");
         }
 
         private void EvaluateTrigger(StageInstance instance, StageEventTrigger triggerType, string triggerMatchValue)
@@ -130,7 +130,7 @@ namespace PublicFramework
                 TargetId = evt.TargetId
             });
 
-            Debug.Log($"[StageEventScheduler] Event triggered: {instance.StageId} #{eventIndex} ({evt.EventType})");
+            Debug.Log($"[스테이지] 이벤트 발동: {instance.StageId} #{eventIndex} ({evt.EventType})");
         }
 
         private void AwardEventRewards(StageEventEntry evt)

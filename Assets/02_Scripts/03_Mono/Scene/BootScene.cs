@@ -8,17 +8,17 @@ namespace PublicFramework
 
         private void Start()
         {
-            Debug.Log("[BootScene] Boot started.");
+            Debug.Log("[씬] 부트 시작.");
 
             ISceneLoader loader = ServiceLocator.Get<ISceneLoader>();
             if (loader == null)
             {
-                Debug.LogError("[BootScene] ISceneLoader not found. Ensure SceneTransitionRunner is initialized.");
+                Debug.LogError("[씬] ISceneLoader 미등록. SceneTransitionRunner 초기화 확인 필요.");
                 return;
             }
 
             loader.LoadScene(_startScene);
-            Debug.Log($"[BootScene] Loading start scene: {_startScene}");
+            Debug.Log($"[씬] 시작 씬 로드: {_startScene}");
         }
     }
 }

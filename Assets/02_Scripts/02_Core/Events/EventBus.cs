@@ -47,7 +47,7 @@ namespace PublicFramework
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"[EventBus] Handler error for {typeof(T).Name}: {e}");
+                    Debug.LogError($"[이벤트] 핸들러 오류: {typeof(T).Name} — {e}");
                 }
             }
         }

@@ -132,7 +132,7 @@ namespace PublicFramework.Tests.Sound
         [Test]
         public void RegisterSound_NullOrEmptyId_LogsError()
         {
-            LogAssert.Expect(LogType.Error, "[SoundManager] SoundData Id is null or empty.");
+            LogAssert.Expect(LogType.Error, "[사운드] SoundData Id가 null 또는 빈 값.");
 
             _manager.RegisterSound(new SoundData());
         }
@@ -140,7 +140,7 @@ namespace PublicFramework.Tests.Sound
         [Test]
         public void PlaySFX_Unregistered_LogsError()
         {
-            LogAssert.Expect(LogType.Error, "[SoundManager] Sound 'unknown' not registered.");
+            LogAssert.Expect(LogType.Error, "[사운드] 사운드 'unknown'이(가) 등록되어 있지 않음.");
 
             _manager.PlaySFX("unknown");
         }
@@ -148,7 +148,7 @@ namespace PublicFramework.Tests.Sound
         [Test]
         public void PlayBGM_Unregistered_LogsError()
         {
-            LogAssert.Expect(LogType.Error, "[SoundManager] Sound 'unknown' not registered.");
+            LogAssert.Expect(LogType.Error, "[사운드] 사운드 'unknown'이(가) 등록되어 있지 않음.");
 
             _manager.PlayBGM("unknown");
         }
@@ -156,7 +156,7 @@ namespace PublicFramework.Tests.Sound
         [Test]
         public void PlayVoice_Unregistered_LogsError()
         {
-            LogAssert.Expect(LogType.Error, "[SoundManager] Sound 'unknown' not registered.");
+            LogAssert.Expect(LogType.Error, "[사운드] 사운드 'unknown'이(가) 등록되어 있지 않음.");
 
             _manager.PlayVoice("unknown");
         }
@@ -164,7 +164,7 @@ namespace PublicFramework.Tests.Sound
         [Test]
         public void StopSFX_Unregistered_LogsError()
         {
-            LogAssert.Expect(LogType.Error, "[SoundManager] Sound 'unknown' not registered.");
+            LogAssert.Expect(LogType.Error, "[사운드] 사운드 'unknown'이(가) 등록되어 있지 않음.");
 
             _manager.StopSFX("unknown");
         }

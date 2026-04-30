@@ -28,7 +28,7 @@ namespace PublicFramework
             _repository = repository;
             _timeProvider = timeProvider;
             _dropResolver = new DefaultDropResolver();
-            Debug.Log("[GachaSystem] Init started");
+            Debug.Log("[가챠] 초기화 시작.");
         }
 
         /// <summary>추첨 전략 교체(OCP). 미호출 시 DefaultDropResolver 사용.</summary>
@@ -36,7 +36,7 @@ namespace PublicFramework
         {
             if (resolver == null) return;
             _dropResolver = resolver;
-            Debug.Log($"[GachaSystem] DropResolver replaced: {resolver.GetType().Name}");
+            Debug.Log($"[가챠] DropResolver 교체됨: {resolver.GetType().Name}");
         }
 
         public void Initialize(BannerDataCollection bannerCollection, GachaDataCollection gachaCollection)
@@ -78,7 +78,7 @@ namespace PublicFramework
 
             LoadPityCounters();
 
-            Debug.Log($"[GachaSystem] Initialized — banners: {_banners.Count}, gachas: {_gachas.Count}, counters: {_pityCounters.Count}");
+            Debug.Log($"[가챠] 초기화 완료 — 배너: {_banners.Count}, 가챠: {_gachas.Count}, 카운터: {_pityCounters.Count}");
         }
 
         public IReadOnlyList<IBanner> GetVisibleBanners(IGachaContext context)
@@ -247,7 +247,7 @@ namespace PublicFramework
                 Summary = summary
             });
 
-            Debug.Log($"[GachaSystem] Pull completed: {gachaMID} x{count} (SSR:{summary.SSRCount} SR:{summary.SRCount} R:{summary.RCount})");
+            Debug.Log($"[가챠] 뽑기 완료: {gachaMID} x{count} (SSR:{summary.SSRCount} SR:{summary.SRCount} R:{summary.RCount})");
 
             callback?.Invoke(new PullResult
             {
@@ -333,7 +333,7 @@ namespace PublicFramework
                 Reason = reason
             });
 
-            Debug.Log($"[GachaSystem] Pull failed: {gachaMID} x{count} (reason: {reason})");
+            Debug.Log($"[가챠] 뽑기 실패: {gachaMID} x{count} (사유: {reason})");
             callback?.Invoke(new PullResult
             {
                 Success = false,

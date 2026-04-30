@@ -29,7 +29,7 @@ namespace PublicFramework
 
             if (_registry.TryGetValue(_id, out TutorialTarget existing) && existing != null && existing != this)
             {
-                Debug.LogWarning($"[TutorialTarget] Duplicate ID '{_id}' — keeping first registration on '{existing.gameObject.name}'. Skipping '{gameObject.name}'.");
+                Debug.LogWarning($"[튜토리얼] 중복 ID '{_id}' — '{existing.gameObject.name}' 첫 등록 유지. '{gameObject.name}' 무시.");
                 return;
             }
             _registry[_id] = this;

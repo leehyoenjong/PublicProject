@@ -59,7 +59,7 @@ namespace PublicFramework
             if (_currentAmount >= RequiredAmount && _state == AchievementState.InProgress)
             {
                 _state = AchievementState.Completed;
-                Debug.Log($"[Achievement] Completed tier {_currentTier}: {_data.AchievementId}");
+                Debug.Log($"[도감] 티어 완료: {_data.AchievementId} (티어={_currentTier})");
             }
         }
 

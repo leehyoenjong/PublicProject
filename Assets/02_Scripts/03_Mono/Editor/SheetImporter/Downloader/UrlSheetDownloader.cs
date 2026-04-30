@@ -39,14 +39,14 @@ namespace PublicFramework.Editor.SheetImporter
 
             if (string.IsNullOrEmpty(source))
             {
-                error = "[SheetImporter] Source 가 비어있습니다(UrlSheetDownloader).";
+                error = "[시트임포터] Source 가 비어있습니다(UrlSheetDownloader).";
                 return false;
             }
 
             string effectiveUrl = NormalizeToCsvExport(source);
             if (!string.Equals(effectiveUrl, source, StringComparison.Ordinal))
             {
-                Debug.Log($"[SheetImporter] Source URL 자동 변환: {source} → {effectiveUrl}");
+                Debug.Log($"[시트임포터] Source URL 자동 변환: {source} → {effectiveUrl}");
             }
 
             UnityWebRequest req = null;
@@ -62,21 +62,21 @@ namespace PublicFramework.Editor.SheetImporter
 
                 if (req.result != UnityWebRequest.Result.Success)
                 {
-                    error = $"[SheetImporter] CSV 다운로드 실패 ({effectiveUrl}): {req.error}";
+                    error = $"[시트임포터] CSV 다운로드 실패 ({effectiveUrl}): {req.error}";
                     return false;
                 }
 
                 csvText = req.downloadHandler != null ? req.downloadHandler.text : null;
                 if (string.IsNullOrEmpty(csvText))
                 {
-                    error = $"[SheetImporter] 다운로드된 CSV 가 비어있습니다 ({effectiveUrl}).";
+                    error = $"[시트임포터] 다운로드된 CSV 가 비어있습니다 ({effectiveUrl}).";
                     return false;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                error = $"[SheetImporter] CSV 다운로드 예외 ({effectiveUrl}): {ex.Message}";
+                error = $"[시트임포터] CSV 다운로드 예외 ({effectiveUrl}): {ex.Message}";
                 return false;
             }
             finally

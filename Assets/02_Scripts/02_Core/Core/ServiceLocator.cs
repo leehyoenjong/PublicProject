@@ -21,10 +21,10 @@ namespace PublicFramework
             var type = typeof(TInterface);
             if (_services.ContainsKey(type))
             {
-                Debug.LogWarning($"[ServiceLocator] {type.Name} already registered. Overwriting.");
+                Debug.LogWarning($"[서비스] {type.Name} 이미 등록됨. 덮어쓰기.");
             }
             _services[type] = service;
-            Debug.Log($"[ServiceLocator] {type.Name} registered.");
+            Debug.Log($"[서비스] {type.Name} 등록됨.");
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace PublicFramework
             if (_services.TryGetValue(type, out var service))
                 return (TInterface)service;
 
-            Debug.LogError($"[ServiceLocator] {type.Name} not found. Did you register it?");
+            Debug.LogError($"[서비스] {type.Name}을(를) 찾을 수 없음. 등록 여부 확인.");
             return default;
         }
 
@@ -47,7 +47,7 @@ namespace PublicFramework
         {
             var type = typeof(TInterface);
             if (_services.Remove(type))
-                Debug.Log($"[ServiceLocator] {type.Name} unregistered.");
+                Debug.Log($"[서비스] {type.Name} 등록 해제됨.");
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace PublicFramework
         public static void Clear()
         {
             _services.Clear();
-            Debug.Log("[ServiceLocator] All services cleared.");
+            Debug.Log("[서비스] 모든 서비스 초기화됨.");
         }
 
         /// <summary>

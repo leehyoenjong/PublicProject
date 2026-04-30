@@ -20,32 +20,32 @@ namespace PublicFramework
             _statSystem = statSystem;
             _probabilityModel = probabilityModel;
 
-            Debug.Log("[EnhanceSystem] Init started");
+            Debug.Log("[강화] 초기화 시작.");
         }
 
         public void RegisterStrategy(EnhanceType type, IEnhanceStrategy strategy)
         {
             _strategies[type] = strategy;
-            Debug.Log($"[EnhanceSystem] Strategy registered: {type}");
+            Debug.Log($"[강화] 전략 등록됨: {type}");
         }
 
         public EnhanceResult Enhance(IEnhanceable target, EnhanceContext context)
         {
             if (target == null)
             {
-                Debug.LogError("[EnhanceSystem] Target is null");
+                Debug.LogError("[강화] 대상이 null임.");
                 return new EnhanceResult { IsSuccess = false, Type = context.Type };
             }
 
             if (!_strategies.TryGetValue(context.Type, out IEnhanceStrategy strategy))
             {
-                Debug.LogError($"[EnhanceSystem] No strategy for type: {context.Type}");
+                Debug.LogError($"[강화] 전략 없음: {context.Type}");
                 return new EnhanceResult { IsSuccess = false, Type = context.Type };
             }
 
             if (!strategy.CanEnhance(target, context))
             {
-                Debug.LogWarning($"[EnhanceSystem] Cannot enhance: {target.InstanceId} ({context.Type})");
+                Debug.LogWarning($"[강화] 강화 불가: {target.InstanceId} ({context.Type})");
                 return new EnhanceResult { IsSuccess = false, Type = context.Type };
             }
 
@@ -73,7 +73,7 @@ namespace PublicFramework
                     AfterValue = result.AfterValue
                 });
 
-                Debug.Log($"[EnhanceSystem] Success: {target.InstanceId} {context.Type} {result.BeforeValue} → {result.AfterValue}");
+                Debug.Log($"[강화] 성공: {target.InstanceId} {context.Type} {result.BeforeValue} → {result.AfterValue}");
             }
             else
             {
@@ -86,7 +86,7 @@ namespace PublicFramework
                     AppliedPolicy = result.FailPolicy
                 });
 
-                Debug.Log($"[EnhanceSystem] Failed: {target.InstanceId} {context.Type} (policy: {result.FailPolicy})");
+                Debug.Log($"[강화] 실패: {target.InstanceId} {context.Type} (정책: {result.FailPolicy})");
             }
 
             return result;
@@ -131,7 +131,7 @@ namespace PublicFramework
             IStatContainer container = _statSystem.GetContainer(target.InstanceId);
             if (container == null)
             {
-                Debug.LogWarning($"[EnhanceSystem] StatContainer not found for: {target.InstanceId}");
+                Debug.LogWarning($"[강화] StatContainer를 찾을 수 없음: {target.InstanceId}");
                 return;
             }
 
@@ -187,7 +187,7 @@ namespace PublicFramework
 
             container.RecalculateAll();
 
-            Debug.Log($"[EnhanceSystem] Modifiers updated for: {target.InstanceId} (Lv{target.Level} G{target.Grade} T{target.TranscendStep})");
+            Debug.Log($"[강화] 모디파이어 갱신됨: {target.InstanceId} (Lv{target.Level} G{target.Grade} T{target.TranscendStep})");
         }
 
         private void PublishMaterialConsumed(EnhanceCost cost, string reason)

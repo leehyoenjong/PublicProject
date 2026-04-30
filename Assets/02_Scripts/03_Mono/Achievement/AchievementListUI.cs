@@ -27,7 +27,7 @@ namespace PublicFramework
             _eventBus.Subscribe<AchievementRewardClaimedEvent>(OnRewardClaimed);
 
             RefreshList();
-            Debug.Log("[AchievementListUI] Init started");
+            Debug.Log("[업적UI] 초기화 시작");
         }
 
         private void OnDestroy()

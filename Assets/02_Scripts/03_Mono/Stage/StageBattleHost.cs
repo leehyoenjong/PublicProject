@@ -79,12 +79,12 @@ namespace PublicFramework
         {
             if (_stageSystem == null)
             {
-                Debug.LogWarning("[StageBattleHost] IStageSystem 미등록 — Enter 무시", this);
+                Debug.LogWarning("[전투호스트] IStageSystem 미등록 — 진입 무시", this);
                 return false;
             }
             if (string.IsNullOrEmpty(_stageId))
             {
-                Debug.LogWarning("[StageBattleHost] _stageId 미설정 — Enter 무시", this);
+                Debug.LogWarning("[전투호스트] _stageId 미설정 — 진입 무시", this);
                 return false;
             }
 
@@ -99,7 +99,7 @@ namespace PublicFramework
             bool ok = _stageSystem.TryEnter(ctx, _playerLevel);
             if (!ok)
             {
-                Debug.LogWarning($"[StageBattleHost] TryEnter 실패: {_stageId}", this);
+                Debug.LogWarning($"[전투호스트] 진입 실패: {_stageId}", this);
                 return false;
             }
 

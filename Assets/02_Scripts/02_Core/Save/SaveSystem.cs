@@ -34,7 +34,7 @@ namespace PublicFramework
             for (int i = 0; i < MAX_SLOTS; i++)
                 _slots[i] = new SaveSlot(i);
 
-            Debug.Log("[SaveSystem] Init completed.");
+            Debug.Log("[세이브] 초기화 완료.");
         }
 
         public void Save<T>(int slotIndex, string key, T data)
@@ -81,12 +81,12 @@ namespace PublicFramework
 
                 _storage.Write(slotIndex, bytes);
 
-                Debug.Log($"[SaveSystem] Slot {slotIndex} saved to disk.");
+                Debug.Log($"[세이브] 슬롯 {slotIndex} 디스크 저장 완료.");
                 OnSaveCompleted?.Invoke(slotIndex);
             }
             catch (Exception e)
             {
-                Debug.LogError($"[SaveSystem] WriteToDisk failed for slot {slotIndex}: {e}");
+                Debug.LogError($"[세이브] 슬롯 {slotIndex} 디스크 저장 실패: {e}");
                 OnSaveFailed?.Invoke(slotIndex, e);
             }
         }
@@ -97,7 +97,7 @@ namespace PublicFramework
 
             if (!_storage.Exists(slotIndex))
             {
-                Debug.LogWarning($"[SaveSystem] Slot {slotIndex} does not exist on disk.");
+                Debug.LogWarning($"[세이브] 슬롯 {slotIndex}이(가) 디스크에 없음.");
                 return;
             }
 
@@ -112,12 +112,12 @@ namespace PublicFramework
 
                 _slots[slotIndex] = _serializer.Deserialize<SaveSlot>(bytes);
 
-                Debug.Log($"[SaveSystem] Slot {slotIndex} loaded from disk.");
+                Debug.Log($"[세이브] 슬롯 {slotIndex} 디스크 로드 완료.");
                 OnLoadCompleted?.Invoke(slotIndex);
             }
             catch (Exception e)
             {
-                Debug.LogError($"[SaveSystem] ReadFromDisk failed for slot {slotIndex}: {e}");
+                Debug.LogError($"[세이브] 슬롯 {slotIndex} 디스크 로드 실패: {e}");
                 OnLoadFailed?.Invoke(slotIndex, e);
             }
         }
@@ -138,7 +138,7 @@ namespace PublicFramework
             ValidateSlotIndex(slotIndex);
             _slots[slotIndex].ClearAll();
             _storage.Delete(slotIndex);
-            Debug.Log($"[SaveSystem] Slot {slotIndex} deleted.");
+            Debug.Log($"[세이브] 슬롯 {slotIndex} 삭제됨.");
         }
 
         public bool HasSlot(int slotIndex)

@@ -34,7 +34,7 @@ namespace PublicFramework
             _popupRoot = popupRoot ?? throw new ArgumentNullException(nameof(popupRoot));
             _coroutineRunner = coroutineRunner ?? throw new ArgumentNullException(nameof(coroutineRunner));
             _dimBackground = dimBackground;
-            Debug.Log("[PopupManager] Init completed.");
+            Debug.Log("[UI] 팝업매니저 초기화 완료.");
         }
 
         public void SetDefaultAnimation(IPopupAnimation animation)
@@ -46,7 +46,7 @@ namespace PublicFramework
         {
             if (_popupPrefabs.ContainsKey(popupId))
             {
-                Debug.LogWarning($"[PopupManager] Popup '{popupId}' already registered. Overwriting.");
+                Debug.LogWarning($"[UI] 팝업 '{popupId}' 이미 등록됨. 덮어씀.");
             }
             _popupPrefabs[popupId] = prefab;
         }
@@ -96,7 +96,7 @@ namespace PublicFramework
 
             _popupQueue.Clear();
             UpdateDimBackground(false);
-            Debug.Log("[PopupManager] All popups hidden.");
+            Debug.Log("[UI] 모든 팝업 숨김.");
         }
 
         public BasePopup GetCurrentPopup()
@@ -161,7 +161,7 @@ namespace PublicFramework
             }
 
             _popupQueue.Insert(insertIndex, entry);
-            Debug.Log($"[PopupManager] Popup '{popupId}' queued at position {insertIndex}. Queue size: {_popupQueue.Count}");
+            Debug.Log($"[UI] 팝업 '{popupId}' 위치 {insertIndex}에 큐잉. 큐 크기: {_popupQueue.Count}");
         }
 
         private void ShowNextInQueue()
@@ -192,7 +192,7 @@ namespace PublicFramework
 
             if (!_popupPrefabs.TryGetValue(popupId, out var prefab))
             {
-                Debug.LogError($"[PopupManager] Popup '{popupId}' not registered.");
+                Debug.LogError($"[UI] 팝업 '{popupId}' 미등록.");
                 return null;
             }
 

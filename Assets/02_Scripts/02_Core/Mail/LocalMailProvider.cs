@@ -13,18 +13,18 @@ namespace PublicFramework
 
         public void FetchMails(Action<List<MailData>> onSuccess, Action<string> onFail)
         {
-            Debug.Log("[LocalMailProvider] Fetch: returning empty (local only)");
+            Debug.Log("[우편] 로컬 제공자 조회: 빈 목록 반환 (로컬 전용).");
             onSuccess?.Invoke(new List<MailData>());
         }
 
         public void ReportClaimed(string mailId)
         {
-            Debug.Log($"[LocalMailProvider] Claimed reported: {mailId}");
+            Debug.Log($"[우편] 수령 보고됨: {mailId}");
         }
 
         public void ReportDeleted(string mailId)
         {
-            Debug.Log($"[LocalMailProvider] Deleted reported: {mailId}");
+            Debug.Log($"[우편] 삭제 보고됨: {mailId}");
         }
     }
 }

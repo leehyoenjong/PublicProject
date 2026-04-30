@@ -68,7 +68,7 @@ namespace PublicFramework
                 _cachedFinal[t] = 0f;
             }
 
-            Debug.Log($"[StatContainer] Created: {ownerId} (level {_level})");
+            Debug.Log($"[스탯] 컨테이너 생성됨: {ownerId} (레벨 {_level})");
         }
 
         // ────────────────────────────────────────────────────────────

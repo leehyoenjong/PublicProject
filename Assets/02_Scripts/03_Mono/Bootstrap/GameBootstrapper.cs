@@ -74,7 +74,7 @@ namespace PublicFramework
                 _stageSystem.CheckUnlocks(_initialUnlockLevel);
             }
 
-            Debug.Log($"[GameBootstrapper] Core systems registered: EventBus / Stat / Buff / Monster{(_soundManager != null ? " / Sound" : "")}{(_stageSystem != null ? " / Stage" : "")}");
+            Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}");
         }
 
         private void Update()

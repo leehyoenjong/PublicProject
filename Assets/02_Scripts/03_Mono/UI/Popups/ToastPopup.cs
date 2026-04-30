@@ -20,7 +20,7 @@ namespace PublicFramework
                 _fadeDuration = config.ToastFadeDuration;
             }
 
-            Debug.Log($"[ToastPopup] Setup: {message}");
+            Debug.Log($"[토스트] 셋업: {message}");
         }
 
         public void ShowAndAutoHide()
@@ -41,7 +41,7 @@ namespace PublicFramework
                 yield return null;
             }
 
-            Debug.Log("[ToastPopup] Auto-hidden.");
+            Debug.Log("[토스트] 자동 숨김.");
             Destroy(gameObject);
         }
     }

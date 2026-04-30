@@ -58,7 +58,7 @@ namespace PublicFramework
 
             CreateModifiers();
 
-            Debug.Log($"[BuffInstance] Created: {data.BuffId} on {targetId} from {sourceId}");
+            Debug.Log($"[버프] 버프 인스턴스 생성됨: {data.BuffId} ({targetId} ← {sourceId})");
         }
 
         public void AddStack()
@@ -70,7 +70,7 @@ namespace PublicFramework
 
             UpdateModifierValues();
 
-            Debug.Log($"[BuffInstance] Stack changed: {_data.BuffId} {oldStack} -> {_currentStack}");
+            Debug.Log($"[버프] 스택 변경됨: {_data.BuffId} {oldStack} → {_currentStack}");
         }
 
         public void RefreshDuration(RefreshPolicy policy)

@@ -38,21 +38,21 @@ namespace PublicFramework
         {
             if (_controller == null || _controller.Unit == null)
             {
-                Debug.LogWarning("[MonsterAIAdapter] UnitController 미해결 — 비활성", this);
+                Debug.LogWarning("[몬스터AI] UnitController 미해결 — 비활성", this);
                 enabled = false;
                 return;
             }
 
             if (_controller.Unit is not IMonsterInfo)
             {
-                Debug.LogWarning($"[MonsterAIAdapter] 비-몬스터 유닛 ({_controller.Unit.UnitId}) — 비활성", this);
+                Debug.LogWarning($"[몬스터AI] 비-몬스터 유닛 ({_controller.Unit.UnitId}) — 비활성", this);
                 enabled = false;
                 return;
             }
 
             if (_monsterSystem == null)
             {
-                Debug.LogWarning("[MonsterAIAdapter] IMonsterSystem 미등록 — 비활성", this);
+                Debug.LogWarning("[몬스터AI] IMonsterSystem 미등록 — 비활성", this);
                 enabled = false;
                 return;
             }
@@ -68,7 +68,7 @@ namespace PublicFramework
             _spawned = inst != null;
             if (!_spawned)
             {
-                Debug.LogWarning($"[MonsterAIAdapter] Spawn 실패 ({_controller.Unit.UnitId}/{_controller.InstanceId})", this);
+                Debug.LogWarning($"[몬스터AI] 스폰 실패 ({_controller.Unit.UnitId}/{_controller.InstanceId})", this);
             }
         }
 

@@ -17,7 +17,7 @@ namespace PublicFramework
 
         public void Initialize(Action onSuccess, Action<string> onFail)
         {
-            Debug.Log("[DummyAd] Initialized");
+            Debug.Log("[광고] 더미 어댑터 초기화됨.");
             onSuccess?.Invoke();
         }
 
@@ -29,12 +29,12 @@ namespace PublicFramework
                 AdType = adType
             });
 
-            Debug.Log($"[DummyAd] Ad loaded: {slotId} ({adType})");
+            Debug.Log($"[광고] 더미 광고 로드됨: {slotId} ({adType})");
         }
 
         public void ShowAd(AdType adType, string slotId, Action onSuccess, Action<AdFailReason> onFail)
         {
-            Debug.Log($"[DummyAd] Ad shown: {slotId} ({adType})");
+            Debug.Log($"[광고] 더미 광고 표시: {slotId} ({adType})");
             onSuccess?.Invoke();
         }
 
@@ -45,12 +45,12 @@ namespace PublicFramework
 
         public void ShowBanner(BannerPosition position)
         {
-            Debug.Log($"[DummyAd] Banner shown: {position}");
+            Debug.Log($"[광고] 더미 배너 표시: {position}");
         }
 
         public void HideBanner()
         {
-            Debug.Log("[DummyAd] Banner hidden");
+            Debug.Log("[광고] 더미 배너 숨김.");
         }
     }
 }

@@ -34,14 +34,14 @@ namespace PublicFramework
             LoadMailbox();
             ProcessExpired();
 
-            Debug.Log("[MailSystem] Init started");
+            Debug.Log("[우편] 초기화 시작.");
         }
 
         public void SendMail(MailData mail)
         {
             if (mail == null)
             {
-                Debug.LogError("[MailSystem] MailData is null");
+                Debug.LogError("[우편] MailData가 null임.");
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace PublicFramework
             {
                 if (!RemoveOldestDeletable())
                 {
-                    Debug.LogWarning("[MailSystem] Mailbox full — all mails have unclaimed rewards. SendMail rejected.");
+                    Debug.LogWarning("[우편] 우편함 가득 참 — 모든 우편에 미수령 보상 있음. 전송 거부됨.");
                     return;
                 }
             }
@@ -84,7 +84,7 @@ namespace PublicFramework
             });
 
             CheckNearFull();
-            Debug.Log($"[MailSystem] Mail sent: {mail.MailId} ({mail.Title})");
+            Debug.Log($"[우편] 우편 전송됨: {mail.MailId} ({mail.Title})");
         }
 
         public IReadOnlyList<MailData> GetAllMails()
@@ -148,7 +148,7 @@ namespace PublicFramework
                 SaveMailbox();
 
                 _eventBus?.Publish(new MailReadEvent { MailId = mailId });
-                Debug.Log($"[MailSystem] Mail read: {mailId}");
+                Debug.Log($"[우편] 우편 읽음: {mailId}");
             }
         }
 
@@ -157,19 +157,19 @@ namespace PublicFramework
             MailData mail = GetMail(mailId);
             if (mail == null)
             {
-                Debug.LogWarning($"[MailSystem] Mail not found: {mailId}");
+                Debug.LogWarning($"[우편] 우편을 찾을 수 없음: {mailId}");
                 return false;
             }
 
             if (mail.State == MailState.Claimed)
             {
-                Debug.LogWarning($"[MailSystem] Already claimed: {mailId}");
+                Debug.LogWarning($"[우편] 이미 수령됨: {mailId}");
                 return false;
             }
 
             if (mail.State == MailState.Expired)
             {
-                Debug.LogWarning($"[MailSystem] Mail expired: {mailId}");
+                Debug.LogWarning($"[우편] 우편 만료됨: {mailId}");
                 return false;
             }
 
@@ -189,7 +189,7 @@ namespace PublicFramework
                 RewardCount = mail.Rewards?.Count ?? 0
             });
 
-            Debug.Log($"[MailSystem] Mail claimed: {mailId}");
+            Debug.Log($"[우편] 우편 수령됨: {mailId}");
             return true;
         }
 
@@ -222,7 +222,7 @@ namespace PublicFramework
                     TotalRewards = totalRewards
                 });
 
-                Debug.Log($"[MailSystem] Claim all: {claimed} mails, {totalRewards} rewards");
+                Debug.Log($"[우편] 전체 수령: {claimed}개 우편, {totalRewards}개 보상.");
             }
 
             return claimed;
@@ -244,7 +244,7 @@ namespace PublicFramework
                         Reason = MailDeleteReason.Manual
                     });
 
-                    Debug.Log($"[MailSystem] Mail deleted: {mailId}");
+                    Debug.Log($"[우편] 우편 삭제됨: {mailId}");
                     return true;
                 }
             }
@@ -276,7 +276,7 @@ namespace PublicFramework
             if (deleted > 0)
             {
                 SaveMailbox();
-                Debug.Log($"[MailSystem] Deleted {deleted} claimed mails");
+                Debug.Log($"[우편] 수령 완료 우편 {deleted}개 삭제됨.");
             }
 
             return deleted;
@@ -286,7 +286,7 @@ namespace PublicFramework
         {
             if (_mailProvider == null || !_mailProvider.IsAvailable)
             {
-                Debug.LogWarning("[MailSystem] Mail provider not available");
+                Debug.LogWarning("[우편] 우편 제공자 사용 불가.");
                 onComplete?.Invoke(0);
                 return;
             }
@@ -303,7 +303,7 @@ namespace PublicFramework
                         {
                             if (!RemoveOldestDeletable())
                             {
-                                Debug.LogWarning("[MailSystem] Mailbox full during fetch — skipping remaining");
+                                Debug.LogWarning("[우편] 조회 중 우편함 가득 참 — 나머지 건너뜀.");
                                 break;
                             }
                         }
@@ -327,12 +327,12 @@ namespace PublicFramework
                         CheckNearFull();
                     }
 
-                    Debug.Log($"[MailSystem] Fetched {added} new mails");
+                    Debug.Log($"[우편] {added}개 새 우편 조회됨.");
                     onComplete?.Invoke(added);
                 },
                 error =>
                 {
-                    Debug.LogError($"[MailSystem] Fetch failed: {error}");
+                    Debug.LogError($"[우편] 조회 실패: {error}");
                     onComplete?.Invoke(0);
                 });
         }
@@ -384,7 +384,7 @@ namespace PublicFramework
             if (expired > 0)
             {
                 SaveMailbox();
-                Debug.Log($"[MailSystem] Processed {expired} expired mails");
+                Debug.Log($"[우편] 만료 우편 {expired}개 처리됨.");
             }
         }
 
@@ -468,7 +468,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log($"[MailSystem] Loaded {_mails.Count} mails");
+            Debug.Log($"[우편] {_mails.Count}개 우편 로드됨.");
         }
 
         private void SaveMailbox()

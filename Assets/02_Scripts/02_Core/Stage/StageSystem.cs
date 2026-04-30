@@ -29,7 +29,7 @@ namespace PublicFramework
             _eventBus = eventBus;
             _config = config;
             _waveScheduler = new WaveScheduler(eventBus);
-            Debug.Log("[StageSystem] Init started");
+            Debug.Log("[스테이지] 초기화 시작.");
         }
 
         public void SetRewardHandler(IRewardHandler handler)
@@ -57,7 +57,7 @@ namespace PublicFramework
         {
             if (!_stages.TryGetValue(stageId, out StageInstance instance))
             {
-                Debug.LogWarning($"[StageSystem] Unknown stage: {stageId}");
+                Debug.LogWarning($"[스테이지] 알 수 없는 스테이지: {stageId}");
                 return false;
             }
 
@@ -113,12 +113,12 @@ namespace PublicFramework
             if (!_stages.TryGetValue(stageId, out StageInstance instance)) return false;
             if (!instance.Data.SweepEnabled)
             {
-                Debug.LogWarning($"[StageSystem] Sweep not enabled: {stageId}");
+                Debug.LogWarning($"[스테이지] 소탕 비활성화됨: {stageId}");
                 return false;
             }
             if (instance.ClearCount <= 0)
             {
-                Debug.LogWarning($"[StageSystem] Sweep requires first clear: {stageId}");
+                Debug.LogWarning($"[스테이지] 소탕에 첫 클리어 필요: {stageId}");
                 return false;
             }
             if (times <= 0) return false;
@@ -137,7 +137,7 @@ namespace PublicFramework
             if (success > 0)
             {
                 _eventBus?.Publish(new StageSweptEvent { StageId = stageId, SweepCount = success });
-                Debug.Log($"[StageSystem] Stage swept: {stageId} x{success}");
+                Debug.Log($"[스테이지] 소탕 완료: {stageId} x{success}");
             }
             return success > 0;
         }
@@ -201,7 +201,7 @@ namespace PublicFramework
                 ElapsedSeconds = instance.ElapsedSeconds
             });
 
-            Debug.Log($"[StageSystem] Stage failed: {instance.StageId} reason={reason}");
+            Debug.Log($"[스테이지] 실패: {instance.StageId} 사유={reason}");
             _activeStage = null;
         }
 
@@ -329,7 +329,7 @@ namespace PublicFramework
             }
 
             _eventBus?.Publish(new ChapterCompletedEvent { ChapterId = chapterId });
-            Debug.Log($"[StageSystem] Chapter completed: {chapterId}");
+            Debug.Log($"[스테이지] 챕터 완료: {chapterId}");
         }
     }
 }

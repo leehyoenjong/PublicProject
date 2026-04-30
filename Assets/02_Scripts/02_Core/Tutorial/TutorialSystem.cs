@@ -31,7 +31,7 @@ namespace PublicFramework
             _saveSystem = saveSystem;
 
             LoadCompletedData();
-            Debug.Log("[TutorialSystem] Init started");
+            Debug.Log("[튜토리얼] 초기화 시작.");
         }
 
         public void SetPresentation(ITutorialPresentation presentation)
@@ -49,19 +49,19 @@ namespace PublicFramework
         {
             if (IsRunning)
             {
-                Debug.LogWarning($"[TutorialSystem] Already running: {_currentTutorial.TutorialId}");
+                Debug.LogWarning($"[튜토리얼] 이미 실행 중: {_currentTutorial.TutorialId}");
                 return;
             }
 
             if (!_tutorials.TryGetValue(tutorialId, out TutorialData data))
             {
-                Debug.LogError($"[TutorialSystem] Tutorial not found: {tutorialId}");
+                Debug.LogError($"[튜토리얼] 튜토리얼을 찾을 수 없음: {tutorialId}");
                 return;
             }
 
             if (IsTutorialCompleted(tutorialId))
             {
-                Debug.Log($"[TutorialSystem] Already completed: {tutorialId}");
+                Debug.Log($"[튜토리얼] 이미 완료됨: {tutorialId}");
                 return;
             }
 
@@ -74,7 +74,7 @@ namespace PublicFramework
                 TotalSteps = data.Steps.Count
             });
 
-            Debug.Log($"[TutorialSystem] Tutorial started: {tutorialId} ({data.Steps.Count} steps)");
+            Debug.Log($"[튜토리얼] 시작됨: {tutorialId} ({data.Steps.Count} 단계)");
             ExecuteCurrentStep();
         }
 
@@ -104,7 +104,7 @@ namespace PublicFramework
 
             if (!_currentTutorial.CanSkip)
             {
-                Debug.LogWarning($"[TutorialSystem] Cannot skip: {_currentTutorial.TutorialId}");
+                Debug.LogWarning($"[튜토리얼] 건너뛸 수 없음: {_currentTutorial.TutorialId}");
                 return;
             }
 
@@ -114,7 +114,7 @@ namespace PublicFramework
                 SkippedAtStep = _currentStepIndex
             });
 
-            Debug.Log($"[TutorialSystem] Tutorial skipped: {_currentTutorial.TutorialId} at step {_currentStepIndex}");
+            Debug.Log($"[튜토리얼] 건너뜀: {_currentTutorial.TutorialId} 단계 {_currentStepIndex}");
 
             CompleteTutorial(_currentTutorial.TutorialId);
         }
@@ -137,7 +137,7 @@ namespace PublicFramework
             SaveCompletedData();
 
             _eventBus?.Publish(new TutorialCompletedEvent { TutorialId = tutorialId });
-            Debug.Log($"[TutorialSystem] Tutorial completed: {tutorialId}");
+            Debug.Log($"[튜토리얼] 완료됨: {tutorialId}");
         }
 
         public bool IsTutorialCompleted(string tutorialId)
@@ -215,7 +215,7 @@ namespace PublicFramework
                 _presentation?.ShowArrow(step.ArrowDirection);
             }
 
-            Debug.Log($"[TutorialSystem] Step {_currentStepIndex}: {step.StepType}");
+            Debug.Log($"[튜토리얼] 단계 {_currentStepIndex}: {step.StepType}");
         }
 
         private bool ArePrerequisitesMet(TutorialData data)
@@ -253,7 +253,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log($"[TutorialSystem] Loaded {_completedTutorials.Count} completed tutorials");
+            Debug.Log($"[튜토리얼] 완료된 튜토리얼 {_completedTutorials.Count}개 로드됨.");
         }
     }
 }

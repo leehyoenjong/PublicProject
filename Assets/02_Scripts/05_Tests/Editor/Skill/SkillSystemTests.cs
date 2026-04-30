@@ -259,7 +259,7 @@ namespace PublicFramework.Tests.Skill
         [Test]
         public void Cast_NoHandler_PublishesActionExecutedFailure()
         {
-            LogAssert.Expect(LogType.Error, "[SkillSystem] No handler for Heal");
+            LogAssert.Expect(LogType.Error, "[스킬] 액션 핸들러 없음: Heal");
             var actions = new[] { MakeAction(SkillActionType.Heal, 0f) };
             RegisterSkill("s1", actions: actions);
 
@@ -275,7 +275,7 @@ namespace PublicFramework.Tests.Skill
         public void Cast_ActionThrows_PublishesActionExecutedFailureWithError()
         {
             LogAssert.Expect(LogType.Error,
-                new Regex(@"\[SkillSystem\] Action DealDamage failed: .+"));
+                new Regex(@"\[스킬\] 액션 실행 실패: DealDamage — .+"));
             _fakeAction.ThrowOnExecute = true;
             var actions = new[] { MakeAction(SkillActionType.DealDamage, 0f) };
             RegisterSkill("s1", actions: actions);

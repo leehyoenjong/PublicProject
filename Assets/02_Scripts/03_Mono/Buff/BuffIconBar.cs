@@ -28,7 +28,7 @@ namespace PublicFramework
             _eventBus.Subscribe<BuffExpiredEvent>(OnBuffExpired);
             _eventBus.Subscribe<BuffStackChangedEvent>(OnBuffStackChanged);
 
-            Debug.Log($"[BuffIconBar] Init for: {_ownerId}");
+            Debug.Log($"[버프UI] 아이콘바 초기화: {_ownerId}");
         }
 
         private void OnDestroy()

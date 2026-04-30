@@ -68,7 +68,7 @@ namespace PublicFramework
         {
             if (_target == null)
             {
-                Debug.LogWarning("[DropFlyCollector] _target 미설정 — 즉시 회수 처리", this);
+                Debug.LogWarning("[드롭] _target 미설정 — 즉시 회수 처리", this);
                 CompletePickup();
                 yield break;
             }
@@ -101,7 +101,7 @@ namespace PublicFramework
             }
             else if (_inventory == null)
             {
-                Debug.LogWarning("[DropFlyCollector] IInventorySystem 미등록 — AddItem 생략", this);
+                Debug.LogWarning("[드롭] IInventorySystem 미등록 — AddItem 생략", this);
             }
 
             Destroy(gameObject);

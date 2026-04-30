@@ -13,7 +13,7 @@ namespace PublicFramework
 
         public void Initialize(Action onSuccess, Action<string> onFail)
         {
-            Debug.Log("[DummyStore] Initialized");
+            Debug.Log("[결제] 더미 스토어 초기화됨.");
             onSuccess?.Invoke();
         }
 
@@ -30,13 +30,13 @@ namespace PublicFramework
                 PurchaseTime = DateTime.UtcNow.ToString("o")
             };
 
-            Debug.Log($"[DummyStore] Purchase success: {productId}");
+            Debug.Log($"[결제] 더미 구매 성공: {productId}");
             onSuccess?.Invoke(receipt);
         }
 
         public void RestorePurchases(Action<List<PurchaseReceipt>> onSuccess, Action<PurchaseFailReason> onFail)
         {
-            Debug.Log("[DummyStore] Restore: empty list");
+            Debug.Log("[결제] 더미 복원: 빈 목록 반환.");
             onSuccess?.Invoke(new List<PurchaseReceipt>());
         }
 
@@ -47,12 +47,12 @@ namespace PublicFramework
 
         public void ConfirmPurchase(string transactionId)
         {
-            Debug.Log($"[DummyStore] Confirmed: {transactionId}");
+            Debug.Log($"[결제] 더미 구매 확인됨: {transactionId}");
         }
 
         public void FetchProducts(List<string> productIds, Action<List<IAPProductData>> onSuccess, Action<string> onFail)
         {
-            Debug.Log("[DummyStore] FetchProducts: returning empty");
+            Debug.Log("[결제] 더미 상품 조회: 빈 목록 반환.");
             onSuccess?.Invoke(new List<IAPProductData>());
         }
     }

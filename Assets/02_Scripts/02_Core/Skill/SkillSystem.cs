@@ -38,7 +38,7 @@ namespace PublicFramework
             _objectPool = objectPool;
             _actionRegistry = registry ?? SkillActionRegistry.CreateDefault();
 
-            Debug.Log("[SkillSystem] Init started");
+            Debug.Log("[스킬] 초기화 시작.");
         }
 
         public void RegisterSkill(SkillData data)
@@ -111,7 +111,7 @@ namespace PublicFramework
             SkillData data = GetSkillData(skillId);
             if (data == null)
             {
-                Debug.LogError($"[SkillSystem] Execute: skill '{skillId}' not found");
+                Debug.LogError($"[스킬] Execute: 스킬 '{skillId}'을(를) 찾을 수 없음.");
                 return;
             }
 
@@ -256,7 +256,7 @@ namespace PublicFramework
             ISkillAction action = _actionRegistry.Get(entry.ActionType);
             if (action == null)
             {
-                Debug.LogError($"[SkillSystem] No handler for {entry.ActionType}");
+                Debug.LogError($"[스킬] 액션 핸들러 없음: {entry.ActionType}");
                 _eventBus?.Publish(new SkillActionExecutedEvent
                 {
                     SkillId = context.SkillData != null ? context.SkillData.SkillId : null,
@@ -283,7 +283,7 @@ namespace PublicFramework
             }
             catch (System.Exception ex)
             {
-                Debug.LogError($"[SkillSystem] Action {entry.ActionType} failed: {ex.Message}");
+                Debug.LogError($"[스킬] 액션 실행 실패: {entry.ActionType} — {ex.Message}");
                 _eventBus?.Publish(new SkillActionExecutedEvent
                 {
                     SkillId = context.SkillData != null ? context.SkillData.SkillId : null,

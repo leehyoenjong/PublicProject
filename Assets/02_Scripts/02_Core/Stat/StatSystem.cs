@@ -19,24 +19,24 @@ namespace PublicFramework
         {
             _eventBus = eventBus;
             _timeProvider = timeProvider;
-            Debug.Log("[StatSystem] Init started");
+            Debug.Log("[스탯] 초기화 시작.");
         }
 
         public IStatContainer CreateContainer(string ownerId, int level = 1)
         {
             if (string.IsNullOrEmpty(ownerId))
             {
-                Debug.LogError("[StatSystem] ownerId is null/empty");
+                Debug.LogError("[스탯] ownerId가 null 또는 빈 값.");
                 return null;
             }
             if (_containers.TryGetValue(ownerId, out IStatContainer existing))
             {
-                Debug.LogWarning($"[StatSystem] Container already exists: {ownerId}");
+                Debug.LogWarning($"[스탯] 컨테이너 이미 존재함: {ownerId}");
                 return existing;
             }
             var container = new StatContainer(ownerId, level, _eventBus, _timeProvider);
             _containers[ownerId] = container;
-            Debug.Log($"[StatSystem] Created: {ownerId}");
+            Debug.Log($"[스탯] 컨테이너 생성됨: {ownerId}");
             return container;
         }
 
@@ -50,7 +50,7 @@ namespace PublicFramework
         {
             if (string.IsNullOrEmpty(ownerId)) return false;
             bool removed = _containers.Remove(ownerId);
-            if (removed) Debug.Log($"[StatSystem] Removed: {ownerId}");
+            if (removed) Debug.Log($"[스탯] 컨테이너 제거됨: {ownerId}");
             return removed;
         }
 

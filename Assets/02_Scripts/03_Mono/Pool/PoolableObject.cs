@@ -6,12 +6,12 @@ namespace PublicFramework
     {
         public virtual void OnSpawn()
         {
-            Debug.Log($"[PoolableObject] '{gameObject.name}' spawned.");
+            Debug.Log($"[풀가능] '{gameObject.name}' 스폰됨.");
         }
 
         public virtual void OnDespawn()
         {
-            Debug.Log($"[PoolableObject] '{gameObject.name}' despawned.");
+            Debug.Log($"[풀가능] '{gameObject.name}' 반환됨.");
         }
     }
 }

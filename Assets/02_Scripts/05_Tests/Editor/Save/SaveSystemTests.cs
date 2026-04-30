@@ -170,7 +170,7 @@ namespace PublicFramework.Tests.Save
         public void WriteToDisk_StorageThrows_PublishesOnSaveFailed()
         {
             LogAssert.Expect(LogType.Error,
-                new Regex(@"\[SaveSystem\] WriteToDisk failed for slot 0"));
+                new Regex(@"\[세이브\] 슬롯 0 디스크 저장 실패"));
             _storage.ThrowOnWrite = true;
             int? failedSlot = null;
             Exception failedEx = null;

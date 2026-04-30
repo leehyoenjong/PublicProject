@@ -46,22 +46,22 @@ namespace PublicFramework.Editor.SheetImporter
                 string label = string.IsNullOrEmpty(entry.EntryName) ? $"#{i}" : entry.EntryName;
 
                 if (string.IsNullOrEmpty(entry.Source))
-                    Debug.LogWarning($"[SheetImporter] 엔트리 '{label}' Source 가 비어있습니다.");
+                    Debug.LogWarning($"[시트임포터] 엔트리 '{label}' Source 가 비어있습니다.");
                 else if (!IsValidSource(entry.Source))
-                    Debug.LogWarning($"[SheetImporter] 엔트리 '{label}' Source 형식을 인식할 수 없습니다(http(s):// 또는 Assets/... 또는 절대경로).");
+                    Debug.LogWarning($"[시트임포터] 엔트리 '{label}' Source 형식을 인식할 수 없습니다(http(s):// 또는 Assets/... 또는 절대경로).");
 
                 if (entry.Mode == SheetEntryMode.GenericSO)
                 {
                     if (entry.TargetScript == null)
-                        Debug.LogWarning($"[SheetImporter] 엔트리 '{label}' TargetScript 가 비어있습니다.");
+                        Debug.LogWarning($"[시트임포터] 엔트리 '{label}' TargetScript 가 비어있습니다.");
                     else if (entry.TargetType == null)
-                        Debug.LogWarning($"[SheetImporter] 엔트리 '{label}' TargetScript 에서 Type 을 얻지 못했습니다(컴파일 오류 가능).");
+                        Debug.LogWarning($"[시트임포터] 엔트리 '{label}' TargetScript 에서 Type 을 얻지 못했습니다(컴파일 오류 가능).");
                     else if (!typeof(ScriptableObject).IsAssignableFrom(entry.TargetType))
-                        Debug.LogWarning($"[SheetImporter] 엔트리 '{label}' TargetScript '{entry.TargetType.Name}' 는 ScriptableObject 가 아닙니다.");
+                        Debug.LogWarning($"[시트임포터] 엔트리 '{label}' TargetScript '{entry.TargetType.Name}' 는 ScriptableObject 가 아닙니다.");
                 }
 
                 if (!string.IsNullOrEmpty(entry.OutputFolder) && !entry.OutputFolder.StartsWith(ASSETS_ROOT))
-                    Debug.LogWarning($"[SheetImporter] 엔트리 '{label}' OutputFolder 는 '{ASSETS_ROOT}' 로 시작해야 합니다.");
+                    Debug.LogWarning($"[시트임포터] 엔트리 '{label}' OutputFolder 는 '{ASSETS_ROOT}' 로 시작해야 합니다.");
             }
         }
 

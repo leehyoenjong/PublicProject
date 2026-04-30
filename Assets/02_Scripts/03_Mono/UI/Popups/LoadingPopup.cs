@@ -22,7 +22,7 @@ namespace PublicFramework
         {
             _messageText.text = message;
             UpdateProgress(0f);
-            Debug.Log($"[LoadingPopup] Setup: {message}");
+            Debug.Log($"[로딩팝업] 셋업: {message}");
         }
 
         public void Show()
@@ -30,7 +30,7 @@ namespace PublicFramework
             gameObject.SetActive(true);
             _canvasGroup.alpha = 1f;
             _canvasGroup.blocksRaycasts = true;
-            Debug.Log("[LoadingPopup] Shown. Input blocked.");
+            Debug.Log("[로딩팝업] 표시됨. 입력 차단.");
         }
 
         public void Hide()
@@ -38,7 +38,7 @@ namespace PublicFramework
             _canvasGroup.alpha = 0f;
             _canvasGroup.blocksRaycasts = false;
             gameObject.SetActive(false);
-            Debug.Log("[LoadingPopup] Hidden. Input unblocked.");
+            Debug.Log("[로딩팝업] 숨김. 입력 활성.");
         }
 
         public void UpdateProgress(float ratio)

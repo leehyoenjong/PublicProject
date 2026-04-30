@@ -43,7 +43,7 @@ namespace PublicFramework
             if (_filterEventButton != null) _filterEventButton.onClick.AddListener(() => SetFilter(MailType.Event));
 
             RefreshList();
-            Debug.Log("[MailboxUI] Init started");
+            Debug.Log("[우편] 메일함 UI 초기화 시작");
         }
 
         private void OnDestroy()

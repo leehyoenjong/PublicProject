@@ -62,7 +62,7 @@ namespace PublicFramework
             if (_pool == null) _pool = ServiceLocator.Has<IObjectPoolManager>() ? ServiceLocator.Get<IObjectPoolManager>() : null;
             if (_stageSystem == null || _pool == null)
             {
-                Debug.LogWarning("[WaveMonsterSpawner] IStageSystem/IObjectPoolManager 미등록 — Wave 스폰 불가", this);
+                Debug.LogWarning("[몬스터스폰] IStageSystem/IObjectPoolManager 미등록 — 웨이브 스폰 불가", this);
                 return;
             }
 
@@ -85,7 +85,7 @@ namespace PublicFramework
                     GameObject go = _pool.Spawn(m.MonsterMID, pos, Quaternion.identity);
                     if (go == null)
                     {
-                        Debug.LogWarning($"[WaveMonsterSpawner] Pool spawn 실패: {m.MonsterMID}", this);
+                        Debug.LogWarning($"[몬스터스폰] 풀 스폰 실패: {m.MonsterMID}", this);
                         continue;
                     }
                     if (target != null)

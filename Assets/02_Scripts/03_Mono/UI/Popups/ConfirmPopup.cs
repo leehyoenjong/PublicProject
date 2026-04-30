@@ -20,7 +20,7 @@ namespace PublicFramework
                 _messageText.text = popupData.Message;
             }
 
-            Debug.Log($"[ConfirmPopup] Shown.");
+            Debug.Log("[확인팝업] 표시됨.");
         }
 
         private void OnEnable()
@@ -37,13 +37,13 @@ namespace PublicFramework
 
         private void OnConfirm()
         {
-            Debug.Log("[ConfirmPopup] Confirmed.");
+            Debug.Log("[확인팝업] 확인됨.");
             SetResult(PopupResult.Confirm);
         }
 
         private void OnCancel()
         {
-            Debug.Log("[ConfirmPopup] Cancelled.");
+            Debug.Log("[확인팝업] 취소됨.");
             SetResult(PopupResult.Cancel);
         }
     }

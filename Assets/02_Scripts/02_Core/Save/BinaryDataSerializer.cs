@@ -36,7 +36,7 @@ namespace PublicFramework
             int version = reader.ReadInt32();
             if (version != HEADER_VERSION)
             {
-                Debug.LogError($"[BinaryDataSerializer] Unknown version: {version}");
+                Debug.LogError($"[세이브] 알 수 없는 버전: {version}");
                 return default;
             }
 

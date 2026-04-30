@@ -27,7 +27,7 @@ namespace PublicFramework
 
             if (_poolEntries == null || _poolEntries.Length == 0)
             {
-                Debug.LogWarning("[PoolInitializer] No pool entries configured.");
+                Debug.LogWarning("[풀] 등록된 풀 항목 없음.");
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace PublicFramework
             {
                 if (entry.Prefab == null)
                 {
-                    Debug.LogError("[PoolInitializer] Prefab is null. Skipping entry.");
+                    Debug.LogError("[풀] Prefab이 null임. 항목 건너뜀.");
                     continue;
                 }
 
@@ -47,14 +47,14 @@ namespace PublicFramework
                 _poolManager.CreatePool(entry.Prefab, entry.Config);
             }
 
-            Debug.Log($"[PoolInitializer] Initialized {_poolEntries.Length} pool(s).");
+            Debug.Log($"[풀] {_poolEntries.Length}개 풀 초기화 완료.");
         }
 
         private void OnDestroy()
         {
             ServiceLocator.Unregister<IObjectPoolManager>();
             _poolManager?.ClearAll();
-            Debug.Log("[PoolInitializer] Destroyed. All pools cleared.");
+            Debug.Log("[풀] 제거됨. 모든 풀 초기화됨.");
         }
     }
 }

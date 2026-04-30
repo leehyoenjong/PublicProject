@@ -27,7 +27,7 @@ namespace PublicFramework
             _eventBus.Subscribe<MailReadEvent>(OnRead);
 
             UpdateBadge();
-            Debug.Log("[MailBadge] Init started");
+            Debug.Log("[우편] 배지 초기화 시작");
         }
 
         private void OnDestroy()

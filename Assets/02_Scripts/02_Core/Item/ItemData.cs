@@ -42,7 +42,7 @@ namespace PublicFramework
         {
             if (_subtypeRef != null && _subtypeRef is not IItemSubtypeInfo)
             {
-                Debug.LogWarning($"[ItemData] MID={_itemId} subtypeRef 는 IItemSubtypeInfo 를 구현해야 합니다: {_subtypeRef.name}");
+                Debug.LogWarning($"[아이템] MID={_itemId} subtypeRef는 IItemSubtypeInfo를 구현해야 함: {_subtypeRef.name}");
             }
         }
     }

@@ -71,7 +71,7 @@ namespace PublicFramework.Tests.Tutorial
         [Test]
         public void StartTutorial_Unknown_LogsErrorAndDoesNotStart()
         {
-            LogAssert.Expect(LogType.Error, "[TutorialSystem] Tutorial not found: nope");
+            LogAssert.Expect(LogType.Error, "[튜토리얼] 튜토리얼을 찾을 수 없음: nope");
 
             _system.StartTutorial("nope");
 

@@ -12,7 +12,7 @@ namespace PublicFramework
 
         public void Validate(PurchaseReceipt receipt, Action<ReceiptValidationResult> callback)
         {
-            Debug.Log($"[AlwaysValidValidator] Validated: {receipt.TransactionId}");
+            Debug.Log($"[결제] 더미 영수증 검증 완료: {receipt.TransactionId}");
 
             callback?.Invoke(new ReceiptValidationResult
             {

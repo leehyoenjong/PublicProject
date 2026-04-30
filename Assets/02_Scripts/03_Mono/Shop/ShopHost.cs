@@ -29,7 +29,7 @@ namespace PublicFramework
 
             if (_shopSystem == null)
             {
-                Debug.LogWarning("[ShopHost] IShopSystem 미등록 — Refresh/Purchase 비활성", this);
+                Debug.LogWarning("[상점] IShopSystem 미등록 — Refresh/Purchase 비활성", this);
             }
         }
 
@@ -65,7 +65,7 @@ namespace PublicFramework
 
             _shopSystem.Purchase(productMID, _context, result =>
             {
-                Debug.Log($"[ShopHost] Purchase result: {result.ProductMID} success={result.Success}");
+                Debug.Log($"[상점] 구매 결과: {result.ProductMID} 성공={result.Success}");
                 onResult?.Invoke(result);
                 PurchaseResulted?.Invoke(result);
             });

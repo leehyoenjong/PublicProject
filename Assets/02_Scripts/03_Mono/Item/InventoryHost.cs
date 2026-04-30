@@ -30,7 +30,7 @@ namespace PublicFramework
 
             if (_inventory == null)
             {
-                Debug.LogWarning("[InventoryHost] IInventorySystem 미등록 — 기능 비활성", this);
+                Debug.LogWarning("[인벤토리] IInventorySystem 미등록 — 기능 비활성", this);
             }
         }
 

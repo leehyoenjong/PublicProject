@@ -39,14 +39,14 @@ namespace PublicFramework
             LoadPurchaseData();
             LoadProducts();
 
-            Debug.Log("[IAPSystem] Init started");
+            Debug.Log("[결제] 초기화 시작.");
         }
 
         public void Purchase(string productId, Action<PurchaseReceipt> onSuccess, Action<PurchaseFailReason> onFail)
         {
             if (_isPurchasing)
             {
-                Debug.LogWarning("[IAPSystem] Purchase already in progress");
+                Debug.LogWarning("[결제] 구매가 이미 진행 중임.");
                 onFail?.Invoke(PurchaseFailReason.StoreError);
                 return;
             }
@@ -54,14 +54,14 @@ namespace PublicFramework
             IAPProductData product = GetProduct(productId);
             if (product == null)
             {
-                Debug.LogError($"[IAPSystem] Product not found: {productId}");
+                Debug.LogError($"[결제] 상품을 찾을 수 없음: {productId}");
                 onFail?.Invoke(PurchaseFailReason.ProductNotFound);
                 return;
             }
 
             if (product.PurchaseLimit > 0 && GetPurchaseCount(productId) >= product.PurchaseLimit)
             {
-                Debug.LogWarning($"[IAPSystem] Purchase limit reached: {productId}");
+                Debug.LogWarning($"[결제] 구매 한도 도달: {productId}");
                 onFail?.Invoke(PurchaseFailReason.PurchaseLimitReached);
                 return;
             }
@@ -74,7 +74,7 @@ namespace PublicFramework
                 ProductType = product.ProductType
             });
 
-            Debug.Log($"[IAPSystem] Purchase started: {productId}");
+            Debug.Log($"[결제] 구매 시작: {productId}");
 
             _storeAdapter.Purchase(productId,
                 receipt => OnPurchaseSuccess(receipt, product, onSuccess, onFail),
@@ -86,7 +86,7 @@ namespace PublicFramework
                         ProductId = productId,
                         Reason = reason
                     });
-                    Debug.Log($"[IAPSystem] Purchase failed: {productId} ({reason})");
+                    Debug.Log($"[결제] 구매 실패: {productId} ({reason})");
                     onFail?.Invoke(reason);
                 });
         }
@@ -122,7 +122,7 @@ namespace PublicFramework
 
         public void RestorePurchases(Action<int> onComplete, Action<PurchaseFailReason> onFail)
         {
-            Debug.Log("[IAPSystem] Restore purchases started");
+            Debug.Log("[결제] 구매 복원 시작.");
 
             _storeAdapter.RestorePurchases(
                 receipts =>
@@ -133,7 +133,7 @@ namespace PublicFramework
 
                     if (total == 0)
                     {
-                        Debug.Log("[IAPSystem] No purchases to restore");
+                        Debug.Log("[결제] 복원할 구매 내역 없음.");
                         onComplete?.Invoke(0);
                         return;
                     }
@@ -155,18 +155,18 @@ namespace PublicFramework
 
                                 if (processed >= total)
                                 {
-                                    Debug.Log($"[IAPSystem] Restored {restored}/{total} purchases");
+                                    Debug.Log($"[결제] 복원 완료: {restored}/{total}");
                                     onComplete?.Invoke(restored);
                                 }
                             },
                             reason =>
                             {
-                                Debug.LogWarning($"[IAPSystem] Restore validation failed: {receipt.ProductId} ({reason})");
+                                Debug.LogWarning($"[결제] 복원 검증 실패: {receipt.ProductId} ({reason})");
                                 processed++;
 
                                 if (processed >= total)
                                 {
-                                    Debug.Log($"[IAPSystem] Restored {restored}/{total} purchases");
+                                    Debug.Log($"[결제] 복원 완료: {restored}/{total}");
                                     onComplete?.Invoke(restored);
                                 }
                             });
@@ -174,7 +174,7 @@ namespace PublicFramework
                 },
                 reason =>
                 {
-                    Debug.LogError($"[IAPSystem] Restore failed: {reason}");
+                    Debug.LogError($"[결제] 복원 실패: {reason}");
                     onFail?.Invoke(reason);
                 });
         }
@@ -195,7 +195,7 @@ namespace PublicFramework
             int processed = 0;
             int resolved = 0;
 
-            Debug.Log($"[IAPSystem] Processing {total} pending purchases");
+            Debug.Log($"[결제] 미처리 구매 {total}건 처리 중.");
 
             foreach (PurchaseReceipt receipt in pending)
             {
@@ -214,17 +214,17 @@ namespace PublicFramework
 
                         if (processed >= total)
                         {
-                            Debug.Log($"[IAPSystem] Pending complete: {resolved}/{total} resolved");
+                            Debug.Log($"[결제] 미처리 완료: {resolved}/{total} 처리됨.");
                         }
                     },
                     reason =>
                     {
-                        Debug.LogWarning($"[IAPSystem] Pending validation failed: {receipt.ProductId} ({reason})");
+                        Debug.LogWarning($"[결제] 미처리 검증 실패: {receipt.ProductId} ({reason})");
                         processed++;
 
                         if (processed >= total)
                         {
-                            Debug.Log($"[IAPSystem] Pending complete: {resolved}/{total} resolved");
+                            Debug.Log($"[결제] 미처리 완료: {resolved}/{total} 처리됨.");
                         }
                     });
             }
@@ -256,7 +256,7 @@ namespace PublicFramework
 
                     _storeAdapter.ConfirmPurchase(validReceipt.TransactionId);
 
-                    Debug.Log($"[IAPSystem] Purchase complete: {product.ProductId}");
+                    Debug.Log($"[결제] 구매 완료: {product.ProductId}");
                     onSuccess?.Invoke(validReceipt);
                 },
                 reason =>
@@ -280,12 +280,12 @@ namespace PublicFramework
 
                 if (result.IsValid)
                 {
-                    Debug.Log($"[IAPSystem] Receipt valid: {receipt.TransactionId}");
+                    Debug.Log($"[결제] 영수증 유효: {receipt.TransactionId}");
                     onValid?.Invoke(receipt);
                 }
                 else
                 {
-                    Debug.LogError($"[IAPSystem] Receipt invalid: {result.Error}");
+                    Debug.LogError($"[결제] 영수증 무효: {result.Error}");
                     onInvalid?.Invoke(PurchaseFailReason.ValidationFailed);
                 }
             });
@@ -306,7 +306,7 @@ namespace PublicFramework
                     Source = source
                 });
 
-                Debug.Log($"[IAPSystem] Reward granted: {reward.RewardId} x{reward.Amount}");
+                Debug.Log($"[결제] 보상 지급: {reward.RewardId} x{reward.Amount}");
             }
         }
 
@@ -323,7 +323,7 @@ namespace PublicFramework
                     Source = "Subscription_Immediate"
                 });
 
-                Debug.Log($"[IAPSystem] Subscription immediate reward: {reward.RewardId} x{reward.Amount}");
+                Debug.Log($"[결제] 구독 즉시 보상: {reward.RewardId} x{reward.Amount}");
             }
         }
 
@@ -368,7 +368,7 @@ namespace PublicFramework
                 _products.AddRange(configProducts);
             }
 
-            Debug.Log($"[IAPSystem] Loaded {_products.Count} products");
+            Debug.Log($"[결제] {_products.Count}개 상품 로드됨.");
         }
 
         private void LoadPurchaseData()
@@ -393,7 +393,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log($"[IAPSystem] Loaded {_purchaseHistory.Count} purchase records");
+            Debug.Log($"[결제] {_purchaseHistory.Count}개 구매 기록 로드됨.");
         }
 
         private void SavePurchaseData()

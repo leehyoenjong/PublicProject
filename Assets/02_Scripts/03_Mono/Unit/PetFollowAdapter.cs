@@ -49,14 +49,14 @@ namespace PublicFramework
         {
             if (_controller == null || _controller.Unit == null)
             {
-                Debug.LogWarning("[PetFollowAdapter] UnitController 미해결 — 비활성", this);
+                Debug.LogWarning("[펫] UnitController 미해결 — 비활성", this);
                 enabled = false;
                 return;
             }
             _petInfo = _controller.Unit as IPetInfo;
             if (_petInfo == null)
             {
-                Debug.LogWarning($"[PetFollowAdapter] 비-펫 유닛 ({_controller.Unit.UnitId}) — 비활성", this);
+                Debug.LogWarning($"[펫] 비-펫 유닛 ({_controller.Unit.UnitId}) — 비활성", this);
                 enabled = false;
                 return;
             }

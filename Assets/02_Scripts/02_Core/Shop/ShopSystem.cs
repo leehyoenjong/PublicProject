@@ -28,7 +28,7 @@ namespace PublicFramework
             _repository = repository;
             _inventory = inventory;
             _timeProvider = timeProvider;
-            Debug.Log("[ShopSystem] Init started");
+            Debug.Log("[상점] 초기화 시작.");
         }
 
         /// <summary>ShopDataCollection 주입 후 저장된 인스턴스 복원 + 리셋 경계 초기화.</summary>
@@ -53,7 +53,7 @@ namespace PublicFramework
             LoadInstances();
             RecomputeResetBoundaries();
 
-            Debug.Log($"[ShopSystem] Initialized — products: {_products.Count}, instances: {_instances.Count}");
+            Debug.Log($"[상점] 초기화 완료 — 상품: {_products.Count}, 인스턴스: {_instances.Count}");
         }
 
         /// <summary>PaymentType 전략 등록. 같은 타입 재등록 시 덮어쓴다.</summary>
@@ -61,7 +61,7 @@ namespace PublicFramework
         {
             if (processor == null) return;
             _processors[processor.SupportedType] = processor;
-            Debug.Log($"[ShopSystem] PaymentProcessor registered: {processor.SupportedType}");
+            Debug.Log($"[상점] 결제 처리기 등록됨: {processor.SupportedType}");
         }
 
         public IReadOnlyList<IShopProduct> GetVisibleProducts(IShopContext context)
@@ -196,7 +196,7 @@ namespace PublicFramework
                 IsSoldOut = instance.IsSoldOut
             });
 
-            Debug.Log($"[ShopSystem] Purchase completed: {data.MID} (tx: {providerTxId})");
+            Debug.Log($"[상점] 구매 완료: {data.MID} (거래ID: {providerTxId})");
             callback?.Invoke(result);
         }
 
@@ -208,7 +208,7 @@ namespace PublicFramework
                 Reason = reason
             });
 
-            Debug.Log($"[ShopSystem] Purchase failed: {productMID} (reason: {reason})");
+            Debug.Log($"[상점] 구매 실패: {productMID} (사유: {reason})");
             callback?.Invoke(new PurchaseResult
             {
                 Success = false,
@@ -332,7 +332,7 @@ namespace PublicFramework
             _repository?.ResetScope(scope);
 
             _eventBus?.Publish(new ShopResetEvent { Scope = scope });
-            Debug.Log($"[ShopSystem] Scope reset: {scope}");
+            Debug.Log($"[상점] 범위 초기화됨: {scope}");
         }
     }
 }

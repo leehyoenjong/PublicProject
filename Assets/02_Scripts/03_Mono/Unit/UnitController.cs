@@ -78,7 +78,7 @@ namespace PublicFramework
             if (_unitInfo == null)
             {
                 string name = _unitInfoAsset != null ? _unitInfoAsset.name : "null";
-                Debug.LogError($"[UnitController] _unitInfoAsset 가 IUnit 미구현 ({name}) — 컨트롤러 비활성", this);
+                Debug.LogError($"[유닛] _unitInfoAsset 가 IUnit 미구현 ({name}) — 컨트롤러 비활성", this);
                 enabled = false;
                 return false;
             }
@@ -98,7 +98,7 @@ namespace PublicFramework
         {
             if (_statSystem == null)
             {
-                Debug.LogWarning("[UnitController] IStatSystem 미등록 — Stats 비활성", this);
+                Debug.LogWarning("[유닛] IStatSystem 미등록 — Stats 비활성", this);
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace PublicFramework
 
             if (_baseStatGroup == null)
             {
-                Debug.LogWarning($"[UnitController] BaseStatGroup 미설정 ({_unitInfo.UnitId}) — Stats 비어있음", this);
+                Debug.LogWarning($"[유닛] BaseStatGroup 미설정 ({_unitInfo.UnitId}) — Stats 비어있음", this);
                 return;
             }
 
@@ -206,7 +206,7 @@ namespace PublicFramework
             ISkillSystem skillSystem = SkillSystem;
             if (skillSystem == null)
             {
-                Debug.LogWarning("[UnitController] ISkillSystem 미등록 — CastSkill 무시", this);
+                Debug.LogWarning("[유닛] ISkillSystem 미등록 — CastSkill 무시", this);
                 return false;
             }
             return skillSystem.Cast(skillId, _instanceId, targetInstanceId, level);
@@ -258,7 +258,7 @@ namespace PublicFramework
         {
             if (_unitInfoAsset != null && _unitInfoAsset is not IUnit)
             {
-                Debug.LogError($"[UnitController] _unitInfoAsset 는 IUnit 구현 SO 여야 함 (현재: {_unitInfoAsset.GetType().Name})", this);
+                Debug.LogError($"[유닛] _unitInfoAsset 는 IUnit 구현 SO 여야 함 (현재: {_unitInfoAsset.GetType().Name})", this);
                 _unitInfoAsset = null;
             }
         }

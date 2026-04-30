@@ -16,7 +16,7 @@ namespace PublicFramework
         private void Start()
         {
             _saveSystem = ServiceLocator.Get<ISaveSystem>();
-            Debug.Log($"[AutoSave] Started. Interval: {_autoSaveInterval}s, Slot: {_activeSlotIndex}");
+            Debug.Log($"[자동저장] 시작됨. 주기: {_autoSaveInterval}s, 슬롯: {_activeSlotIndex}");
         }
 
         private void Update()
@@ -33,12 +33,12 @@ namespace PublicFramework
         {
             if (_saveSystem == null)
             {
-                Debug.LogError("[AutoSave] SaveSystem not found.");
+                Debug.LogError("[자동저장] SaveSystem 미등록.");
                 return;
             }
 
             _saveSystem.WriteToDisk(_activeSlotIndex);
-            Debug.Log($"[AutoSave] Slot {_activeSlotIndex} auto-saved.");
+            Debug.Log($"[자동저장] 슬롯 {_activeSlotIndex} 저장됨.");
         }
 
         public void SetActiveSlot(int slotIndex)

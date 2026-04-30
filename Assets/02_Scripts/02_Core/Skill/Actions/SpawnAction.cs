@@ -16,14 +16,14 @@ namespace PublicFramework
             if (context == null || entry == null) return;
             if (context.ObjectPool == null)
             {
-                Debug.LogError("[SpawnAction] IObjectPoolManager not provided");
+                Debug.LogError("[스킬액션] IObjectPoolManager가 제공되지 않음.");
                 return;
             }
 
             string poolId = entry.Param1;
             if (string.IsNullOrEmpty(poolId))
             {
-                Debug.LogError("[SpawnAction] param1(poolId) is empty");
+                Debug.LogError("[스킬액션] param1(poolId)가 비어 있음.");
                 return;
             }
 
@@ -33,7 +33,7 @@ namespace PublicFramework
             GameObject instance = context.ObjectPool.Spawn(poolId, spawnPos, Quaternion.identity);
             if (instance == null)
             {
-                Debug.LogError($"[SpawnAction] Pool spawn failed: '{poolId}'");
+                Debug.LogError($"[스킬액션] 풀 스폰 실패: '{poolId}'");
                 return;
             }
 

@@ -19,7 +19,7 @@ namespace PublicFramework
             int beforeLevel = target.Level;
             target.Level += 1;
 
-            Debug.Log($"[LevelEnhance] Level up: {beforeLevel} → {target.Level}");
+            Debug.Log($"[강화] 레벨 증가: {beforeLevel} → {target.Level}");
 
             return new EnhanceResult
             {
@@ -36,20 +36,20 @@ namespace PublicFramework
             EnhanceData gradeData = _collection != null ? _collection.Find(EnhanceType.Grade) : null;
             if (gradeData == null)
             {
-                Debug.LogWarning("[LevelEnhance] Grade data not found in collection");
+                Debug.LogWarning("[강화] 등급 데이터를 컬렉션에서 찾을 수 없음.");
                 return false;
             }
 
             GradePolicyEntry policy = gradeData.FindGradePolicy(target.Grade);
             if (policy == null)
             {
-                Debug.LogWarning($"[LevelEnhance] No grade policy for grade {target.Grade}");
+                Debug.LogWarning($"[강화] 등급 정책 없음: {target.Grade}");
                 return false;
             }
 
             if (target.Level >= policy.MaxLevel)
             {
-                Debug.LogWarning($"[LevelEnhance] Already max level: {target.Level}/{policy.MaxLevel}");
+                Debug.LogWarning($"[강화] 이미 최대 레벨: {target.Level}/{policy.MaxLevel}");
                 return false;
             }
 

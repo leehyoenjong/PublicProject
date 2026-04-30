@@ -90,7 +90,7 @@ namespace PublicFramework.Tests.Pool
         [Test]
         public void Spawn_UnknownPool_LogsErrorAndReturnsNull()
         {
-            LogAssert.Expect(LogType.Error, "[ObjectPoolManager] Pool 'nope' not found.");
+            LogAssert.Expect(LogType.Error, "[풀] 풀 'nope'을(를) 찾을 수 없음.");
 
             GameObject obj = _manager.Spawn("nope", Vector3.zero, Quaternion.identity);
 
@@ -153,7 +153,7 @@ namespace PublicFramework.Tests.Pool
         [Test]
         public void Despawn_UnknownObject_LogsError()
         {
-            LogAssert.Expect(LogType.Error, "[ObjectPoolManager] Object not managed by any pool.");
+            LogAssert.Expect(LogType.Error, "[풀] 어떤 풀에도 속하지 않는 오브젝트.");
             var stranger = new GameObject("Stranger");
 
             try { _manager.Despawn(stranger); }

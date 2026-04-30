@@ -19,7 +19,7 @@ namespace PublicFramework
                 _messageText.text = popupData.Message;
             }
 
-            Debug.Log($"[AlertPopup] Shown.");
+            Debug.Log("[경고팝업] 표시됨.");
         }
 
         private void OnEnable()
@@ -34,7 +34,7 @@ namespace PublicFramework
 
         private void OnConfirm()
         {
-            Debug.Log("[AlertPopup] Confirmed.");
+            Debug.Log("[경고팝업] 확인됨.");
             SetResult(PopupResult.Confirm);
         }
     }

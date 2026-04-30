@@ -15,7 +15,7 @@ namespace PublicFramework
         {
             _sceneLoader = new SceneLoader(this, _loadingSceneName);
             ServiceLocator.Register<ISceneLoader>(_sceneLoader);
-            Debug.Log("[SceneTransitionRunner] Init started.");
+            Debug.Log("[씬] SceneTransitionRunner 초기화 시작.");
         }
 
         private void Start()
@@ -23,7 +23,7 @@ namespace PublicFramework
             if (!string.IsNullOrEmpty(_firstScene))
             {
                 _sceneLoader.LoadScene(_firstScene);
-                Debug.Log($"[SceneTransitionRunner] Loading first scene: {_firstScene}");
+                Debug.Log($"[씬] 최초 씬 로드: {_firstScene}");
             }
         }
 
@@ -36,7 +36,7 @@ namespace PublicFramework
         private void OnDestroy()
         {
             ServiceLocator.Unregister<ISceneLoader>();
-            Debug.Log("[SceneTransitionRunner] Destroyed.");
+            Debug.Log("[씬] SceneTransitionRunner 파괴됨.");
         }
     }
 }

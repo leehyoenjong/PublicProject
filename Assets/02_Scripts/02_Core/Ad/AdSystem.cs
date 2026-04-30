@@ -34,7 +34,7 @@ namespace PublicFramework
 
             LoadDailyData();
 
-            Debug.Log("[AdSystem] Init started");
+            Debug.Log("[광고] 초기화 시작.");
         }
 
         public void ShowAd(string slotId, Action onSuccess, Action<AdFailReason> onFail)
@@ -42,7 +42,7 @@ namespace PublicFramework
             AdSlotData slot = _config.GetAdSlot(slotId);
             if (slot == null)
             {
-                Debug.LogError($"[AdSystem] Slot not found: {slotId}");
+                Debug.LogError($"[광고] 슬롯을 찾을 수 없음: {slotId}");
                 onFail?.Invoke(AdFailReason.AdapterError);
                 return;
             }
@@ -60,7 +60,7 @@ namespace PublicFramework
                 AdType = slot.AdType
             });
 
-            Debug.Log($"[AdSystem] Showing ad: {slotId} ({slot.AdType})");
+            Debug.Log($"[광고] 광고 표시: {slotId} ({slot.AdType})");
 
             _adAdapter.ShowAd(slot.AdType, slotId,
                 () =>
@@ -75,7 +75,7 @@ namespace PublicFramework
                         Rewarded = slot.AdType == AdType.Rewarded
                     });
 
-                    Debug.Log($"[AdSystem] Ad complete: {slotId}");
+                    Debug.Log($"[광고] 광고 완료: {slotId}");
                     onSuccess?.Invoke();
                 },
                 reason =>
@@ -87,7 +87,7 @@ namespace PublicFramework
                         Reason = reason
                     });
 
-                    Debug.Log($"[AdSystem] Ad failed: {slotId} ({reason})");
+                    Debug.Log($"[광고] 광고 실패: {slotId} ({reason})");
                     onFail?.Invoke(reason);
                 });
         }
@@ -135,18 +135,18 @@ namespace PublicFramework
         {
             if (_isVIP)
             {
-                Debug.Log("[AdSystem] VIP — banner skipped");
+                Debug.Log("[광고] VIP — 배너 생략.");
                 return;
             }
 
             _adAdapter.ShowBanner(position);
-            Debug.Log($"[AdSystem] Banner shown: {position}");
+            Debug.Log($"[광고] 배너 표시: {position}");
         }
 
         public void HideBanner()
         {
             _adAdapter.HideBanner();
-            Debug.Log("[AdSystem] Banner hidden");
+            Debug.Log("[광고] 배너 숨김.");
         }
 
         public void SetVIP(bool isVIP)
@@ -158,7 +158,7 @@ namespace PublicFramework
                 HideBanner();
             }
 
-            Debug.Log($"[AdSystem] VIP state: {_isVIP}");
+            Debug.Log($"[광고] VIP 상태: {_isVIP}");
         }
 
         private void RecordWatch(string slotId)
@@ -188,7 +188,7 @@ namespace PublicFramework
                     Source = "Ad"
                 });
 
-                Debug.Log($"[AdSystem] Reward granted: {reward.RewardId} x{reward.Amount}");
+                Debug.Log($"[광고] 보상 지급: {reward.RewardId} x{reward.Amount}");
             }
         }
 
@@ -221,7 +221,7 @@ namespace PublicFramework
                 _dailyWatchCounts.Clear();
                 _lastSavedDate = today;
                 SaveDailyData();
-                Debug.Log("[AdSystem] Daily data reset");
+                Debug.Log("[광고] 일일 데이터 초기화됨.");
             }
         }
 
@@ -253,7 +253,7 @@ namespace PublicFramework
                 }
             }
 
-            Debug.Log("[AdSystem] Daily data loaded");
+            Debug.Log("[광고] 일일 데이터 로드됨.");
         }
 
         private void SaveDailyData()

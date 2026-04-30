@@ -45,7 +45,7 @@ namespace PublicFramework
             CanvasGroup.alpha = 1f;
             CanvasGroup.interactable = true;
             CanvasGroup.blocksRaycasts = true;
-            Debug.Log($"[UI] Popup show: {_popupId}");
+            Debug.Log($"[UI] 팝업 표시: {_popupId}");
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace PublicFramework
             CanvasGroup.interactable = false;
             CanvasGroup.blocksRaycasts = false;
             gameObject.SetActive(false);
-            Debug.Log($"[UI] Popup hide: {_popupId}");
+            Debug.Log($"[UI] 팝업 숨김: {_popupId}");
         }
 
         /// <summary>

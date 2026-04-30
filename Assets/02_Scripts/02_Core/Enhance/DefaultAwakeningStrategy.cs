@@ -36,7 +36,7 @@ namespace PublicFramework
                 OptionValue = rolledValue
             });
 
-            Debug.Log($"[Awakening] Slot {slotIndex}: {option.OptionId} ({rolledValue:F2} [{option.MinValue}~{option.MaxValue}])");
+            Debug.Log($"[강화] 각성 슬롯 {slotIndex}: {option.OptionId} ({rolledValue:F2} [{option.MinValue}~{option.MaxValue}])");
 
             return new EnhanceResult
             {
@@ -52,7 +52,7 @@ namespace PublicFramework
         {
             if (target.AwakeningSlots == null || target.AwakeningSlots.Length == 0)
             {
-                Debug.LogWarning("[Awakening] No awakening slots");
+                Debug.LogWarning("[강화] 각성 슬롯 없음.");
                 return false;
             }
 
@@ -60,7 +60,7 @@ namespace PublicFramework
 
             if (slotIndex < 0 || slotIndex >= target.AwakeningSlots.Length)
             {
-                Debug.LogWarning($"[Awakening] Invalid slot index: {slotIndex}");
+                Debug.LogWarning($"[강화] 잘못된 슬롯 인덱스: {slotIndex}");
                 return false;
             }
 
@@ -68,13 +68,13 @@ namespace PublicFramework
 
             if (!slot.IsUnlocked)
             {
-                Debug.LogWarning($"[Awakening] Slot {slotIndex} is locked");
+                Debug.LogWarning($"[강화] 슬롯 {slotIndex}이(가) 잠겨 있음.");
                 return false;
             }
 
             if (slot.IsLocked)
             {
-                Debug.LogWarning($"[Awakening] Slot {slotIndex} option is locked by user");
+                Debug.LogWarning($"[강화] 슬롯 {slotIndex} 옵션이 사용자에 의해 잠겨 있음.");
                 return false;
             }
 
@@ -113,7 +113,7 @@ namespace PublicFramework
 
             if (options == null || options.Count == 0)
             {
-                Debug.LogError("[Awakening] No options configured");
+                Debug.LogError("[강화] 각성 옵션이 설정되지 않음.");
                 return new AwakeningOptionEntry { OptionId = "NONE", MinValue = 0f, MaxValue = 0f, Weight = 0 };
             }
 

@@ -27,14 +27,14 @@ namespace PublicFramework
         {
             _screenRoot = screenRoot ?? throw new ArgumentNullException(nameof(screenRoot));
             _coroutineRunner = coroutineRunner ?? throw new ArgumentNullException(nameof(coroutineRunner));
-            Debug.Log("[UIManager] Init completed.");
+            Debug.Log("[UI] 초기화 완료.");
         }
 
         public void RegisterScreen(string screenId, BaseScreen prefab)
         {
             if (_screenPrefabs.ContainsKey(screenId))
             {
-                Debug.LogWarning($"[UIManager] Screen '{screenId}' already registered. Overwriting.");
+                Debug.LogWarning($"[UI] 스크린 '{screenId}' 이미 등록됨. 덮어씀.");
             }
             _screenPrefabs[screenId] = prefab;
         }
@@ -43,7 +43,7 @@ namespace PublicFramework
         {
             if (_isTransitioning)
             {
-                Debug.LogWarning("[UIManager] Transition in progress. Push ignored.");
+                Debug.LogWarning("[UI] 전환 진행 중. Push 무시됨.");
                 return;
             }
 
@@ -72,13 +72,13 @@ namespace PublicFramework
         {
             if (_isTransitioning)
             {
-                Debug.LogWarning("[UIManager] Transition in progress. Pop ignored.");
+                Debug.LogWarning("[UI] 전환 진행 중. Pop 무시됨.");
                 return;
             }
 
             if (_screenStack.Count <= 1)
             {
-                Debug.LogWarning("[UIManager] Cannot pop the last screen.");
+                Debug.LogWarning("[UI] 마지막 스크린은 Pop할 수 없음.");
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace PublicFramework
         {
             if (_isTransitioning)
             {
-                Debug.LogWarning("[UIManager] Transition in progress. Replace ignored.");
+                Debug.LogWarning("[UI] 전환 진행 중. Replace 무시됨.");
                 return;
             }
 
@@ -156,7 +156,7 @@ namespace PublicFramework
 
             if (!_screenPrefabs.TryGetValue(screenId, out var prefab))
             {
-                Debug.LogError($"[UIManager] Screen '{screenId}' not registered.");
+                Debug.LogError($"[UI] 스크린 '{screenId}'이(가) 등록되지 않음.");
                 return null;
             }
 
@@ -182,7 +182,7 @@ namespace PublicFramework
                 tempList[i].Hide();
             }
 
-            Debug.LogWarning($"[UIManager] History depth exceeded. Trimmed to {MAX_HISTORY_DEPTH}.");
+            Debug.LogWarning($"[UI] 히스토리 깊이 초과. {MAX_HISTORY_DEPTH}개로 잘림.");
         }
 
         private IEnumerator ExecuteTransition(

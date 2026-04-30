@@ -23,7 +23,7 @@ namespace PublicFramework
         {
             if (condition == null)
             {
-                Debug.LogWarning("[ConditionGroup] Null condition ignored");
+                Debug.LogWarning("[조건] null 조건 무시됨.");
                 return;
             }
             _conditions.Add(condition);

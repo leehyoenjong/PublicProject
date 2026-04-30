@@ -17,13 +17,13 @@ namespace PublicFramework
             if (context == null || entry == null) return;
             if (string.IsNullOrEmpty(context.TargetId))
             {
-                Debug.LogWarning("[DealDamageAction] targetId is empty");
+                Debug.LogWarning("[데미지] 타겟 ID가 비어있음");
                 return;
             }
 
             if (!float.TryParse(entry.Param1, NumberStyles.Float, CultureInfo.InvariantCulture, out float baseAmount))
             {
-                Debug.LogError($"[DealDamageAction] param1 parse failed: '{entry.Param1}'");
+                Debug.LogError($"[데미지] param1 파싱 실패: '{entry.Param1}'");
                 return;
             }
 

@@ -31,7 +31,7 @@ namespace PublicFramework
                 Duration = entry.Duration
             });
 
-            Debug.Log($"[MoveAction] {context.CasterId} move {dir} * {distance}");
+            Debug.Log($"[스킬액션] 이동: {context.CasterId} 방향={dir} 거리={distance}");
         }
 
         private static Vector3 ResolveDirection(string raw, SkillContext context)

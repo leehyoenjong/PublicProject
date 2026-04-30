@@ -12,13 +12,13 @@ namespace PublicFramework
 
         public void RegisterForRemotePush(Action<string> onTokenReceived, Action<string> onError)
         {
-            Debug.Log("[DummyPush] Registered for remote push");
+            Debug.Log("[알림] 리모트 푸시 등록됨.");
             onTokenReceived?.Invoke(DUMMY_TOKEN);
         }
 
         public void UnregisterFromRemotePush()
         {
-            Debug.Log("[DummyPush] Unregistered from remote push");
+            Debug.Log("[알림] 리모트 푸시 등록 해제됨.");
         }
 
         public string GetPushToken()

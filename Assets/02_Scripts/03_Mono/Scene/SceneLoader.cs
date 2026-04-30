@@ -25,32 +25,32 @@ namespace PublicFramework
             _coroutineRunner = coroutineRunner;
             _loadingSceneName = loadingSceneName;
             CurrentScene = SceneManager.GetActiveScene().name;
-            Debug.Log($"[SceneLoader] Init started. Current scene: {CurrentScene}, Loading scene: {_loadingSceneName}");
+            Debug.Log($"[씬] 초기화 시작. 현재 씬: {CurrentScene}, 로딩 씬: {_loadingSceneName}");
         }
 
         public void SetLoadingScene(string sceneName)
         {
             _loadingSceneName = sceneName;
-            Debug.Log($"[SceneLoader] Loading scene set: {_loadingSceneName}");
+            Debug.Log($"[씬] 로딩 씬 설정됨: {_loadingSceneName}");
         }
 
         public void SetFlow(ISceneFlow flow)
         {
             _flow = flow;
-            Debug.Log($"[SceneLoader] Flow set: {flow.GetType().Name}");
+            Debug.Log($"[씬] 플로우 설정됨: {flow.GetType().Name}");
         }
 
         public void LoadScene(string sceneName, ISceneParam param = null)
         {
             if (IsLoading)
             {
-                Debug.LogWarning("[SceneLoader] Already loading a scene. Request ignored.");
+                Debug.LogWarning("[씬] 이미 로딩 중. 요청 무시됨.");
                 return;
             }
 
             if (string.IsNullOrEmpty(sceneName))
             {
-                Debug.LogError("[SceneLoader] Scene name is null or empty.");
+                Debug.LogError("[씬] 씬 이름이 null이거나 비어 있음.");
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace PublicFramework
             _pendingParam = param;
             IsLoading = true;
 
-            Debug.Log($"[SceneLoader] Load requested: {CurrentScene} -> {sceneName}");
+            Debug.Log($"[씬] 로드 요청: {CurrentScene} -> {sceneName}");
             _coroutineRunner.StartCoroutine(LoadSequence());
         }
 
@@ -137,7 +137,7 @@ namespace PublicFramework
             IsLoading = false;
             _pendingParam = null;
 
-            Debug.Log($"[SceneLoader] Scene changed: {previousScene} -> {CurrentScene}");
+            Debug.Log($"[씬] 씬 변경됨: {previousScene} -> {CurrentScene}");
             OnSceneChanged?.Invoke(CurrentScene);
         }
     }

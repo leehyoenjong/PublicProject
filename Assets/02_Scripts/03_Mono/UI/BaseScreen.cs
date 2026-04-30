@@ -30,7 +30,7 @@ namespace PublicFramework
         /// </summary>
         public virtual void OnScreenEnter()
         {
-            Debug.Log($"[UI] Screen enter: {_screenId}");
+            Debug.Log($"[UI] 스크린 진입: {_screenId}");
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace PublicFramework
         /// </summary>
         public virtual void OnScreenExit()
         {
-            Debug.Log($"[UI] Screen exit: {_screenId}");
+            Debug.Log($"[UI] 스크린 퇴장: {_screenId}");
         }
 
         /// <summary>

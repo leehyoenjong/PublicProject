@@ -30,7 +30,7 @@ namespace PublicFramework
             _eventBus.Subscribe<QuestUnlockedEvent>(OnQuestUnlocked);
 
             RefreshList();
-            Debug.Log("[QuestListUI] Init started");
+            Debug.Log("[퀘스트UI] 초기화 시작");
         }
 
         private void OnDestroy()

@@ -16,13 +16,13 @@ namespace PublicFramework
             if (context == null || entry == null) return;
             if (string.IsNullOrEmpty(context.TargetId))
             {
-                Debug.LogWarning("[HealAction] targetId is empty");
+                Debug.LogWarning("[스킬액션] targetId가 비어 있음.");
                 return;
             }
 
             if (!float.TryParse(entry.Param1, NumberStyles.Float, CultureInfo.InvariantCulture, out float baseAmount))
             {
-                Debug.LogError($"[HealAction] param1 parse failed: '{entry.Param1}'");
+                Debug.LogError($"[스킬액션] param1 파싱 실패: '{entry.Param1}'");
                 return;
             }
 
@@ -49,7 +49,7 @@ namespace PublicFramework
                 Amount = finalAmount
             });
 
-            Debug.Log($"[HealAction] {context.CasterId} -> {context.TargetId} : +{finalAmount}");
+            Debug.Log($"[스킬액션] 힐: {context.CasterId} → {context.TargetId} : +{finalAmount}");
         }
     }
 }

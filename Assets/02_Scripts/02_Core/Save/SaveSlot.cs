@@ -67,7 +67,7 @@ namespace PublicFramework
             if (index >= 0)
                 return _values[index];
 
-            Debug.LogWarning($"[SaveSlot] Key '{key}' not found in slot {_slotIndex}.");
+            Debug.LogWarning($"[세이브] 키 '{key}'을(를) 슬롯 {_slotIndex}에서 찾을 수 없음.");
             return null;
         }
 
