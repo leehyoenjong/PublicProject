@@ -524,6 +524,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2084307177}
   - component: {fileID: 2084307178}
+  - component: {fileID: 2084307179}
   m_Layer: 0
   m_Name: INIT
   m_TagString: Untagged
@@ -560,6 +561,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.SkillSystemInitializer
   _buffDataCollection: {fileID: 11400000, guid: e8a86d8c1a5d745f4959ebdf3a3d5351, type: 2}
   _skillDataCollection: {fileID: 11400000, guid: 4e8d16a0021104778b1613c77b335535, type: 2}
+--- !u!114 &2084307179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084307176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8743857d8b67b473096750250cb9a55a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.PoolInitializer
+  _poolEntries:
+  - _prefab: {fileID: 100100000, guid: d0158671491d451983954d6f147b6f14, type: 3}
+    _config:
+      _id: mon_slime
+      _initialSize: 8
+      _maxSize: 24
+      _autoExpand: 1
+  - _prefab: {fileID: 100100000, guid: 06bd396f5a7f4f2aa88e9ac1f2f8e97f, type: 3}
+    _config:
+      _id: projectile_placeholder
+      _initialSize: 10
+      _maxSize: 30
+      _autoExpand: 1
+  - _prefab: {fileID: 100100000, guid: 4cb9229be67747108cb773ec5cfa54a7, type: 3}
+    _config:
+      _id: hitfx_placeholder
+      _initialSize: 10
+      _maxSize: 30
+      _autoExpand: 1
 --- !u!1001 &8386086637552853487
 PrefabInstance:
   m_ObjectHideFlags: 0

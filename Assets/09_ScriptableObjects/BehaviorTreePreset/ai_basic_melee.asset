@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c626276dec140b690eabc423aa673a, type: 3}
+  m_Name: ai_basic_melee
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.BehaviorTreePreset
+  _presetId: ai_basic_melee
+  _rootIndex: 0
+  _nodes:
+  - _nodeType: 1
+    _childIndices:
+    - 1
+    - 4
+    _actionKey:
+    _param1:
+    _param2:
+    _param3:
+  - _nodeType: 0
+    _childIndices:
+    - 2
+    - 3
+    _actionKey:
+    _param1:
+    _param2:
+    _param3:
+  - _nodeType: 5
+    _childIndices: []
+    _actionKey: TargetInRange
+    _param1: '1.5'
+    _param2:
+    _param3:
+  - _nodeType: 6
+    _childIndices: []
+    _actionKey: CastSkill
+    _param1: skill_slime_tackle
+    _param2:
+    _param3:
+  - _nodeType: 6
+    _childIndices: []
+    _actionKey: MoveToTarget
+    _param1:
+    _param2:
+    _param3:
