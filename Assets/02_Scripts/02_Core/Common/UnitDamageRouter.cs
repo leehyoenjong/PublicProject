@@ -29,6 +29,8 @@ namespace PublicFramework
             float newHp = Mathf.Clamp(oldHp + delta, 0f, maxHp);
             stats.SetCurrentHP(newHp);
 
+            Debug.Log($"[유닛] {instanceId} HP {oldHp:F1} → {newHp:F1} ({delta:+0.0;-0.0}) / 최대 {maxHp:F1}");
+
             eventBus?.Publish(new UnitHpChangedEvent
             {
                 InstanceId = instanceId,

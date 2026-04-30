@@ -31,7 +31,7 @@ MonoBehaviour:
   - _actionType: 7
     _delay: 0
     _duration: 0.5
-    _param1: Attack
+    _param1: attack
     _param2: Self
     _param3: 0
   - _actionType: 5

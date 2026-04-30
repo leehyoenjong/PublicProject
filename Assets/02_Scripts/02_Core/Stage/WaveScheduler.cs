@@ -25,7 +25,7 @@ namespace PublicFramework
                 StageId = instance.StageId,
                 WaveIndex = idx
             });
-            Debug.Log($"[WaveScheduler] Wave started: {instance.StageId} #{idx}");
+            Debug.Log($"[웨이브] 시작: {instance.StageId} #{idx}");
         }
 
         /// <summary>외부 보고로 transition 조건 충족 시 호출. 다음 wave 가 있으면 시작, 아니면 false.</summary>
@@ -42,7 +42,7 @@ namespace PublicFramework
             int nextIdx = prevIdx + 1;
             if (instance.Data.Waves == null || nextIdx >= instance.Data.Waves.Count)
             {
-                Debug.Log($"[WaveScheduler] All waves cleared: {instance.StageId}");
+                Debug.Log($"[웨이브] 모든 웨이브 클리어: {instance.StageId}");
                 return false;
             }
 

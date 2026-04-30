@@ -102,7 +102,7 @@ namespace PublicFramework
             });
 
             ScheduleSequence(data, casterId, targetId, casterPos, targetPos, level, powerMult, publishCompleted: true);
-            Debug.Log($"[SkillSystem] Cast: {skillId} by {casterId} -> {targetId} (Lv{level}, cd={cooldown}, cost={cost})");
+            Debug.Log($"[스킬] 시전: {skillId} (시전자={casterId}, 대상={targetId}, Lv{level}, 쿨다운={cooldown}초, 비용={cost})");
             return true;
         }
 
@@ -163,7 +163,7 @@ namespace PublicFramework
 
         private void Fail(string skillId, string casterId, string reason)
         {
-            Debug.LogWarning($"[SkillSystem] Cast failed: {skillId} by {casterId} reason={reason}");
+            Debug.LogWarning($"[스킬] 시전 실패: {skillId} (시전자={casterId}, 사유={reason})");
             _eventBus?.Publish(new SkillCastFailedEvent
             {
                 SkillId = skillId,

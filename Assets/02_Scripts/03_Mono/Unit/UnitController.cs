@@ -20,6 +20,10 @@ namespace PublicFramework
         [Header("연출 (없으면 자식에서 자동 탐색)")]
         [SerializeField] private Animator _animator;
 
+        [Header("사망 처리")]
+        [SerializeField] private bool _returnToPoolOnDeath;
+        [SerializeField] private float _returnDelay = 0.5f;
+
         private IUnit _unitInfo;
         private StatGroupData _baseStatGroup;
         private IStatContainer _stats;
@@ -59,7 +63,7 @@ namespace PublicFramework
                 UnitId = _unitInfo.UnitId,
                 Position = transform.position,
             });
-            Debug.Log($"[UnitController] Spawned: {_instanceId} (unit={_unitInfo.UnitId})");
+            Debug.Log($"[유닛] 등장: {_instanceId} (종류={_unitInfo.UnitId})");
         }
 
         private void OnDestroy()
@@ -226,7 +230,27 @@ namespace PublicFramework
             bool wasAlive = _isAlive;
             _isAlive = UnitDamageRouter.Apply(_stats, _eventBus, _instanceId, _unitInfo.UnitId, _isAlive, delta, source);
             if (wasAlive && !_isAlive)
-                Debug.Log($"[UnitController] Died: {_instanceId} (cause={source})");
+            {
+                Debug.Log($"[유닛] 사망: {_instanceId} (원인={source})");
+                if (_returnToPoolOnDeath)
+                    StartCoroutine(ReturnToPoolAfterDelay());
+            }
+        }
+
+        private IEnumerator ReturnToPoolAfterDelay()
+        {
+            if (_returnDelay > 0f) yield return new WaitForSeconds(_returnDelay);
+            IObjectPoolManager pool = ServiceLocator.Has<IObjectPoolManager>()
+                ? ServiceLocator.Get<IObjectPoolManager>()
+                : null;
+            if (pool != null)
+            {
+                pool.Despawn(gameObject);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
 
 #if UNITY_EDITOR

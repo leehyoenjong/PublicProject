@@ -148,15 +148,21 @@ namespace PublicFramework
 
         private void OnWaveStarted(WaveStartedEvent ev)
         {
-            if (ev.StageId != _stageId || _instance == null) return;
+            if (ev.StageId != _stageId) return;
+
+            // _instance 는 Enter() 의 TryEnter 호출 직후 set 되지만, TryEnter 내부에서 StartWave
+            // → Publish(WaveStartedEvent) 가 동기 호출되므로 본 콜백 시점에 아직 null 일 수 있다.
+            // ServiceLocator 로 한 번 더 lookup 해 race 회피.
+            StageInstance instance = _instance ?? _stageSystem?.GetInstance(_stageId);
+            if (instance == null) return;
 
             _waveElapsed = 0f;
             _aliveByMID.Clear();
 
-            if (_instance.Data?.Waves == null) return;
-            if (ev.WaveIndex < 0 || ev.WaveIndex >= _instance.Data.Waves.Count) return;
+            if (instance.Data?.Waves == null) return;
+            if (ev.WaveIndex < 0 || ev.WaveIndex >= instance.Data.Waves.Count) return;
 
-            WaveData wave = _instance.Data.Waves[ev.WaveIndex];
+            WaveData wave = instance.Data.Waves[ev.WaveIndex];
             if (wave?.Monsters == null) return;
 
             foreach (WaveMonsterEntry m in wave.Monsters)

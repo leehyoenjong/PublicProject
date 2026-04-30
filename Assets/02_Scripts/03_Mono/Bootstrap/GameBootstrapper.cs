@@ -19,11 +19,19 @@ namespace PublicFramework
         [SerializeField] private DropTableDataCollection _dropTables;
         [SerializeField] private MonsterEventCatalog _monsterEventCatalog;
 
+        [Header("Stage (선택 — IStageSystem 등록 + chapter/stage 컬렉션 자동 등록)")]
+        [SerializeField] private bool _enableStage = true;
+        [SerializeField] private StageConfig _stageConfig;
+        [SerializeField] private ChapterDataCollection _chapterCollection;
+        [SerializeField] private StageDataCollection _stageCollection;
+        [SerializeField] private int _initialUnlockLevel = 1;
+
         private EventBus _eventBus;
         private StatSystem _statSystem;
         private BuffSystem _buffSystem;
         private MonsterSystem _monsterSystem;
         private SoundManager _soundManager;
+        private StageSystem _stageSystem;
 
         private void Awake()
         {
@@ -47,7 +55,26 @@ namespace PublicFramework
                 ServiceLocator.Register<ISoundManager>(_soundManager);
             }
 
-            Debug.Log($"[GameBootstrapper] Core systems registered: EventBus / Stat / Buff / Monster{(_soundManager != null ? " / Sound" : "")}");
+            if (_enableStage)
+            {
+                StageConfig cfg = _stageConfig != null ? _stageConfig : ScriptableObject.CreateInstance<StageConfig>();
+                _stageSystem = new StageSystem(_eventBus, cfg);
+                ServiceLocator.Register<IStageSystem>(_stageSystem);
+
+                if (_chapterCollection != null && _chapterCollection.Items != null)
+                {
+                    foreach (ChapterData c in _chapterCollection.Items)
+                        _stageSystem.RegisterChapter(c);
+                }
+                if (_stageCollection != null && _stageCollection.Items != null)
+                {
+                    foreach (StageData s in _stageCollection.Items)
+                        _stageSystem.RegisterStage(s);
+                }
+                _stageSystem.CheckUnlocks(_initialUnlockLevel);
+            }
+
+            Debug.Log($"[GameBootstrapper] Core systems registered: EventBus / Stat / Buff / Monster{(_soundManager != null ? " / Sound" : "")}{(_stageSystem != null ? " / Stage" : "")}");
         }
 
         private void Update()
@@ -59,6 +86,7 @@ namespace PublicFramework
 
         private void OnDestroy()
         {
+            if (_stageSystem != null) ServiceLocator.Unregister<IStageSystem>();
             if (_soundManager != null) ServiceLocator.Unregister<ISoundManager>();
             ServiceLocator.Unregister<IMonsterSystem>();
             ServiceLocator.Unregister<IBuffSystem>();

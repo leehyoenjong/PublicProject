@@ -104,7 +104,7 @@ namespace PublicFramework
                 _eventScheduler?.OnWaveStart(instance, 0);
             }
 
-            Debug.Log($"[StageSystem] Stage entered: {context.StageId} (sweep={context.IsSweep})");
+            Debug.Log($"[스테이지] 진입: {context.StageId} (소탕={context.IsSweep})");
             return true;
         }
 
@@ -184,7 +184,7 @@ namespace PublicFramework
 
             CheckChapterCompletion(instance.Data.ChapterId);
 
-            Debug.Log($"[StageSystem] Stage cleared: {instance.StageId} stars={starsAchieved} firstClear={isFirstClear}");
+            Debug.Log($"[스테이지] 클리어: {instance.StageId} (별점={starsAchieved}, 첫클리어={isFirstClear})");
             _activeStage = null;
         }
 

@@ -51,7 +51,7 @@ namespace PublicFramework
                 Element = entry.Param2
             });
 
-            Debug.Log($"[DealDamageAction] {context.CasterId} -> {context.TargetId} : {finalAmount} ({entry.Param2})");
+            Debug.Log($"[데미지] {context.CasterId} → {context.TargetId} : {finalAmount:F1} ({entry.Param2})");
         }
     }
 }

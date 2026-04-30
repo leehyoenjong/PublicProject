@@ -206,6 +206,8 @@ MonoBehaviour:
   _unitInfoAsset: {fileID: 11400000, guid: dbe692150571747a79d603e97cfc1cde, type: 2}
   _initialLevel: 1
   _animator: {fileID: 8100000000000000004}
+  _returnToPoolOnDeath: 1
+  _returnDelay: 0.5
 --- !u!114 &8100000000000000008
 MonoBehaviour:
   m_ObjectHideFlags: 0
