@@ -70,7 +70,29 @@ namespace PublicFramework
         {
             if (_skill == null || string.IsNullOrEmpty(_skill.SkillId)) return;
             if (_controller == null || !_controller.IsAlive) return;
-            _controller.CastSkill(_skill.SkillId);
+
+            string targetId = FindNearestEnemyInstanceId();
+            _controller.CastSkill(_skill.SkillId, targetId);
+        }
+
+        private string FindNearestEnemyInstanceId()
+        {
+            UnitController[] all = FindObjectsByType<UnitController>(FindObjectsSortMode.None);
+            UnitController nearest = null;
+            float nearestSqr = float.MaxValue;
+            Vector3 origin = transform.position;
+
+            foreach (UnitController u in all)
+            {
+                if (u == _controller) continue;
+                if (!u.IsAlive) continue;
+                float sqr = (u.transform.position - origin).sqrMagnitude;
+                if (sqr >= nearestSqr) continue;
+                nearestSqr = sqr;
+                nearest = u;
+            }
+
+            return nearest != null ? nearest.InstanceId : null;
         }
 
         private void Update()

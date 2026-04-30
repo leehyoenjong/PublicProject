@@ -31,13 +31,25 @@ MonoBehaviour:
   - _actionType: 7
     _delay: 0
     _duration: 0.5
-    _param1: swing
+    _param1: Attack
     _param2: Self
     _param3: 0
+  - _actionType: 5
+    _delay: 0.1
+    _duration: 0
+    _param1: sfx_axe_swing
+    _param2:
+    _param3:
   - _actionType: 1
     _delay: 0.4
     _duration: 0
     _param1: 15
     _param2: Physical
     _param3: Attack
+  - _actionType: 6
+    _delay: 0.4
+    _duration: 1
+    _param1: hitfx_placeholder
+    _param2:
+    _param3:
   _levelTable: []

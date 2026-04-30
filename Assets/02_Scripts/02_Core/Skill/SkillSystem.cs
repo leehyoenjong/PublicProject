@@ -218,8 +218,8 @@ namespace PublicFramework
                 EventBus = _eventBus,
                 BuffSystem = _buffSystem,
                 StatSystem = _statSystem,
-                SoundManager = _soundManager,
-                ObjectPool = _objectPool,
+                SoundManager = _soundManager ?? (ServiceLocator.Has<ISoundManager>() ? ServiceLocator.Get<ISoundManager>() : null),
+                ObjectPool = _objectPool ?? (ServiceLocator.Has<IObjectPoolManager>() ? ServiceLocator.Get<IObjectPoolManager>() : null),
                 SkillSystem = this
             };
 

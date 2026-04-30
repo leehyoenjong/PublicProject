@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PublicFramework
 {
@@ -122,7 +123,35 @@ namespace PublicFramework
 
         private GameObject CreateNewObject()
         {
-            GameObject obj = Object.Instantiate(_prefab, _parent);
+            if (_prefab == null)
+            {
+                Debug.LogError($"[ObjectPool] '{_config.Id}' _prefab is fake-null — Inspector reference broken (probably scene instance instead of prefab asset).");
+                return null;
+            }
+#if UNITY_EDITOR
+            // Unity 6 Editor 환경에서 generic Instantiate<GameObject>(prefab asset) 이 InvalidCastException 을,
+            // PrefabUtility.InstantiatePrefab 도 fake-null marker 를 반환하는 케이스가 있다. instance 는 정상적으로
+            // 씬에 만들어지므로 호출 전후의 scene root 차이로 새 instance 를 직접 찾아낸다 (Player 빌드는 일반 Instantiate).
+            Scene scene = _parent.gameObject.scene;
+            HashSet<int> beforeRoots = new HashSet<int>();
+            foreach (GameObject g in scene.GetRootGameObjects()) beforeRoots.Add(g.GetInstanceID());
+            UnityEditor.PrefabUtility.InstantiatePrefab(_prefab);
+            GameObject obj = null;
+            foreach (GameObject g in scene.GetRootGameObjects())
+            {
+                if (beforeRoots.Contains(g.GetInstanceID())) continue;
+                obj = g;
+                break;
+            }
+            if (obj == null)
+            {
+                Debug.LogError($"[ObjectPool] '{_config.Id}' instance not found in scene roots after InstantiatePrefab");
+                return null;
+            }
+#else
+            GameObject obj = Object.Instantiate(_prefab);
+#endif
+            obj.transform.SetParent(_parent, worldPositionStays: false);
             obj.SetActive(false);
             return obj;
         }
