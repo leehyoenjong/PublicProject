@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PublicFramework
 {
@@ -6,6 +7,7 @@ namespace PublicFramework
     /// Core 시스템 통합 부팅 진입점. Awake 에서 EventBus → StatSystem → BuffSystem → MonsterSystem
     /// → (SoundManager 옵션) 를 만들고 ServiceLocator 에 등록한다. SkillSystemInitializer/PoolInitializer
     /// 보다 먼저 실행되도록 [DefaultExecutionOrder(-1000)].
+    /// 부팅 완료 후 _nextScene 으로 자동 전환. INIT 자신은 DontDestroyOnLoad 로 살아남는다.
     /// </summary>
     [DefaultExecutionOrder(-1000)]
     public class GameBootstrapper : MonoBehaviour
@@ -26,15 +28,29 @@ namespace PublicFramework
         [SerializeField] private StageDataCollection _stageCollection;
         [SerializeField] private int _initialUnlockLevel = 1;
 
+        [Header("Scene 전환 (부팅 완료 후 자동 LoadScene)")]
+        [SerializeField] private bool _loadNextSceneOnBoot = true;
+        [SerializeField, SceneName] private string _nextScene = "02_Battle";
+
         private EventBus _eventBus;
         private StatSystem _statSystem;
         private BuffSystem _buffSystem;
         private MonsterSystem _monsterSystem;
         private SoundManager _soundManager;
         private StageSystem _stageSystem;
+        private bool _isOwner;
 
         private void Awake()
         {
+            if (ServiceLocator.Has<IEventBus>())
+            {
+                Debug.LogWarning("[부팅] 중복 진입점 감지 — 이 인스턴스는 파기");
+                Destroy(gameObject);
+                return;
+            }
+
+            _isOwner = true;
+
             _eventBus = new EventBus();
             ServiceLocator.Register<IEventBus>(_eventBus);
 
@@ -77,6 +93,29 @@ namespace PublicFramework
             Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}");
         }
 
+        // DontDestroyOnLoad + LoadScene 은 Start 로 미룸. Awake 에서 호출하면 INIT 이 즉시 DontDestroyOnLoad 씬으로
+        // 옮겨져 같은 batch 의 다른 Awake (PoolInitializer 등) 가 prefab reference fake-null 을 만나는 케이스 회피.
+        private void Start()
+        {
+            if (!_isOwner) return;
+
+            DontDestroyOnLoad(gameObject);
+
+            if (_loadNextSceneOnBoot && !string.IsNullOrEmpty(_nextScene))
+            {
+                Scene current = SceneManager.GetActiveScene();
+                if (current.name == _nextScene)
+                {
+                    Debug.Log($"[부팅] 다음 씬 '{_nextScene}' 이 이미 활성화 — LoadScene 생략");
+                }
+                else
+                {
+                    Debug.Log($"[부팅] 다음 씬 로드: '{_nextScene}'");
+                    SceneManager.LoadScene(_nextScene);
+                }
+            }
+        }
+
         private void Update()
         {
             float dt = Time.deltaTime;
@@ -86,6 +125,8 @@ namespace PublicFramework
 
         private void OnDestroy()
         {
+            if (!_isOwner) return;
+
             if (_stageSystem != null) ServiceLocator.Unregister<IStageSystem>();
             if (_soundManager != null) ServiceLocator.Unregister<ISoundManager>();
             ServiceLocator.Unregister<IMonsterSystem>();
