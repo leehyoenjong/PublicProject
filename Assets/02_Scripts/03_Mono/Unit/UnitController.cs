@@ -262,6 +262,15 @@ namespace PublicFramework
                 _unitInfoAsset = null;
             }
         }
+
+        [ContextMenu("디버그/HP -5")]
+        private void DebugDamage5() => TakeDirectDamage(5f, "debug");
+
+        [ContextMenu("디버그/HP -20")]
+        private void DebugDamage20() => TakeDirectDamage(20f, "debug");
+
+        [ContextMenu("디버그/즉시 사망")]
+        private void DebugKill() => TakeDirectDamage(99999f, "debug");
 #endif
     }
 }

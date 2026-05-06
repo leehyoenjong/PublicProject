@@ -35,6 +35,9 @@ namespace PublicFramework
 
         private void OnEnable()
         {
+            if (_target == null)
+                _target = GetComponentInParent<UnitController>();
+
             _eventBus = ServiceLocator.Has<IEventBus>() ? ServiceLocator.Get<IEventBus>() : null;
             _eventBus?.Subscribe<UnitHpChangedEvent>(OnHpChanged);
             RefreshImmediate();
