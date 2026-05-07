@@ -8,6 +8,8 @@ namespace PublicFramework
     /// </summary>
     public interface IStageSystem : IService
     {
+        StageConfig Config { get; }
+
         void RegisterChapter(ChapterData chapterData);
         void RegisterStage(StageData stageData);
 

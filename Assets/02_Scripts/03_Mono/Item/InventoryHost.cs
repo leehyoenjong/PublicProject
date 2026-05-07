@@ -79,6 +79,11 @@ namespace PublicFramework
             return _inventory != null ? _inventory.GetCount(mid) : 0;
         }
 
+        public int GetMaxStack(int mid)
+        {
+            return _inventory != null ? _inventory.GetMaxStack(mid) : 0;
+        }
+
         public IItemInstance Get(string instanceId)
         {
             return _inventory?.GetInstance(instanceId);

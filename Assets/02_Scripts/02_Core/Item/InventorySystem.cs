@@ -142,6 +142,11 @@ namespace PublicFramework
             return sum;
         }
 
+        public int GetMaxStack(int mid)
+        {
+            return _repo.TryGetItem(mid, out IItem item) ? item.MaxStack : 0;
+        }
+
         public IItemInstance GetInstance(string instanceId)
         {
             _instances.TryGetValue(instanceId, out var inst);

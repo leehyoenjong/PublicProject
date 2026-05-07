@@ -526,6 +526,7 @@ GameObject:
   - component: {fileID: 2084307180}
   - component: {fileID: 2084307178}
   - component: {fileID: 2084307179}
+  - component: {fileID: 2084307181}
   m_Layer: 0
   m_Name: INIT
   m_TagString: Untagged
@@ -615,8 +616,22 @@ MonoBehaviour:
   _chapterCollection: {fileID: 11400000, guid: 6f777f106d9ed448d8d02251a6b98c6e, type: 2}
   _stageCollection: {fileID: 11400000, guid: 3e123eb3e718f4709ab146208e066959, type: 2}
   _initialUnlockLevel: 1
+  _itemDataCollection: {fileID: 11400000, guid: 17b51c3ebec6244cdb2a5e95ab1f5d6f, type: 2}
   _loadNextSceneOnBoot: 1
   _nextScene: 02_Battle
+--- !u!114 &2084307181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084307176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c72ee4022da7426ca890ff6182486b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PublicFramework.StaminaRecoveryTicker
+  _staminaMid: 40002
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

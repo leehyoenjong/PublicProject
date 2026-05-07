@@ -15,7 +15,7 @@ MonoBehaviour:
   _statGroupId: stat_mon_slime
   _entries:
   - _stat: 0
-    _customKey:
+    _customKey: 
     _baseValue: 12
     _curve: 0
     _growth: 0

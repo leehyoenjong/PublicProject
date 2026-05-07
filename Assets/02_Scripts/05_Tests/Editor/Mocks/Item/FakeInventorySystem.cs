@@ -32,6 +32,8 @@ namespace PublicFramework.Tests
             return _balances.TryGetValue(mid, out int c) ? c : 0;
         }
 
+        public int GetMaxStack(int mid) => int.MaxValue;
+
         public bool ConsumeByMID(int mid, int count)
         {
             int current = GetCount(mid);

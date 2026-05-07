@@ -12,6 +12,7 @@ namespace PublicFramework
         bool ConsumeByMID(int mid, int count);
         bool ConsumeByInstance(string instanceId, int count);
         int GetCount(int mid);
+        int GetMaxStack(int mid);
         IItemInstance GetInstance(string instanceId);
         IReadOnlyList<IItemInstance> GetAll();
         IReadOnlyList<IItemInstance> GetByCategory(ItemCategory category);

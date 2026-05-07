@@ -28,6 +28,9 @@ namespace PublicFramework
         [SerializeField] private StageDataCollection _stageCollection;
         [SerializeField] private int _initialUnlockLevel = 1;
 
+        [Header("Item (선택 — IInventorySystem 등록 + ItemDataCollection 로 Repository 채움)")]
+        [SerializeField] private ItemDataCollection _itemDataCollection;
+
         [Header("Scene 전환 (부팅 완료 후 자동 LoadScene)")]
         [SerializeField] private bool _loadNextSceneOnBoot = true;
         [SerializeField, SceneName] private string _nextScene = "02_Battle";
@@ -38,6 +41,7 @@ namespace PublicFramework
         private MonsterSystem _monsterSystem;
         private SoundManager _soundManager;
         private StageSystem _stageSystem;
+        private InventorySystem _inventorySystem;
         private bool _isOwner;
 
         private void Awake()
@@ -90,7 +94,14 @@ namespace PublicFramework
                 _stageSystem.CheckUnlocks(_initialUnlockLevel);
             }
 
-            Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}");
+            if (_itemDataCollection != null)
+            {
+                ItemDataRepository itemRepo = new ItemDataRepository(_itemDataCollection);
+                _inventorySystem = new InventorySystem(itemRepo, _eventBus);
+                ServiceLocator.Register<IInventorySystem>(_inventorySystem);
+            }
+
+            Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}{(_inventorySystem != null ? " / 인벤토리" : "")}");
         }
 
         // DontDestroyOnLoad + LoadScene 은 Start 로 미룸. Awake 에서 호출하면 INIT 이 즉시 DontDestroyOnLoad 씬으로
@@ -127,6 +138,7 @@ namespace PublicFramework
         {
             if (!_isOwner) return;
 
+            if (_inventorySystem != null) ServiceLocator.Unregister<IInventorySystem>();
             if (_stageSystem != null) ServiceLocator.Unregister<IStageSystem>();
             if (_soundManager != null) ServiceLocator.Unregister<ISoundManager>();
             ServiceLocator.Unregister<IMonsterSystem>();

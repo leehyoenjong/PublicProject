@@ -24,6 +24,8 @@ namespace PublicFramework
         private StageInstance _activeStage;
         private StageContext _activeContext;
 
+        public StageConfig Config => _config;
+
         public StageSystem(IEventBus eventBus, StageConfig config)
         {
             _eventBus = eventBus;
