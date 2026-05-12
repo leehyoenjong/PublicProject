@@ -66,7 +66,13 @@ namespace PublicFramework
         private void OnMovePerformed(InputAction.CallbackContext ctx) => _moveInput = ctx.ReadValue<Vector2>();
         private void OnMoveCanceled(InputAction.CallbackContext ctx) => _moveInput = Vector2.zero;
 
-        private void OnSkillPerformed(InputAction.CallbackContext ctx)
+        private void OnSkillPerformed(InputAction.CallbackContext ctx) => FireSkill();
+
+        /// <summary>
+        /// 슬롯에 주입된 SkillData 를 자동 타겟팅으로 시전한다.
+        /// InputAction performed 와 UI Button.onClick 양쪽에서 호출 가능.
+        /// </summary>
+        public void FireSkill()
         {
             if (_skill == null || string.IsNullOrEmpty(_skill.SkillId)) return;
             if (_controller == null || !_controller.IsAlive) return;
@@ -74,6 +80,9 @@ namespace PublicFramework
             string targetId = FindNearestEnemyInstanceId();
             _controller.CastSkill(_skill.SkillId, targetId);
         }
+
+        /// <summary>외부(UI) 가 슬롯 정보를 표시할 때 사용.</summary>
+        public SkillData Skill => _skill;
 
         private string FindNearestEnemyInstanceId()
         {
