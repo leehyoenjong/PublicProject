@@ -1123,6 +1123,24 @@ namespace PublicFramework.Editor.SheetImporter
             {
                 Debug.LogError($"{LOG_PREFIX} [{label}] 첫 에러: {r.FirstErrorOrNull}");
             }
+
+            RunPostImportValidators(entry, r);
+        }
+
+        private static void RunPostImportValidators(SheetImporterEntry entry, GenericSoImporter.ImportResult result)
+        {
+            if (entry == null) return;
+            if (entry.Mode != SheetEntryMode.GenericSO) return;
+            if (result.Failed > 0) return;
+
+            Type t = entry.TargetType;
+            if (t == typeof(SkillData))
+            {
+                string folder = string.IsNullOrEmpty(entry.OutputFolder)
+                    ? $"Assets/09_ScriptableObjects/{t.Name}"
+                    : entry.OutputFolder;
+                SkillBuffDurationValidator.Validate(folder);
+            }
         }
 
         private void RecordFailure(int index, string summary, string logLine)
