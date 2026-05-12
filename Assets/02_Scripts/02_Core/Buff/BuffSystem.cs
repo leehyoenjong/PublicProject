@@ -24,7 +24,7 @@ namespace PublicFramework
             Debug.Log("[버프] 초기화 시작.");
         }
 
-        public BuffResult AddBuff(string targetId, BuffData buffData, string sourceId)
+        public BuffResult AddBuff(string targetId, BuffData buffData, string sourceId, string sourceSkillId = "")
         {
             if (buffData == null)
             {
@@ -38,6 +38,8 @@ namespace PublicFramework
                 return new BuffResult { Success = false, FailReason = "targetId is null" };
             }
 
+            string skillKey = sourceSkillId ?? string.Empty;
+
             // 면역 체크
             if (IsImmune(targetId, buffData))
             {
@@ -45,6 +47,7 @@ namespace PublicFramework
                 {
                     TargetId = targetId,
                     BuffId = buffData.BuffId,
+                    SourceSkillId = skillKey,
                     Reason = "Immune"
                 });
 
@@ -52,30 +55,30 @@ namespace PublicFramework
                 return new BuffResult { Success = false, BuffId = buffData.BuffId, FailReason = "Immune" };
             }
 
-            // 기존 버프 확인
-            BuffInstance existing = FindBuff(targetId, buffData.BuffId);
+            // 기존 버프 확인 — (buffId + sourceSkillId) 페어로 매칭
+            BuffInstance existing = FindBuff(targetId, buffData.BuffId, skillKey);
 
             if (existing != null)
             {
-                return HandleExistingBuff(targetId, buffData, existing, sourceId);
+                return HandleExistingBuff(targetId, buffData, existing, sourceId, skillKey);
             }
 
-            return ApplyNewBuff(targetId, buffData, sourceId);
+            return ApplyNewBuff(targetId, buffData, sourceId, skillKey);
         }
 
-        public bool RemoveBuff(string targetId, string buffId)
+        public bool RemoveBuff(string targetId, string buffId, string sourceSkillId = null)
         {
             if (!_activeBuffs.TryGetValue(targetId, out List<BuffInstance> buffs)) return false;
 
             for (int i = buffs.Count - 1; i >= 0; i--)
             {
-                if (buffs[i].BuffId == buffId)
-                {
-                    RemoveBuffInstance(targetId, buffs[i], "Manual");
-                    buffs.RemoveAt(i);
-                    CleanupEmptyList(targetId);
-                    return true;
-                }
+                if (buffs[i].BuffId != buffId) continue;
+                if (sourceSkillId != null && buffs[i].SourceSkillId != sourceSkillId) continue;
+
+                RemoveBuffInstance(targetId, buffs[i], "Manual");
+                buffs.RemoveAt(i);
+                CleanupEmptyList(targetId);
+                return true;
             }
 
             return false;
@@ -112,14 +115,14 @@ namespace PublicFramework
             return new List<IBuffInstance>().AsReadOnly();
         }
 
-        public bool HasBuff(string targetId, string buffId)
+        public bool HasBuff(string targetId, string buffId, string sourceSkillId = null)
         {
-            return FindBuff(targetId, buffId) != null;
+            return FindBuff(targetId, buffId, sourceSkillId) != null;
         }
 
-        public int GetStackCount(string targetId, string buffId)
+        public int GetStackCount(string targetId, string buffId, string sourceSkillId = null)
         {
-            BuffInstance instance = FindBuff(targetId, buffId);
+            BuffInstance instance = FindBuff(targetId, buffId, sourceSkillId);
             return instance?.CurrentStack ?? 0;
         }
 
@@ -179,12 +182,14 @@ namespace PublicFramework
 
                     if (expired)
                     {
-                        RemoveBuffInstance(targetId, buffs[i], "Expired");
+                        BuffInstance expiredInstance = buffs[i];
+                        RemoveBuffInstance(targetId, expiredInstance, "Expired");
 
                         _eventBus?.Publish(new BuffExpiredEvent
                         {
                             TargetId = targetId,
-                            BuffId = buffs[i].BuffId
+                            BuffId = expiredInstance.BuffId,
+                            SourceSkillId = expiredInstance.SourceSkillId
                         });
 
                         buffs.RemoveAt(i);
@@ -205,12 +210,14 @@ namespace PublicFramework
 
                 if (expired)
                 {
-                    RemoveBuffInstance(targetId, buffs[i], "TurnExpired");
+                    BuffInstance expiredInstance = buffs[i];
+                    RemoveBuffInstance(targetId, expiredInstance, "TurnExpired");
 
                     _eventBus?.Publish(new BuffExpiredEvent
                     {
                         TargetId = targetId,
-                        BuffId = buffs[i].BuffId
+                        BuffId = expiredInstance.BuffId,
+                        SourceSkillId = expiredInstance.SourceSkillId
                     });
 
                     buffs.RemoveAt(i);
@@ -220,9 +227,9 @@ namespace PublicFramework
             CleanupEmptyList(targetId);
         }
 
-        private BuffResult ApplyNewBuff(string targetId, BuffData buffData, string sourceId)
+        private BuffResult ApplyNewBuff(string targetId, BuffData buffData, string sourceId, string sourceSkillId)
         {
-            var instance = new BuffInstance(buffData, targetId, sourceId, _locSystem);
+            var instance = new BuffInstance(buffData, targetId, sourceId, sourceSkillId, _locSystem);
 
             if (!_activeBuffs.TryGetValue(targetId, out List<BuffInstance> buffs))
             {
@@ -249,11 +256,12 @@ namespace PublicFramework
             {
                 TargetId = targetId,
                 BuffId = buffData.BuffId,
+                SourceSkillId = sourceSkillId,
                 StackCount = instance.CurrentStack,
                 Duration = instance.RemainingDuration
             });
 
-            Debug.Log($"[버프] 버프 적용됨: {buffData.BuffId} → {targetId}");
+            Debug.Log($"[버프] 버프 적용됨: {buffData.BuffId} → {targetId} (skill={sourceSkillId})");
 
             return new BuffResult
             {
@@ -263,7 +271,7 @@ namespace PublicFramework
             };
         }
 
-        private BuffResult HandleExistingBuff(string targetId, BuffData buffData, BuffInstance existing, string sourceId)
+        private BuffResult HandleExistingBuff(string targetId, BuffData buffData, BuffInstance existing, string sourceId, string sourceSkillId)
         {
             switch (buffData.StackPolicy)
             {
@@ -274,6 +282,7 @@ namespace PublicFramework
                     {
                         TargetId = targetId,
                         BuffId = buffData.BuffId,
+                        SourceSkillId = sourceSkillId,
                         NewDuration = existing.RemainingDuration
                     });
 
@@ -291,6 +300,7 @@ namespace PublicFramework
                     {
                         TargetId = targetId,
                         BuffId = buffData.BuffId,
+                        SourceSkillId = sourceSkillId,
                         NewDuration = existing.RemainingDuration
                     });
 
@@ -342,6 +352,7 @@ namespace PublicFramework
                     {
                         TargetId = targetId,
                         BuffId = buffData.BuffId,
+                        SourceSkillId = sourceSkillId,
                         OldStack = oldStack,
                         NewStack = existing.CurrentStack
                     });
@@ -354,8 +365,8 @@ namespace PublicFramework
                     };
 
                 case StackPolicy.Independent:
-                    // 독립 스택: 별도 인스턴스로 추가
-                    return ApplyNewBuff(targetId, buffData, sourceId);
+                    // 독립 스택: 별도 인스턴스로 추가 (sourceSkillId 동일해도 강제 분리)
+                    return ApplyNewBuff(targetId, buffData, sourceId, sourceSkillId);
 
                 default:
                     return new BuffResult { Success = false, FailReason = "Unknown StackPolicy" };
@@ -378,22 +389,25 @@ namespace PublicFramework
             {
                 TargetId = targetId,
                 BuffId = instance.BuffId,
+                SourceSkillId = instance.SourceSkillId,
                 RemoveReason = reason
             });
 
             Debug.Log($"[버프] 버프 제거됨: {instance.BuffId} ← {targetId} ({reason})");
         }
 
-        private BuffInstance FindBuff(string targetId, string buffId)
+        private BuffInstance FindBuff(string targetId, string buffId, string sourceSkillId)
         {
             if (!_activeBuffs.TryGetValue(targetId, out List<BuffInstance> buffs)) return null;
 
             foreach (BuffInstance buff in buffs)
             {
-                if (buff.BuffId == buffId && !buff.IsExpired)
-                {
-                    return buff;
-                }
+                if (buff.IsExpired) continue;
+                if (buff.BuffId != buffId) continue;
+                // sourceSkillId 가 null 이면 buffId 만으로 매칭 (외부 호출 호환)
+                if (sourceSkillId != null && buff.SourceSkillId != sourceSkillId) continue;
+
+                return buff;
             }
 
             return null;

@@ -10,6 +10,7 @@ namespace PublicFramework
         string BuffId { get; }
         string TargetId { get; }
         string SourceId { get; }
+        string SourceSkillId { get; }
         BuffCategory Category { get; }
         int CurrentStack { get; }
         int MaxStack { get; }

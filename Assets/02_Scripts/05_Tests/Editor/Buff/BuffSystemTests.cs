@@ -44,12 +44,13 @@ namespace PublicFramework.Tests.Buff
         {
             BuffData data = TestHelpers.MakeBuffData("buf1", duration: 5f);
 
-            _system.AddBuff(TARGET, data, SOURCE);
+            _system.AddBuff(TARGET, data, SOURCE, "skill_x");
 
             var events = _bus.GetPublished<BuffAppliedEvent>();
             Assert.AreEqual(1, events.Count);
             Assert.AreEqual("buf1", events[0].BuffId);
             Assert.AreEqual(TARGET, events[0].TargetId);
+            Assert.AreEqual("skill_x", events[0].SourceSkillId);
             Assert.AreEqual(1, events[0].StackCount);
             Assert.AreEqual(5f, events[0].Duration, 0.001f);
         }
@@ -379,6 +380,63 @@ namespace PublicFramework.Tests.Buff
         public void GetBuffs_EmptyTarget_ReturnsEmpty()
         {
             Assert.AreEqual(0, _system.GetBuffs("unknown").Count);
+        }
+
+        // ---------- SourceSkillId 분리 ----------
+
+        [Test]
+        public void AddBuff_DifferentSourceSkillId_CreatesSeparateInstances()
+        {
+            BuffData data = TestHelpers.MakeBuffData("buf1", duration: 10f);
+
+            _system.AddBuff(TARGET, data, SOURCE, "skill_a");
+            _system.AddBuff(TARGET, data, SOURCE, "skill_b");
+
+            Assert.AreEqual(2, _system.GetBuffs(TARGET).Count);
+            Assert.IsTrue(_system.HasBuff(TARGET, "buf1", "skill_a"));
+            Assert.IsTrue(_system.HasBuff(TARGET, "buf1", "skill_b"));
+        }
+
+        [Test]
+        public void AddBuff_SameSourceSkillId_RefreshesExistingInstance()
+        {
+            BuffData data = TestHelpers.MakeBuffData("buf1",
+                stackPolicy: StackPolicy.None, refreshPolicy: RefreshPolicy.Reset, duration: 10f);
+
+            _system.AddBuff(TARGET, data, SOURCE, "skill_a");
+            _system.AddBuff(TARGET, data, SOURCE, "skill_a");
+
+            Assert.AreEqual(1, _system.GetBuffs(TARGET).Count);
+            Assert.AreEqual(1, _bus.GetPublished<BuffRefreshedEvent>().Count);
+            Assert.AreEqual("skill_a", _bus.GetPublished<BuffRefreshedEvent>()[0].SourceSkillId);
+        }
+
+        [Test]
+        public void RemoveBuff_BySourceSkillId_RemovesOnlyMatching()
+        {
+            BuffData data = TestHelpers.MakeBuffData("buf1");
+            _system.AddBuff(TARGET, data, SOURCE, "skill_a");
+            _system.AddBuff(TARGET, data, SOURCE, "skill_b");
+
+            bool ok = _system.RemoveBuff(TARGET, "buf1", "skill_a");
+
+            Assert.IsTrue(ok);
+            Assert.IsFalse(_system.HasBuff(TARGET, "buf1", "skill_a"));
+            Assert.IsTrue(_system.HasBuff(TARGET, "buf1", "skill_b"));
+        }
+
+        [Test]
+        public void AddBuff_StackIntensity_DifferentSourceSkillId_DoesNotShareStack()
+        {
+            BuffData data = TestHelpers.MakeBuffData("buf1",
+                stackPolicy: StackPolicy.Intensity, maxStack: 3, targetStats: OnePassive());
+
+            _system.AddBuff(TARGET, data, SOURCE, "skill_a");
+            _system.AddBuff(TARGET, data, SOURCE, "skill_b");
+
+            Assert.AreEqual(2, _system.GetBuffs(TARGET).Count);
+            Assert.AreEqual(1, _system.GetStackCount(TARGET, "buf1", "skill_a"));
+            Assert.AreEqual(1, _system.GetStackCount(TARGET, "buf1", "skill_b"));
         }
     }
 }

@@ -41,7 +41,8 @@ namespace PublicFramework
                 return;
             }
 
-            context.BuffSystem.AddBuff(targetId, data, context.CasterId);
+            string sourceSkillId = context.SkillData != null ? context.SkillData.SkillId : string.Empty;
+            context.BuffSystem.AddBuff(targetId, data, context.CasterId, sourceSkillId);
         }
 
         private static string ResolveTarget(SkillContext context, string role)

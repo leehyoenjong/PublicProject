@@ -4,6 +4,7 @@ namespace PublicFramework
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
         public int StackCount;
         public float Duration;
     }
@@ -12,6 +13,7 @@ namespace PublicFramework
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
         public string RemoveReason;
     }
 
@@ -19,12 +21,14 @@ namespace PublicFramework
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
     }
 
     public struct BuffStackChangedEvent
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
         public int OldStack;
         public int NewStack;
     }
@@ -33,6 +37,7 @@ namespace PublicFramework
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
         public float NewDuration;
     }
 
@@ -40,6 +45,7 @@ namespace PublicFramework
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
         public float TickValue;
         public int RemainingTicks;
     }
@@ -48,6 +54,7 @@ namespace PublicFramework
     {
         public string TargetId;
         public string BuffId;
+        public string SourceSkillId;
         public string Reason;
     }
 }

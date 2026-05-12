@@ -11,6 +11,7 @@ namespace PublicFramework
         private readonly BuffData _data;
         private readonly string _targetId;
         private readonly string _sourceId;
+        private readonly string _sourceSkillId;
         private readonly ILocalizationSystem _locSystem;
         private readonly List<IStatModifier> _modifiers = new List<IStatModifier>();
 
@@ -23,6 +24,7 @@ namespace PublicFramework
         public string BuffId => _data.BuffId;
         public string TargetId => _targetId;
         public string SourceId => _sourceId;
+        public string SourceSkillId => _sourceSkillId;
         public BuffCategory Category => _data.Category;
         public int CurrentStack => _currentStack;
         public int MaxStack => _data.MaxStack;
@@ -43,11 +45,12 @@ namespace PublicFramework
 
         private readonly IBuffEffect _customEffect;
 
-        public BuffInstance(BuffData data, string targetId, string sourceId, ILocalizationSystem locSystem, IBuffEffect customEffect = null)
+        public BuffInstance(BuffData data, string targetId, string sourceId, string sourceSkillId, ILocalizationSystem locSystem, IBuffEffect customEffect = null)
         {
             _data = data;
             _targetId = targetId;
             _sourceId = sourceId;
+            _sourceSkillId = sourceSkillId ?? string.Empty;
             _locSystem = locSystem;
             _customEffect = customEffect;
             _currentStack = 1;
@@ -58,7 +61,7 @@ namespace PublicFramework
 
             CreateModifiers();
 
-            Debug.Log($"[버프] 버프 인스턴스 생성됨: {data.BuffId} ({targetId} ← {sourceId})");
+            Debug.Log($"[버프] 버프 인스턴스 생성됨: {data.BuffId} ({targetId} ← {sourceId}, skill={_sourceSkillId})");
         }
 
         public void AddStack()
@@ -122,6 +125,7 @@ namespace PublicFramework
                     {
                         TargetId = _targetId,
                         BuffId = _data.BuffId,
+                        SourceSkillId = _sourceSkillId,
                         TickValue = _data.TickValue * _currentStack,
                         RemainingTicks = remainingTicks
                     });
@@ -155,6 +159,7 @@ namespace PublicFramework
                 {
                     TargetId = _targetId,
                     BuffId = _data.BuffId,
+                    SourceSkillId = _sourceSkillId,
                     TickValue = _data.TickValue * _currentStack,
                     RemainingTicks = remainingTicks
                 });
