@@ -30,6 +30,10 @@ namespace PublicFramework
         [Header("표시 옵션")]
         [SerializeField] private string _cooldownFormat = "{0:F1}";
 
+        [Header("자동 캐스트")]
+        [Tooltip("true 면 쿨다운/사망 가드 통과 시 매 프레임 자동 시전 (방치형/오토배틀 게임). 버튼 클릭과 동시 사용 가능.")]
+        [SerializeField] private bool _autoCast;
+
         private IEventBus _eventBus;
         private ISkillSystem _skillSystem;
         private Action<SkillCooldownStartedEvent> _onCooldownStarted;
@@ -106,19 +110,27 @@ namespace PublicFramework
 
         private void Update()
         {
-            if (!_isCoolingDown) return;
             if (_skillSystem == null || _caster == null || _skill == null) return;
 
-            ISkillInstance inst = _skillSystem.GetInstance(_caster.InstanceId, _skill.SkillId);
-            if (inst == null || inst.CooldownRemaining <= 0f)
+            if (_isCoolingDown)
             {
-                ResetCooldownVisual();
-                return;
+                ISkillInstance inst = _skillSystem.GetInstance(_caster.InstanceId, _skill.SkillId);
+                if (inst == null || inst.CooldownRemaining <= 0f)
+                {
+                    ResetCooldownVisual();
+                }
+                else
+                {
+                    float ratio = _currentDuration > 0f ? Mathf.Clamp01(inst.CooldownRemaining / _currentDuration) : 0f;
+                    if (_cooldownOverlay != null) _cooldownOverlay.fillAmount = ratio;
+                    if (_cooldownText != null) _cooldownText.text = string.Format(_cooldownFormat, inst.CooldownRemaining);
+                }
             }
 
-            float ratio = _currentDuration > 0f ? Mathf.Clamp01(inst.CooldownRemaining / _currentDuration) : 0f;
-            if (_cooldownOverlay != null) _cooldownOverlay.fillAmount = ratio;
-            if (_cooldownText != null) _cooldownText.text = string.Format(_cooldownFormat, inst.CooldownRemaining);
+            if (_autoCast && !_isCoolingDown && _caster.IsAlive)
+            {
+                TryCast();
+            }
         }
 
         private void OnCooldownStarted(SkillCooldownStartedEvent evt)
@@ -136,7 +148,9 @@ namespace PublicFramework
             ResetCooldownVisual();
         }
 
-        private void OnButtonClicked()
+        private void OnButtonClicked() => TryCast();
+
+        private void TryCast()
         {
             if (_caster == null || _skill == null || string.IsNullOrEmpty(_skill.SkillId)) return;
             if (!_caster.IsAlive) return;
