@@ -22,6 +22,23 @@ namespace PublicFramework
             _skillSystem = CreateSkillSystem();
             ServiceLocator.Register<ISkillSystem>(_skillSystem);
             RegisterSkills();
+            InjectMonsterAIRegistry();
+        }
+
+        // 몬스터 BT 의 액션 레지스트리를 MonsterSystem 에 주입한다(없으면 _treeExecutor=null 이라 TickAI 가 즉시 종료).
+        // CastSkill 액션이 실제 ISkillSystem 으로 시전하도록 SkillSystem 생성 직후 이 시점에서 연결한다.
+        // GameBootstrapper([DefaultExecutionOrder(-1000)])가 먼저 돌아 IMonsterSystem 은 이미 등록돼 있다.
+        private void InjectMonsterAIRegistry()
+        {
+            if (!ServiceLocator.Has<IMonsterSystem>())
+            {
+                Debug.LogWarning("[스킬초기화] IMonsterSystem 미등록 — 몬스터 BT 액션 레지스트리 주입 생략(몬스터 AI 비활성)");
+                return;
+            }
+
+            IMonsterSystem monsterSystem = ServiceLocator.Get<IMonsterSystem>();
+            monsterSystem.SetActionRegistry(BehaviorActionRegistry.CreateDefault(_skillSystem));
+            Debug.Log("[스킬초기화] 몬스터 BT 액션 레지스트리 주입 완료 (CastSkill→SkillSystem)");
         }
 
         private void Update()

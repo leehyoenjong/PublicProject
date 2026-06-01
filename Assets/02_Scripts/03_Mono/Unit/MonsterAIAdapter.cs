@@ -88,6 +88,7 @@ namespace PublicFramework
             IUnit targetUnit = null;
             Vector3 targetPos = Vector3.zero;
             IStatContainer targetStats = null;
+            string targetInstanceId = null;
 
             if (_target != null)
             {
@@ -96,11 +97,12 @@ namespace PublicFramework
                 {
                     targetUnit = tc.Unit;
                     targetStats = tc.Stats;
+                    targetInstanceId = tc.InstanceId;
                 }
                 targetPos = _target.position;
             }
 
-            _monsterSystem.TickAI(_controller.InstanceId, Time.deltaTime, targetUnit, targetPos, targetStats);
+            _monsterSystem.TickAI(_controller.InstanceId, Time.deltaTime, targetUnit, targetPos, targetStats, targetInstanceId, transform.position);
         }
 
         /// <summary>

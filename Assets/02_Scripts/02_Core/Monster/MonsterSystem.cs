@@ -244,10 +244,13 @@ namespace PublicFramework
             return _aiContexts.TryGetValue(instanceId, out BehaviorContext ctx) ? ctx : null;
         }
 
-        public BehaviorNodeStatus TickAI(string instanceId, float deltaTime, IUnit target, Vector3 targetPosition, IStatContainer targetStats = null)
+        public BehaviorNodeStatus TickAI(string instanceId, float deltaTime, IUnit target, Vector3 targetPosition, IStatContainer targetStats = null, string targetInstanceId = null, Vector3? selfPosition = null)
         {
             if (_treeExecutor == null) return BehaviorNodeStatus.Failure;
             if (!_instances.TryGetValue(instanceId, out MonsterInstance inst)) return BehaviorNodeStatus.Failure;
+
+            // 매 프레임 self 위치 동기화: TargetInRange 등 거리 판정이 스폰점이 아닌 현재 위치 기준이 되도록.
+            if (selfPosition.HasValue) inst.SetPosition(selfPosition.Value);
 
             string presetId = inst.Info?.AIPresetMID;
             if (string.IsNullOrEmpty(presetId)) return BehaviorNodeStatus.Failure;
@@ -261,6 +264,7 @@ namespace PublicFramework
 
             _aiNowSeconds += deltaTime;
             ctx.Target = target;
+            ctx.TargetInstanceId = targetInstanceId;
             ctx.TargetPosition = targetPosition;
             ctx.TargetStats = targetStats;
             ctx.DeltaTime = deltaTime;

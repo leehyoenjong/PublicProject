@@ -16,6 +16,9 @@ namespace PublicFramework
 
         public IMonsterInstance Self { get; set; }
         public IUnit Target { get; set; }
+        // 타겟의 런타임 InstanceId. IUnit.UnitId 는 카탈로그 MID 라 런타임 인스턴스와 불일치하므로,
+        // 스킬 시전 등 "특정 인스턴스 대상" 액션은 이 값을 우선 사용한다(없으면 Target.UnitId fallback).
+        public string TargetInstanceId { get; set; }
         public Vector3 TargetPosition { get; set; }
         public float DeltaTime { get; set; }
         public float NowSeconds { get; set; }

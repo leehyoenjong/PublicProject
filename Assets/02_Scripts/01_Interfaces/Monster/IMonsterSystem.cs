@@ -24,7 +24,7 @@ namespace PublicFramework
         // BT/AI (Phase 1.5)
         void RegisterAIPreset(BehaviorTreePreset preset);
         void SetActionRegistry(BehaviorActionRegistry registry);
-        BehaviorNodeStatus TickAI(string instanceId, float deltaTime, IUnit target, UnityEngine.Vector3 targetPosition, IStatContainer targetStats = null);
+        BehaviorNodeStatus TickAI(string instanceId, float deltaTime, IUnit target, UnityEngine.Vector3 targetPosition, IStatContainer targetStats = null, string targetInstanceId = null, UnityEngine.Vector3? selfPosition = null);
         BehaviorContext GetAIContext(string instanceId);
     }
 }

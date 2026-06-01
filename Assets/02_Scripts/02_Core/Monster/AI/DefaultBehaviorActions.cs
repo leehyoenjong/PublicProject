@@ -71,7 +71,9 @@ namespace PublicFramework
             if (_skillSystem == null) return BehaviorNodeStatus.Failure;
 
             string casterId = c.Self.InstanceId;
-            string targetId = c.Target?.UnitId;
+            // 런타임 InstanceId 우선: UnitController.OnSkillDamage 는 ev.TargetId 를 자신의 InstanceId 로 필터한다.
+            // IUnit.UnitId(카탈로그 MID)를 넘기면 영원히 불일치 → TargetInstanceId 를 우선 사용(없으면 fallback).
+            string targetId = !string.IsNullOrEmpty(c.TargetInstanceId) ? c.TargetInstanceId : c.Target?.UnitId;
             bool ok = _skillSystem.Cast(p1, casterId, targetId);
             return ok ? BehaviorNodeStatus.Success : BehaviorNodeStatus.Failure;
         }
