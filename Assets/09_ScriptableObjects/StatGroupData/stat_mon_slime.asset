@@ -21,7 +21,7 @@ MonoBehaviour:
     _growth: 0
   - _stat: 3
     _customKey: 
-    _baseValue: 8
+    _baseValue: 25
     _curve: 0
     _growth: 1
   - _stat: 1

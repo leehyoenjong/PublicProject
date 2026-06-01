@@ -37,7 +37,7 @@ MonoBehaviour:
   - _actionType: 1
     _delay: 0.3
     _duration: 0
-    _param1: 8
+    _param1: 70
     _param2: Physical
     _param3: Attack
   _levelTable: []

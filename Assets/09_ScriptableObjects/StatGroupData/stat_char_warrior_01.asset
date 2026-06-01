@@ -36,9 +36,9 @@ MonoBehaviour:
     _growth: 0.02
   - _stat: 11
     _customKey: 
-    _baseValue: 3
+    _baseValue: 1
     _curve: 0
-    _growth: 0.6
+    _growth: 0.2
   - _stat: 9
     _customKey: 
     _baseValue: 0
