@@ -24,6 +24,11 @@ namespace PublicFramework
         [SerializeField] private bool _returnToPoolOnDeath;
         [SerializeField] private float _returnDelay = 0.5f;
 
+        [Header("진영 (타겟팅·전투종료 기준)")]
+        [Tooltip("켜면 몬스터(IMonsterInfo)=Enemy, 그 외=Friendly 로 자동 결정. 끄면 아래 _faction 사용(소환물/적성 캐릭터 등).")]
+        [SerializeField] private bool _autoFaction = true;
+        [SerializeField] private Faction _faction = Faction.Friendly;
+
         private IUnit _unitInfo;
         private StatGroupData _baseStatGroup;
         private IStatContainer _stats;
@@ -36,6 +41,7 @@ namespace PublicFramework
             => ServiceLocator.Has<ISkillSystem>() ? ServiceLocator.Get<ISkillSystem>() : null;
         private string _instanceId;
         private bool _isAlive = true;
+        private Faction _resolvedFaction = Faction.Friendly;
         private Coroutine _moveCoroutine;
 
         private Action<SkillAnimationEvent> _onAnimation;
@@ -47,6 +53,7 @@ namespace PublicFramework
         public IUnit Unit => _unitInfo;
         public IStatContainer Stats => _stats;
         public bool IsAlive => _isAlive;
+        public Faction Faction => _resolvedFaction;
         public Animator Animator => _animator;
 
         private void Awake()
@@ -85,6 +92,9 @@ namespace PublicFramework
 
             _baseStatGroup = _unitInfo.BaseStatGroup;
             _instanceId = $"{_unitInfo.UnitId}_{Guid.NewGuid().ToString("N").Substring(0, 8)}";
+            _resolvedFaction = _autoFaction
+                ? (_unitInfo is IMonsterInfo ? Faction.Enemy : Faction.Friendly)
+                : _faction;
             return true;
         }
 

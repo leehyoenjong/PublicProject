@@ -121,6 +121,8 @@ namespace PublicFramework
 
                     _customEffect?.OnTick(_targetId, deltaTime);
 
+                    // 주: BuffTickEvent 는 "틱 발생 + TickValue" 통지만 한다. DoT 실데미지 적용은 의도적 빈칸 —
+                    // 파생이 이 이벤트를 구독해 UnitDamageRouter/UnitController 로 HP 차감을 처리한다.
                     eventBus?.Publish(new BuffTickEvent
                     {
                         TargetId = _targetId,

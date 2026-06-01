@@ -24,8 +24,16 @@ namespace PublicFramework
 
         private UnitController _controller;
         private Vector2 _moveInput;
+        private ITargetSelector _targetSelector = NearestHostileTargetSelector.Instance;
 
         public Vector2 MoveInput => _moveInput;
+
+        /// <summary>타겟 선택 전략 주입(OCP). null 대입 시 기본(NearestHostile) 로 복귀.</summary>
+        public ITargetSelector TargetSelector
+        {
+            get => _targetSelector;
+            set => _targetSelector = value ?? NearestHostileTargetSelector.Instance;
+        }
 
         private void Awake()
         {
@@ -86,22 +94,10 @@ namespace PublicFramework
 
         private string FindNearestEnemyInstanceId()
         {
+            // 후보 수집은 여기(씬 스캔), 적대/거리 판정은 전략(ITargetSelector) 책임.
             UnitController[] all = FindObjectsByType<UnitController>(FindObjectsSortMode.None);
-            UnitController nearest = null;
-            float nearestSqr = float.MaxValue;
-            Vector3 origin = transform.position;
-
-            foreach (UnitController u in all)
-            {
-                if (u == _controller) continue;
-                if (!u.IsAlive) continue;
-                float sqr = (u.transform.position - origin).sqrMagnitude;
-                if (sqr >= nearestSqr) continue;
-                nearestSqr = sqr;
-                nearest = u;
-            }
-
-            return nearest != null ? nearest.InstanceId : null;
+            UnitController target = _targetSelector.Select(_controller, all);
+            return target != null ? target.InstanceId : null;
         }
 
         private void Update()

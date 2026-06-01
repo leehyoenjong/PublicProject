@@ -18,9 +18,15 @@ namespace PublicFramework
         [Header("타깃 (선택 — 없으면 BT 가 Failure 분기)")]
         [SerializeField] private Transform _target;
 
+        [Header("자동 타겟 (수동 _target 비었을 때 적대 진영 자동 탐색)")]
+        [SerializeField] private bool _autoAcquireTarget = true;
+        [SerializeField] private float _retargetInterval = 0.5f;
+
         private UnitController _controller;
         private IMonsterSystem _monsterSystem;
         private bool _spawned;
+        private readonly ITargetSelector _targetSelector = NearestHostileTargetSelector.Instance;
+        private float _retargetTimer;
 
         public Transform Target
         {
@@ -77,6 +83,8 @@ namespace PublicFramework
             if (!_spawned || _monsterSystem == null) return;
             if (!_controller.IsAlive) return;
 
+            if (_autoAcquireTarget) AutoAcquireTargetIfNeeded();
+
             IUnit targetUnit = null;
             Vector3 targetPos = Vector3.zero;
             IStatContainer targetStats = null;
@@ -93,6 +101,31 @@ namespace PublicFramework
             }
 
             _monsterSystem.TickAI(_controller.InstanceId, Time.deltaTime, targetUnit, targetPos, targetStats);
+        }
+
+        /// <summary>
+        /// 수동 _target 이 비었거나 죽었/비적대면 _retargetInterval 마다 가장 가까운 적대 유닛을 자동 지정.
+        /// 매 프레임 전체 스캔을 피하려 인터벌로 제한(모바일 성능). 타겟 선택 규칙은 ITargetSelector 가 담당.
+        /// </summary>
+        private void AutoAcquireTargetIfNeeded()
+        {
+            if (IsCurrentTargetValid()) return;
+
+            _retargetTimer -= Time.deltaTime;
+            if (_retargetTimer > 0f) return;
+            _retargetTimer = _retargetInterval;
+
+            UnitController[] all = FindObjectsByType<UnitController>(FindObjectsSortMode.None);
+            UnitController picked = _targetSelector.Select(_controller, all);
+            _target = picked != null ? picked.transform : null;
+        }
+
+        private bool IsCurrentTargetValid()
+        {
+            if (_target == null) return false;
+            UnitController tc = _target.GetComponent<UnitController>();
+            if (tc == null) return true; // 비-유닛 타깃(지점 등)은 유효로 간주
+            return tc.IsAlive && FactionRules.IsHostile(_controller.Faction, tc.Faction);
         }
     }
 }
