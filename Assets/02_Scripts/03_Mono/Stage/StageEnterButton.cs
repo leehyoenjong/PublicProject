@@ -8,6 +8,8 @@ namespace PublicFramework
     /// 스테이지 선택 허브용 버튼. 클릭 시 IStageSelection 에 _stageId 를 기록하고 전투 씬을 로드한다.
     /// 전투 씬의 StageBattleHost 가 그 선택을 읽어 해당 스테이지로 진입한다(미등록이면 호스트 기본값).
     /// 로비에 스테이지 수만큼 배치하는 재사용 컴포넌트 — 레이아웃/연출은 파생 몫.
+    /// "명시 선택" 모드를 보여주는 제거 가능한 샘플 — 선택 화면 없는 게임은 이 컴포넌트를 안 쓰면 된다
+    /// (그 경우 StageBattleHost 가 직렬화 기본 스테이지로 진입). 진입 정책 전체는 IStageSelection 참고.
     /// </summary>
     [RequireComponent(typeof(Button))]
     public class StageEnterButton : MonoBehaviour

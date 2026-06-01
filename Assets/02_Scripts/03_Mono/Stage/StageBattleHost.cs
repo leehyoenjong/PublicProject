@@ -112,6 +112,8 @@ namespace PublicFramework
             return _entered;
         }
 
+        // 진입 스테이지 결정. 정책은 파생 게임 선택사항: IStageSelection 에 선택값이 있으면 그것(명시 선택/이어하기),
+        // 없으면 직렬화 _stageId(고정/현재 스테이지). 즉 선택은 override 일 뿐 강제가 아니다.
         private string ResolveStageId()
         {
             if (ServiceLocator.Has<IStageSelection>())
