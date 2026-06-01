@@ -24,6 +24,7 @@ namespace PublicFramework
 
         private UnitController _controller;
         private IMonsterSystem _monsterSystem;
+        private IMonsterInstance _instance;
         private bool _spawned;
         private readonly ITargetSelector _targetSelector = NearestHostileTargetSelector.Instance;
         private float _retargetTimer;
@@ -65,13 +66,13 @@ namespace PublicFramework
 
             if (_aiPreset != null) _monsterSystem.RegisterAIPreset(_aiPreset);
 
-            IMonsterInstance inst = _monsterSystem.Spawn(
+            _instance = _monsterSystem.Spawn(
                 _controller.Unit.UnitId,
                 _controller.InstanceId,
                 _controller.Stats,
                 transform.position);
 
-            _spawned = inst != null;
+            _spawned = _instance != null;
             if (!_spawned)
             {
                 Debug.LogWarning($"[몬스터AI] 스폰 실패 ({_controller.Unit.UnitId}/{_controller.InstanceId})", this);
@@ -103,6 +104,14 @@ namespace PublicFramework
             }
 
             _monsterSystem.TickAI(_controller.InstanceId, Time.deltaTime, targetUnit, targetPos, targetStats, targetInstanceId, transform.position);
+
+            // BT(MoveToTarget)가 Core 인스턴스 위치를 갱신했으면 transform 에 반영. z(2D 깊이)는 유지.
+            if (_instance != null)
+            {
+                Vector3 moved = _instance.Position;
+                moved.z = transform.position.z;
+                transform.position = moved;
+            }
         }
 
         /// <summary>
