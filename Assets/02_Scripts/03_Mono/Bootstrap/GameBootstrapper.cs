@@ -42,6 +42,7 @@ namespace PublicFramework
         private SoundManager _soundManager;
         private StageSystem _stageSystem;
         private StageSelection _stageSelection;
+        private PauseService _pauseService;
         private InventorySystem _inventorySystem;
         private ItemDataRepository _itemRepo;
         private IRewardHandler _rewardHandler;
@@ -75,6 +76,10 @@ namespace PublicFramework
             // 씬 간 스테이지 선택 운반자 (로비 허브 → 전투 씬). 가벼워서 항상 등록.
             _stageSelection = new StageSelection();
             ServiceLocator.Register<IStageSelection>(_stageSelection);
+
+            // 게임 시간 일시정지 seam (전투 메뉴/설정 등). 가벼워서 항상 등록.
+            _pauseService = new PauseService(_eventBus);
+            ServiceLocator.Register<IPauseService>(_pauseService);
 
             if (_enableSound)
             {
@@ -157,6 +162,7 @@ namespace PublicFramework
             if (_itemRepo != null) ServiceLocator.Unregister<IItemRepository>();
             if (_stageSystem != null) ServiceLocator.Unregister<IStageSystem>();
             if (_soundManager != null) ServiceLocator.Unregister<ISoundManager>();
+            ServiceLocator.Unregister<IPauseService>();
             ServiceLocator.Unregister<IStageSelection>();
             ServiceLocator.Unregister<IMonsterSystem>();
             ServiceLocator.Unregister<IBuffSystem>();
