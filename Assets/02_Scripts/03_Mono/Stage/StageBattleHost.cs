@@ -82,11 +82,14 @@ namespace PublicFramework
                 Debug.LogWarning("[전투호스트] IStageSystem 미등록 — 진입 무시", this);
                 return false;
             }
-            if (string.IsNullOrEmpty(_stageId))
+            // 씬 간 선택(IStageSelection)이 있으면 그 스테이지로 진입 — 없으면 직렬화 기본값(_stageId) 폴백.
+            string resolvedStageId = ResolveStageId();
+            if (string.IsNullOrEmpty(resolvedStageId))
             {
                 Debug.LogWarning("[전투호스트] _stageId 미설정 — 진입 무시", this);
                 return false;
             }
+            _stageId = resolvedStageId; // 이후 이벤트 필터·GetInstance 가 선택된 스테이지로 일관되게 동작
 
             var ctx = new StageContext
             {
@@ -107,6 +110,16 @@ namespace PublicFramework
             _entered = _instance != null;
             _waveElapsed = 0f;
             return _entered;
+        }
+
+        private string ResolveStageId()
+        {
+            if (ServiceLocator.Has<IStageSelection>())
+            {
+                string selected = ServiceLocator.Get<IStageSelection>().SelectedStageId;
+                if (!string.IsNullOrEmpty(selected)) return selected;
+            }
+            return _stageId;
         }
 
         private void Update()
