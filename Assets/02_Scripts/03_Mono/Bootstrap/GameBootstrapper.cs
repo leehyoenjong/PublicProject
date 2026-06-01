@@ -42,6 +42,8 @@ namespace PublicFramework
         private SoundManager _soundManager;
         private StageSystem _stageSystem;
         private InventorySystem _inventorySystem;
+        private ItemDataRepository _itemRepo;
+        private IRewardHandler _rewardHandler;
         private bool _isOwner;
 
         private void Awake()
@@ -96,9 +98,17 @@ namespace PublicFramework
 
             if (_itemDataCollection != null)
             {
-                ItemDataRepository itemRepo = new ItemDataRepository(_itemDataCollection);
-                _inventorySystem = new InventorySystem(itemRepo, _eventBus);
+                _itemRepo = new ItemDataRepository(_itemDataCollection);
+                ServiceLocator.Register<IItemRepository>(_itemRepo);
+                _inventorySystem = new InventorySystem(_itemRepo, _eventBus);
                 ServiceLocator.Register<IInventorySystem>(_inventorySystem);
+            }
+
+            // 보상 핸들러: 스테이지/퀘스트/업적 보상을 인벤토리에 적립. Stage·Inventory 둘 다 있을 때만 연결.
+            if (_stageSystem != null && _inventorySystem != null)
+            {
+                _rewardHandler = new InventoryRewardHandler(_inventorySystem);
+                _stageSystem.SetRewardHandler(_rewardHandler);
             }
 
             Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}{(_inventorySystem != null ? " / 인벤토리" : "")}");
@@ -139,6 +149,7 @@ namespace PublicFramework
             if (!_isOwner) return;
 
             if (_inventorySystem != null) ServiceLocator.Unregister<IInventorySystem>();
+            if (_itemRepo != null) ServiceLocator.Unregister<IItemRepository>();
             if (_stageSystem != null) ServiceLocator.Unregister<IStageSystem>();
             if (_soundManager != null) ServiceLocator.Unregister<ISoundManager>();
             ServiceLocator.Unregister<IMonsterSystem>();

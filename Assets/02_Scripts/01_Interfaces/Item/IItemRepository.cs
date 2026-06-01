@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace PublicFramework
 {
-    public interface IItemRepository
+    public interface IItemRepository : IService
     {
         IItem GetItem(int mid);
         bool TryGetItem(int mid, out IItem item);

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace PublicFramework
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace PublicFramework
     public interface IItem
     {
         int MID { get; }
+        Sprite Icon { get; }
         int DisplayNameKey { get; }
         int DescriptionKey { get; }
         Rarity Rarity { get; }

@@ -618,7 +618,7 @@ MonoBehaviour:
   _initialUnlockLevel: 1
   _itemDataCollection: {fileID: 11400000, guid: 17b51c3ebec6244cdb2a5e95ab1f5d6f, type: 2}
   _loadNextSceneOnBoot: 1
-  _nextScene: 02_Battle
+  _nextScene: 01_Lobby
 --- !u!114 &2084307181
 MonoBehaviour:
   m_ObjectHideFlags: 0
