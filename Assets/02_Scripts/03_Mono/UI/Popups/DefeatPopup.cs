@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -45,13 +44,13 @@ namespace PublicFramework
         private void OnRetry()
         {
             SetResult(PopupResult.Confirm);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneFlowRouter.Reload();
         }
 
         private void OnExit()
         {
             SetResult(PopupResult.Cancel);
-            if (!string.IsNullOrEmpty(_lobbyScene)) SceneManager.LoadScene(_lobbyScene);
+            if (!string.IsNullOrEmpty(_lobbyScene)) SceneFlowRouter.Load(_lobbyScene);
         }
     }
 }

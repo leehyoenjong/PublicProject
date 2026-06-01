@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace PublicFramework
@@ -58,7 +57,7 @@ namespace PublicFramework
             }
 
             Debug.Log($"[스테이지선택] 진입: {_stageId} → {_battleScene}");
-            SceneManager.LoadScene(_battleScene);
+            SceneFlowRouter.Load(_battleScene);
         }
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace PublicFramework
@@ -40,7 +39,7 @@ namespace PublicFramework
             }
 
             Debug.Log($"[씬전환] 버튼 클릭 → 씬 로드: {_sceneName}");
-            SceneManager.LoadScene(_sceneName);
+            SceneFlowRouter.Load(_sceneName);
         }
     }
 }

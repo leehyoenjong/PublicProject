@@ -137,7 +137,7 @@ namespace PublicFramework
                 else
                 {
                     Debug.Log($"[부팅] 다음 씬 로드: '{_nextScene}'");
-                    SceneManager.LoadScene(_nextScene);
+                    SceneFlowRouter.Load(_nextScene);
                 }
             }
         }

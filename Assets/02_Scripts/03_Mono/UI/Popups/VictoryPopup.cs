@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -49,7 +48,7 @@ namespace PublicFramework
         private void OnConfirm()
         {
             SetResult(PopupResult.Confirm);
-            if (!string.IsNullOrEmpty(_nextScene)) SceneManager.LoadScene(_nextScene);
+            if (!string.IsNullOrEmpty(_nextScene)) SceneFlowRouter.Load(_nextScene);
         }
     }
 }
