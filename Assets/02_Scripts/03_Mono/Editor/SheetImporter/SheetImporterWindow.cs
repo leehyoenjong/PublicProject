@@ -1141,6 +1141,13 @@ namespace PublicFramework.Editor.SheetImporter
                     : entry.OutputFolder;
                 SkillBuffDurationValidator.Validate(folder);
             }
+            else if (t == typeof(BuffData))
+            {
+                string folder = string.IsNullOrEmpty(entry.OutputFolder)
+                    ? $"Assets/09_ScriptableObjects/{t.Name}"
+                    : entry.OutputFolder;
+                BuffStatRangeValidator.Validate(folder);
+            }
         }
 
         private void RecordFailure(int index, string summary, string logLine)

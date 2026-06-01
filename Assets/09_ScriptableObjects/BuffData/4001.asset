@@ -32,4 +32,4 @@ MonoBehaviour:
   _targetStats:
   - _statType: 3
     _layer: 1
-    _value: 20
+    _value: 0.2

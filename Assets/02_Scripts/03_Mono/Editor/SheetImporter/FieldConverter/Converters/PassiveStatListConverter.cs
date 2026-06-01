@@ -9,7 +9,9 @@ namespace PublicFramework.Editor.SheetImporter
     /// <summary>
     /// `{StatType,StatLayer,Value},{StatType,StatLayer,Value}` 형식을 PassiveStat[] 로 변환.
     /// 공백 허용. enum 파싱은 대소문자 무관(Enum.TryParse ignoreCase=true).
-    /// 예: `{Attack,Flat,10},{HP,Percent,5},{CritDamage,Multiplicative,1.5}`
+    /// 예: `{Attack,Flat,10},{HP,Percent,0.05},{CritDamage,Multiplicative,1.5}`
+    /// Value 단위 규약: Flat=절대값, Percent=비율(0.05 = +5%), Multiplicative=곱셈 인자(1.5 = ×1.5).
+    /// 자세한 규약은 PassiveStat 주석 참고.
     /// </summary>
     public class PassiveStatListConverter : IFieldConverter
     {
