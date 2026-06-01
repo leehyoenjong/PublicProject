@@ -582,7 +582,7 @@ MonoBehaviour:
       _initialSize: 8
       _maxSize: 24
       _autoExpand: 1
-  - _prefab: {fileID: 7073548112817277724, guid: 64370ee1722404c43b2946f47a2a1c24, type: 3}
+  - _prefab: {fileID: 8200000000000000001, guid: 06bd396f5a7f4f2aa88e9ac1f2f8e97f, type: 3}
     _config:
       _id: projectile_placeholder
       _initialSize: 10
