@@ -617,6 +617,7 @@ MonoBehaviour:
   _stageCollection: {fileID: 11400000, guid: 3e123eb3e718f4709ab146208e066959, type: 2}
   _initialUnlockLevel: 1
   _itemDataCollection: {fileID: 11400000, guid: 17b51c3ebec6244cdb2a5e95ab1f5d6f, type: 2}
+  _shopDataCollection: {fileID: 11400000, guid: 3be7293cd91374052956cc33b8e7984b, type: 2}
   _loadNextSceneOnBoot: 1
   _nextScene: 01_Lobby
 --- !u!114 &2084307181

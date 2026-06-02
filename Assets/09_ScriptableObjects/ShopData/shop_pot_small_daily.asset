@@ -17,7 +17,7 @@ MonoBehaviour:
   _description: 6002
   _icon: {fileID: 0}
   _paymentType: 2
-  _paymentId: currency_gem
+  _paymentId: 40001
   _paymentAmount: 10
   _resetPeriod: 1
   _weeklyMask: 0

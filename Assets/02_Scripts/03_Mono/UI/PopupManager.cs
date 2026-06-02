@@ -116,10 +116,13 @@ namespace PublicFramework
             }
 
             _currentPopup = popup;
-            popup.transform.SetAsLastSibling();
 
+            // Dim 을 먼저 최상단으로 올린 뒤 팝업을 그 위로 올린다.
+            // (순서를 바꾸면 Dim 이 팝업을 덮어 팝업이 안 보임 — 모달 Dim 은 항상 팝업 바로 아래여야 함)
             if (popup.IsModal)
                 UpdateDimBackground(true);
+
+            popup.transform.SetAsLastSibling();
 
             if (_defaultAnimation != null)
             {

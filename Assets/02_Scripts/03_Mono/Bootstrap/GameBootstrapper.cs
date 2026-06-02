@@ -31,6 +31,9 @@ namespace PublicFramework
         [Header("Item (선택 — IInventorySystem 등록 + ItemDataCollection 로 Repository 채움)")]
         [SerializeField] private ItemDataCollection _itemDataCollection;
 
+        [Header("Shop (선택 — IShopSystem 등록 + ShopDataCollection / Item 결제기. 인벤토리 필요)")]
+        [SerializeField] private ShopDataCollection _shopDataCollection;
+
         [Header("Scene 전환 (부팅 완료 후 자동 LoadScene)")]
         [SerializeField] private bool _loadNextSceneOnBoot = true;
         [SerializeField, SceneName] private string _nextScene = "02_Battle";
@@ -45,6 +48,7 @@ namespace PublicFramework
         private PauseService _pauseService;
         private InventorySystem _inventorySystem;
         private ItemDataRepository _itemRepo;
+        private ShopSystem _shopSystem;
         private IRewardHandler _rewardHandler;
         private bool _isOwner;
 
@@ -121,7 +125,18 @@ namespace PublicFramework
                 _stageSystem.SetRewardHandler(_rewardHandler);
             }
 
-            Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}{(_inventorySystem != null ? " / 인벤토리" : "")}");
+            // 상점(재화 교환소): 인벤토리 의존. ShopDataCollection 주입 + Item 결제 처리기 등록.
+            // 영속화(IShopRepository)·서버시간(ITimeProvider)은 null — in-memory 레퍼런스(Save 트랙 후속).
+            // 현금 결제(IAP)·광고(Ad) 처리기는 미등록 — IAP 는 IIAPSystem(영수증 검증 seam, 뒤끝 SDK 해소 후) 경유로 분리(의도적 빈칸).
+            if (_inventorySystem != null && _shopDataCollection != null)
+            {
+                _shopSystem = new ShopSystem(_eventBus, repository: null, _inventorySystem, timeProvider: null);
+                _shopSystem.Initialize(_shopDataCollection);
+                _shopSystem.RegisterPaymentProcessor(new ItemPaymentProcessor(_inventorySystem));
+                ServiceLocator.Register<IShopSystem>(_shopSystem);
+            }
+
+            Debug.Log($"[부팅] 핵심 시스템 등록됨: 이벤트버스 / 스탯 / 버프 / 몬스터{(_soundManager != null ? " / 사운드" : "")}{(_stageSystem != null ? " / 스테이지" : "")}{(_inventorySystem != null ? " / 인벤토리" : "")}{(_shopSystem != null ? " / 상점" : "")}");
         }
 
         // DontDestroyOnLoad + LoadScene 은 Start 로 미룸. Awake 에서 호출하면 INIT 이 즉시 DontDestroyOnLoad 씬으로
@@ -158,6 +173,7 @@ namespace PublicFramework
         {
             if (!_isOwner) return;
 
+            if (_shopSystem != null) ServiceLocator.Unregister<IShopSystem>();
             if (_inventorySystem != null) ServiceLocator.Unregister<IInventorySystem>();
             if (_itemRepo != null) ServiceLocator.Unregister<IItemRepository>();
             if (_stageSystem != null) ServiceLocator.Unregister<IStageSystem>();
