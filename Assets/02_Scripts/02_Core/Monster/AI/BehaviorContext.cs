@@ -24,6 +24,9 @@ namespace PublicFramework
         public float NowSeconds { get; set; }
         public IStatContainer SelfStats { get; set; }
         public IStatContainer TargetStats { get; set; }
+        // 군집 인지(AvoidCrowding 등) 액션용 동족 집합. MonsterSystem 이 자신의 인스턴스 집합을 주입.
+        // null 이면 군집 액션은 no-op — 단일 Self/Target 만 쓰는 액션엔 영향이 없다.
+        public IReadOnlyCollection<IMonsterInstance> Neighbors { get; set; }
 
         public void SetBlackboard(string key, object value) => _blackboard[key] = value;
         public T GetBlackboard<T>(string key, T defaultValue = default)

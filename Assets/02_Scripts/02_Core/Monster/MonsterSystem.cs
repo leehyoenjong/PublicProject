@@ -206,6 +206,7 @@ namespace PublicFramework
             });
 
             _instances.Remove(instanceId);
+            _aiContexts.Remove(instanceId); // AI 컨텍스트도 정리 — 풀링 재사용 시 죽은 인스턴스의 blackboard(patrol_origin 등) 오염 방지
 
             Debug.Log($"[몬스터] 처치됨: {result.MonsterMID} ({instanceId}) 드롭={result.Drops?.Count ?? 0}");
             return result;
@@ -258,7 +259,7 @@ namespace PublicFramework
 
             if (!_aiContexts.TryGetValue(instanceId, out BehaviorContext ctx))
             {
-                ctx = new BehaviorContext { Self = inst, SelfStats = inst.Stats };
+                ctx = new BehaviorContext { Self = inst, SelfStats = inst.Stats, Neighbors = All };
                 _aiContexts[instanceId] = ctx;
             }
 

@@ -104,10 +104,15 @@ namespace PublicFramework
             if (_spawnPoints != null && _spawnPoints.Length > 0)
             {
                 Transform p = _spawnPoints[slot % _spawnPoints.Length];
-                if (p != null) return p.position;
+                if (p != null)
+                {
+                    // 슬롯이 스폰 포인트 수를 넘으면(2바퀴째~) 링 단위 나선 오프셋으로 같은 점 겹침 방지.
+                    int ring = slot / _spawnPoints.Length;
+                    return ring == 0 ? p.position : p.position + SpawnScatter.SpiralOffset(slot, _fallbackRadius);
+                }
             }
-            Vector2 r = UnityEngine.Random.insideUnitCircle * _fallbackRadius;
-            return transform.position + new Vector3(r.x, r.y, 0f);
+            // 스폰 포인트 없으면 자기 위치 기준 황금각 나선으로 분산(anti-stack, 결정론적).
+            return transform.position + SpawnScatter.SpiralOffset(slot, _fallbackRadius);
         }
 
         private Transform ResolveTarget()

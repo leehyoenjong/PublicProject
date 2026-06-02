@@ -32,6 +32,11 @@ namespace PublicFramework
             r.Register(new HpBelowCondition());
             r.Register(new TargetInRangeCondition());
             r.Register(new HasBuffCondition());
+            // 프리셋(Ranged/Patrol/anti-stack)용 확장 어휘
+            r.Register(new KeepDistanceAction());
+            r.Register(new PatrolAction());
+            r.Register(new AvoidCrowdingAction());
+            r.Register(new TargetOutOfRangeCondition());
             return r;
         }
     }
